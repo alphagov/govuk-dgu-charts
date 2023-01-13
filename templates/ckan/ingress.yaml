@@ -1,0 +1,28 @@
+{{- if .Values.ingress.enabled }}
+{{- with .Values.ingress }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ckan
+  annotations:
+    {{- (tpl (toYaml .annotations) .) | trim | nindent 4 }}
+spec:
+  ingressClassName: {{ .ingressClassName }}
+  rules:
+    - host: {{ .host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ckan
+                port:
+                  number: 5000
+  {{- if .tls.enabled }}
+  tls:
+    - hosts:
+      - {{ .host }}
+  {{- end }}
+{{- end }}
+{{- end }}

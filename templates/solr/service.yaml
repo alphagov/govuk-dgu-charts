@@ -1,0 +1,14 @@
+{{- if .Values.solr.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-solr
+spec:
+  selector:
+    app: {{ .Release.Name }}-solr
+  ports:
+    - name: solr
+      protocol: TCP
+      port: 80
+      targetPort: solr
+{{- end }}

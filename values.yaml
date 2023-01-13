@@ -1,0 +1,60 @@
+ckan:
+  count: 1
+  image: ghcr.io/kentsanggds/ckan:2.9.7
+  config:
+    site:
+      id: "dgu"
+      url: "http://127.0.0.1:8080"
+      title: "DGU test"
+      description: "Hello"
+    mock_harvest_source: "https://ckan-static-mock-harvest-source.cloudapps.digital/"
+    sqlalchemyUrlSecretKeyRef:
+      name: ckan
+      key: sqlalchemy_url
+    redis:
+      host: ""
+      port: "6379"
+      db_number: "1"
+    solr:
+      url: ""
+      user: ""
+      passwordSecretKeyRef:
+        name: ckan
+        key: solr_password
+    smtp:
+      server: "localhost:1025"
+      user: ""
+      passwordSecretKeyRef:
+        name: ckan
+        key: smtp_password
+      mailFrom: ""
+      starttls: "False"
+    s3:
+      bucket_name: ""
+      url_prefix: ""
+      region_name: ""
+      credentials:
+        access_key_id: ""
+        secret_access_key: ""
+    
+
+solr:
+  enabled: true
+  image: ghcr.io/samsimpson1/solr
+  persistence:
+    enabled: false
+    storageClassName: ""
+    size: 1Gi
+# This postgres instance is for development purposes only
+postgres:
+  enabled: true
+  image: ghcr.io/samsimpson1/postgis
+  persistence:
+    enabled: false
+redis:
+  enabled: true
+  image: redis:6.2.5-alpine3.14
+ingress:
+  enabled: false
+  ingressClassName: tbd
+  annotations: []

@@ -1,0 +1,32 @@
+{{- if .Values.solr.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-solr
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-solr
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-solr
+    spec:
+      containers:
+        - name: solr
+          image: {{ .Values.solr.image }}
+          ports:
+            - name: solr
+              containerPort: 8983
+          {{- if .Values.solr.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: /opt/solr/server/solr/ckan/data
+          {{- end }}
+  {{- if .Values.solr.persistence.enabled }}
+  volumes:
+    - name: data
+      persiistentVolumeClaim:
+        claimName: {{ .Release.Name }}-solr
+  {{- end }}
+{{- end }}
