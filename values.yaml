@@ -58,3 +58,5 @@ ingress:
   enabled: false
   ingressClassName: tbd
   annotations: []
+dev:
+  enabled: false
