@@ -12,4 +12,14 @@ spec:
             - name: ckan
               image: {{ .Values.ckan.image }}
               command: [ ckan, search-index, rebuild ]
+              env:
+                {{- include "ckan.environment-variables" . | nindent 16 }}
+              volumeMounts:
+                - name: production-ini
+                  mountPath: /config
+                  readOnly: true
           restartPolicy: OnFailure
+          volumes:
+            - name: production-ini
+              configMap:
+                name: {{ .Release.Name }}-ckan-production-ini
