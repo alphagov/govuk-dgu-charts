@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-harvester-run
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: ckan
+              image: {{ .Values.ckan.image }}
+              command: [ ckan, harvester, run ]
+          restartPolicy: OnFailure
