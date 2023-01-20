@@ -56,7 +56,10 @@ redis:
   image: redis:6.2.5-alpine3.14
 ingress:
   enabled: false
-  ingressClassName: tbd
-  annotations: []
+  host: ckan.dev.gov.uk
+  ingressClassName: ""
+  annotations:
+  tls:
+    enabled: false
 dev:
   enabled: false
