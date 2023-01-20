@@ -43,14 +43,14 @@ solr:
   image: ghcr.io/samsimpson1/solr
   persistence:
     enabled: false
-    storageClassName: ""
-    size: 1Gi
+    persistentVolumeClaimName: ""
 # This postgres instance is for development purposes only
 postgres:
   enabled: true
   image: ghcr.io/samsimpson1/postgis
   persistence:
     enabled: false
+    persistentVolumeClaimName: ""
 redis:
   enabled: true
   image: redis:6.2.5-alpine3.14

@@ -28,10 +28,10 @@ spec:
             - name: data
               mountPath: /var/lib/postgresql/data
           {{- end }}
-  {{- if .Values.postgres.persistence.enabled }}
-  volumes:
-    - name: data
-      persistentVolumeClaim:
-        claimName: {{ .Release.Name }}-postgres
-  {{- end }}
+      {{- if .Values.postgres.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.postgres.persistence.persistentVolumeClaimName }}
+      {{- end }}
 {{- end }}
