@@ -4,9 +4,9 @@ ckan:
   config:
     site:
       id: "dgu"
-      url: "http://127.0.0.1:8080"
-      title: "DGU test"
-      description: "Hello"
+      url: "http://dev.data.gov.uk:8081"
+      title: "dev.data.gov.uk"
+      description: "Data publisher"
     mock_harvest_source: "https://ckan-static-mock-harvest-source.cloudapps.digital/"
     sqlalchemyUrlSecretKeyRef:
       name: ckan
@@ -43,23 +43,27 @@ solr:
   image: ghcr.io/samsimpson1/solr
   persistence:
     enabled: false
-    persistentVolumeClaimName: ""
+    persistentVolumeClaimName: "solr"
 # This postgres instance is for development purposes only
 postgres:
   enabled: true
   image: ghcr.io/samsimpson1/postgis
   persistence:
     enabled: false
-    persistentVolumeClaimName: ""
+    persistentVolumeClaimName: "postgres"
 redis:
   enabled: true
   image: redis:6.2.5-alpine3.14
 ingress:
-  enabled: false
-  host: ckan.dev.gov.uk
+  enabled: true
+  host: dev.data.gov.uk
   ingressClassName: ""
   annotations:
   tls:
     enabled: false
 dev:
-  enabled: false
+  enabled: true
+gather:
+  count: 1
+fetch:
+  count: 1

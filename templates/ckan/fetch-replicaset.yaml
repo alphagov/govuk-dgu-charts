@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: {{ .Release.Name }}-fetch
+spec:
+  replicas: {{ .Values.fetch.count }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-fetch
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-fetch
+    spec:
+      containers:
+        - name: harvest-fetch
+          image: {{ .Values.ckan.image }}
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: production-ini
+              mountPath: /config
+              readOnly: true
+          command: ["/bin/sh", "-c"]
+          args: ["ckan harvester fetch-consumer"]
+          env:
+            {{ include "ckan.environment-variables" . | nindent 12 }}
+      volumes:
+        - name: production-ini
+          configMap:
+            name: {{ .Release.Name }}-ckan-production-ini
