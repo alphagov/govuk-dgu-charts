@@ -1,6 +1,9 @@
 ckan:
   count: 1
   image: ghcr.io/kentsanggds/ckan:2.9.7
+  serviceAccount:
+    enabled: false
+    iamRoleARN: ""
   config:
     site:
       id: "dgu"
@@ -11,6 +14,7 @@ ckan:
     sqlalchemyUrlSecretKeyRef:
       name: ckan
       key: sqlalchemy_url
+    dbHost: ""
     redis:
       host: ""
       port: "6379"
@@ -33,12 +37,17 @@ ckan:
       mailFrom: ""
       starttls: "False"
     s3:
-      bucket_name: ""
-      url_prefix: ""
-      region_name: ""
+      useIamServiceAccount: false
+      bucketName: ""
+      urlPrefix: ""
+      regionName: ""
       credentials:
-        access_key_id: ""
-        secret_access_key: ""
+        awsAccessKeyIdSecretKeyRef:
+          name: ckan
+          key: aws_access_key_id
+        awsSecretAccessKeySecretKeyRef:
+          name: ckan
+          key: aws_secret_access_key
     
 
 solr:
