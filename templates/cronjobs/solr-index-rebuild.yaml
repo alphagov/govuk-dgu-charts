@@ -11,7 +11,7 @@ spec:
           containers:
             - name: ckan
               image: {{ .Values.ckan.image }}
-              command: [ ckan, search-index, rebuild ]
+              command: [ ckan, search-index, rebuild, -r, --force ]
               env:
                 {{- include "ckan.environment-variables" . | nindent 16 }}
               volumeMounts:
