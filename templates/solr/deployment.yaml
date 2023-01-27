@@ -23,10 +23,10 @@ spec:
             - name: data
               mountPath: /opt/solr/server/solr/ckan/data
           {{- end }}
-  {{- if .Values.solr.persistence.enabled }}
-  volumes:
-    - name: data
-      persiistentVolumeClaim:
-        claimName: {{ .Release.Name }}-solr
-  {{- end }}
+      {{- if .Values.solr.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.solr.persistence.persistentVolumeClaimName }}
+      {{- end }}
 {{- end }}

@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-solr-index-rebuild
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: ckan
+              image: {{ .Values.ckan.image }}
+              command: [ ckan, search-index, rebuild ]
+              env:
+                {{- include "ckan.environment-variables" . | nindent 16 }}
+              volumeMounts:
+                - name: production-ini
+                  mountPath: /config
+                  readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+            - name: production-ini
+              configMap:
+                name: {{ .Release.Name }}-ckan-production-ini
