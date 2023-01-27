@@ -12,6 +12,7 @@ spec:
       labels:
         app: {{ .Release.Name }}-ckan
     spec:
+      {{- if .Values.ckan.serviceAccount.enabled }}serviceAccountName: ckan-service-account-{{ .Release.Name }}{{- end }}
       initContainers:
         - name: config-set
           image: {{ .Values.ckan.image }}
