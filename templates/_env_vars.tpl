@@ -6,7 +6,7 @@
       name: {{ .sqlalchemyUrlSecretKeyRef.name }}
       key: {{ .sqlalchemyUrlSecretKeyRef.key }}
 - name: CKAN_DB_HOST
-  value: {{ print $.Release.Name "-postgres" }}
+  value: {{ .dbHost | default (print $.Release.Name "-postgres") }}
 - name: CKAN_SOLR_URL
   value: {{ .solr.url | default (print "http://" $.Release.Name "-solr/solr/ckan") }}
 - name: CKAN_SITE_ID
@@ -48,5 +48,17 @@
 - name: SETUP_DGU_TEST_DATA
   value: "1"
   {{- end }}
+{{- if not .s3.useIamServiceAccount }}
+- name: AWS_ACCESS_KEY_ID
+  valueFrom:
+    secretKeyRef:
+      name: {{ .s3.credentials.awsAccessKeyIdSecretKeyRef.name }}
+      key: {{ .s3.credentials.awsAccessKeyIdSecretKeyRef.key }}
+- name: AWS_SECRET_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ .s3.credentials.awsSecretAccessKeySecretKeyRef.name }}
+      key: {{ .s3.credentials.awsSecretAccessKeySecretKeyRef.key }}
+{{- end }}
 {{- end }}
 {{- end }}
