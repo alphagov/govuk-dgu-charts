@@ -98,6 +98,8 @@ data:
     ckan.harvest.mq.port = {{ .Values.ckan.config.redis.port | default "6379" }}
     ckan.harvest.mq.redis_db = {{ .Values.ckan.config.redis.db_number | default "1" }}
     
+    ckan.redis.url = redis://{{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}:{{ .Values.ckan.config.redis.port | default "6379" }}/{{ .Values.ckan.config.redis.db_number | default "1" }}
+
     ckan.spatial.validator.profiles = iso19139eden,constraints-1.4,gemini2-1.3
     ckan.spatial.validator.reject = true
     
@@ -145,11 +147,9 @@ data:
     #ckan.max_image_size = 2
     
     ## S3 Settngs
-    ckan.datagovuk.s3_aws_access_key_id = xx
-    ckan.datagovuk.s3_aws_secret_access_key = xx
-    ckan.datagovuk.s3_bucket_name = {{ .Values.ckan.config.s3.bucket_name }}
-    ckan.datagovuk.s3_url_prefix = {{ .Values.ckan.config.s3.url_prefix }}
-    ckan.datagovuk.s3_aws_region_name = {{ .Values.ckan.config.s3.region_name }}
+    ckan.datagovuk.s3_bucket_name = {{ .Values.ckan.config.s3.bucketName }}
+    ckan.datagovuk.s3_url_prefix = {{ .Values.ckan.config.s3.urlPrefix }}
+    ckan.datagovuk.s3_aws_region_name = {{ .Values.ckan.config.s3.regionName }}
     
     ## CKAN 2.9 settings
     ckan.route_after_login = dashboard.datasets
