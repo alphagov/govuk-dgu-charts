@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-pycsw
+spec:
+  selector:
+    app: {{ .Release.Name }}-pycsw
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: http

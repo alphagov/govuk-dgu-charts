@@ -79,3 +79,14 @@ gather:
   count: 1
 fetch:
   count: 1
+  
+pycsw:
+  count: 1
+  image: ghcr.io/geopython/pycsw
+  ingress:
+    enabled: true
+    host: pycsw.data.gov.uk
+    ingressClassName: ""
+    annotations:
+    tls:
+      enabled: false

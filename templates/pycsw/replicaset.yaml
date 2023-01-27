@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: {{ .Release.Name }}-pycsw
+spec:
+  replicas: {{ .Values.pycsw.count }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-pycsw
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-pycsw
+    spec:
+      containers:
+        - name: pycsw
+          image: {{ .Values.pycsw.image }}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+          volumeMounts:
+            - name: pycsw-cfg
+              mountPath: /config
+              readOnly: true
+          # command: ["/bin/sh", "-c"]
+          # args: ["/ckan-entrypoint.sh && ckan run --host 0.0.0.0"]
+          env:
+            - name: PYCSW_CONFIG
+              value: /config/pycsw.cfg
+      volumes:
+        - name: pycsw-cfg
+          configMap:
+            name: {{ .Release.Name }}-pycsw-cfg
