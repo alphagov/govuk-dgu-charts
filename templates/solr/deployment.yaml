@@ -12,6 +12,16 @@ spec:
       labels:
         app: {{ .Release.Name }}-solr
     spec:
+      initContainers:
+        - name: fix-volume-permissions
+          image: {{ .Values.solr.image }}
+          command: [ bash, -c, "chown -R solr:solr /data" ]
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          volumeMounts:
+            - name: data
+              mountPath: /data
       containers:
         - name: solr
           image: {{ .Values.solr.image }}
