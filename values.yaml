@@ -15,6 +15,9 @@ ckan:
       host: ""
       port: "6379"
       db_number: "1"
+    beakerSessionSecretKeyRef:
+      name: ckan
+      key: beaker_session_secret
     solr:
       url: ""
       user: ""
