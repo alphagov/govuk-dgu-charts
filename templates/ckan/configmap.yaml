@@ -124,6 +124,7 @@ data:
     #ckan.recaptcha.privatekey =
     #licenses_group_url = http://licenses.opendefinition.org/licenses/groups/ckan.json
     # ckan.template_footer_end =
+    ckan.group_and_organization_list_max = 2000
     
     
     ## Internationalisation Settings
