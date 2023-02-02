@@ -12,6 +12,7 @@ spec:
       labels:
         app: {{ .Release.Name }}-solr
     spec:
+      {{- if .Values.solr.persistence.enabled }}
       initContainers:
         - name: fix-volume-permissions
           image: {{ .Values.solr.image }}
@@ -22,6 +23,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
+      {{- end }}
       containers:
         - name: solr
           image: {{ .Values.solr.image }}
