@@ -48,11 +48,10 @@ ckan:
         awsSecretAccessKeySecretKeyRef:
           name: ckan
           key: aws_secret_access_key
-    
 
 solr:
   enabled: true
-  image: ghcr.io/samsimpson1/solr
+  image: ghcr.io/kentsanggds/solr:6.6.2
   persistence:
     enabled: false
     persistentVolumeClaimName: "solr"
@@ -79,10 +78,10 @@ gather:
   count: 1
 fetch:
   count: 1
-  
+
 pycsw:
   count: 1
-  image: ghcr.io/geopython/pycsw
+  image: ghcr.io/kentsanggds/pycsw:2.6.1
   ingress:
     enabled: true
     host: pycsw.data.gov.uk
