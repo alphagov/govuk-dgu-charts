@@ -15,7 +15,7 @@ spec:
       initContainers:
         - name: config-set
           image: {{ .Values.ckan.image }}
-          command: [ "/bin/sh", "-c", '. /init/init.sh && python $CKAN_VENV/src/pycsw/pycsw/wsgi.py']
+          command: [ "/bin/sh", "-c", '. /init/init.sh']
           imagePullPolicy: Always
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
@@ -45,8 +45,7 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-          command: ["/bin/sh", "-c"]
-          args: ["tail -f /dev/null"]
+          command: ["/bin/sh", "-c", "python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
           env:
             - name: PYCSW_CONFIG
               value: /config/pycsw.cfg
