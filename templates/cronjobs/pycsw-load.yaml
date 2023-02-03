@@ -10,8 +10,8 @@ spec:
         spec:
           {{- include "ckan.pycsw-init" . | nindent 10 }}
           containers:
-            - name: ckan
-              image: {{ .Values.ckan.image }}
+            - name: pycsw
+              image: {{ .Values.pycsw.image }}
               command: [ "/bin/sh", "-c", "ckan ckan-pycsw load -p $CKAN_CONFIG/pycsw.cfg -u http://{{ .Release.Name }}-ckan:5000" ]
               env:
                 - name: PYCSW_CONFIG

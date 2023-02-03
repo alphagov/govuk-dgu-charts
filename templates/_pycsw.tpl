@@ -1,7 +1,7 @@
 {{- define "ckan.pycsw-init" -}}
 initContainers:
   - name: config-set
-    image: {{ .Values.ckan.image }}
+    image: {{ .Values.pycsw.image }}
     command: [ "/bin/sh", "-c", '. /init/init.sh']
     imagePullPolicy: Always
     env:
