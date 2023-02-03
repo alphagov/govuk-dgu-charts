@@ -12,29 +12,7 @@ spec:
       labels:
         app: {{ .Release.Name }}-pycsw
     spec:
-      initContainers:
-        - name: config-set
-          image: {{ .Values.ckan.image }}
-          command: [ "/bin/sh", "-c", '. /init/init.sh']
-          imagePullPolicy: Always
-          env:
-            {{ include "ckan.environment-variables" . | nindent 12 }}
-            - name: CKAN_BEAKER_SESSION_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.ckan.config.beakerSessionSecretKeyRef.name }}
-                  key: {{ .Values.ckan.config.beakerSessionSecretKeyRef.key }}
-          volumeMounts:
-            - name: pycsw-cfg
-              mountPath: /pycsw
-              readOnly: true
-            - name: production-ini
-              mountPath: /map
-              readOnly: true
-            - name: config
-              mountPath: /config
-            - name: pycsw-init
-              mountPath: /init
+      {{- include "ckan.pycsw-init" . | nindent 6 }}
       containers:
         - name: pycsw
           image: {{ .Values.pycsw.image }}
@@ -50,15 +28,4 @@ spec:
             - name: PYCSW_CONFIG
               value: /config/pycsw.cfg
             {{ include "ckan.environment-variables" . | nindent 12 }}
-      volumes:
-        - name: pycsw-cfg
-          configMap:
-            name: {{ .Release.Name }}-pycsw-cfg
-        - name: pycsw-init
-          configMap:
-            name: {{ .Release.Name }}-pycsw-init
-        - name: production-ini
-          configMap:
-            name: {{ .Release.Name }}-ckan-production-ini
-        - name: config
-          emptyDir: {}
+      {{ include "ckan.pycsw-volumes" . | nindent 6 }}

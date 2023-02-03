@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-pycsw-load
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- include "ckan.pycsw-init" . | nindent 10 }}
+          containers:
+            - name: ckan
+              image: {{ .Values.ckan.image }}
+              command: [ "/bin/sh", "-c", "ckan ckan-pycsw load -p $CKAN_CONFIG/pycsw.cfg -u http://{{ .Release.Name }}-ckan:5000" ]
+              env:
+                - name: PYCSW_CONFIG
+                  value: /config/pycsw.cfg
+                {{ include "ckan.environment-variables" . | nindent 16 }}
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+          restartPolicy: OnFailure
+          {{ include "ckan.pycsw-volumes" . | nindent 10 }}
