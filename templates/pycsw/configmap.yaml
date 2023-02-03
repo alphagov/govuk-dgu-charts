@@ -37,7 +37,7 @@ data:
 
     [server]
     home=/home/pycsw
-    url=http://localhost:8000/
+    url=${CKAN_SITE_URL}/csw
     mimetype=application/xml; charset=UTF-8
     encoding=UTF-8
     language=en-US
@@ -86,8 +86,7 @@ data:
 
     [repository]
     # postgres
-    #database=postgresql://username:password@localhost/pycsw
-    database=postgresql://ckan:ckan@ckan-test-postgres/pycsw
+    database=${CKAN_SQLALCHEMY_URL}
     table=records
 
     [metadata:inspire]
