@@ -2,7 +2,7 @@
 
 - use k3d framework
 
-(k3d)[https://k3d.io/v5.4.6/] so that we don't need to worry about creating an ingress controller. This will be more aligned with how we run the cluster on EKS as that manages the ingress for us.
+[k3d](https://k3d.io/v5.4.6/) so that we don't need to worry about creating an ingress controller. This will be more aligned with how we run the cluster on EKS as that manages the ingress for us.
 
   - we will need to create a registry so that we can push locally built images to it and we will want to access it
 
