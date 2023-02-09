@@ -11,6 +11,7 @@ spec:
           containers:
             - name: ckan
               image: {{ .Values.ckan.image }}
+              imagePullPolicy: Always
               command: [ ckan, harvester, run ]
               env:
                 {{- include "ckan.environment-variables" . | nindent 16 }}

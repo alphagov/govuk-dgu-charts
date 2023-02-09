@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-pycsw-load
 spec:
-  schedule: "*/10 * * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       template:
@@ -12,6 +12,7 @@ spec:
           containers:
             - name: pycsw
               image: {{ .Values.pycsw.image }}
+              imagePullPolicy: Always
               command: [ "/bin/sh", "-c", "ckan ckan-pycsw load -p $CKAN_CONFIG/pycsw.cfg -u http://{{ .Release.Name }}-ckan:5000" ]
               env:
                 - name: PYCSW_CONFIG

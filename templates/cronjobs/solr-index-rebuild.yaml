@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-solr-index-rebuild
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       template:
@@ -11,6 +11,7 @@ spec:
           containers:
             - name: ckan
               image: {{ .Values.ckan.image }}
+              imagePullPolicy: Always
               command: [ ckan, search-index, rebuild, -r, --force ]
               env:
                 {{- include "ckan.environment-variables" . | nindent 16 }}
