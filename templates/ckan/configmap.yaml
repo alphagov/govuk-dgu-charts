@@ -148,6 +148,8 @@ data:
     #ckan.max_image_size = 2
     
     ## S3 Settngs
+    ckan.datagovuk.s3_aws_access_key_id =
+    ckan.datagovuk.s3_aws_secret_access_key =
     ckan.datagovuk.s3_bucket_name = {{ .Values.ckan.config.s3.bucketName }}
     ckan.datagovuk.s3_url_prefix = {{ .Values.ckan.config.s3.urlPrefix }}
     ckan.datagovuk.s3_aws_region_name = {{ .Values.ckan.config.s3.regionName }}

@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: config-set
           image: {{ .Values.ckan.image }}
-          command: [ "/bin/sh", "-c", 'cp /map/production.ini /config && ckan config-tool $CKAN_INI "beaker.session.secret=$CKAN_BEAKER_SESSION_SECRET"']
+          command: [ "/bin/sh", "-c", '. /init/init.sh']
           imagePullPolicy: Always
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
@@ -25,12 +25,26 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.ckan.config.beakerSessionSecretKeyRef.name }}
                   key: {{ .Values.ckan.config.beakerSessionSecretKeyRef.key }}
+            {{- if .Values.dev.enabled }}
+            - name: CKAN_AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ckan.config.s3.credentials.awsAccessKeyIdSecretKeyRef.name }}
+                  key: {{ .Values.ckan.config.s3.credentials.awsAccessKeyIdSecretKeyRef.key }}
+            - name: CKAN_AWS_ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ckan.config.s3.credentials.awsSecretAccessKeySecretKeyRef.name }}
+                  key: {{ .Values.ckan.config.s3.credentials.awsSecretAccessKeySecretKeyRef.key }}
+            {{- end }}
           volumeMounts:
             - name: production-ini
               mountPath: /map
               readOnly: true
             - name: config
               mountPath: /config
+            - name: ckan-init
+              mountPath: /init
       containers:
         - name: ckan
           image: {{ .Values.ckan.image }}
@@ -47,6 +61,9 @@ spec:
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
       volumes:
+        - name: ckan-init
+          configMap:
+            name: {{ .Release.Name }}-ckan-init
         - name: production-ini
           configMap:
             name: {{ .Release.Name }}-ckan-production-ini
