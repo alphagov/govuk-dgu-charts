@@ -12,6 +12,15 @@ entries:
     version: 1.0.0
   argo-bootstrap:
   - apiVersion: v2
+    created: "2023-02-10T14:47:59.579071511Z"
+    description: Bootstraps CKAN in Argo CD
+    digest: 82d9365180404caa14ac92fd061816a315445e81ef291e4e737bf5582df830fb
+    name: argo-bootstrap
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-ckan-chart/releases/download/argo-bootstrap-1.0.2/argo-bootstrap-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     created: "2023-02-10T14:40:07.653634969Z"
     description: Bootstraps CKAN in Argo CD
     digest: 88121e22ffe938db297074d0b3220e596813898d13e48d5eaf752bffea6c53ab
@@ -39,4 +48,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-ckan-chart/releases/download/govuk-ckan-1.0.1/govuk-ckan-1.0.1.tgz
     version: 1.0.1
-generated: "2023-02-10T14:40:07.653641769Z"
+generated: "2023-02-10T14:47:59.579086711Z"
