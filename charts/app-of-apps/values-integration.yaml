@@ -43,6 +43,6 @@ ckanHelmValues:
   dev:
     enabled: false
   gather:
-    count: 0
+    count: 1
   fetch:
-    count: 0
+    count: 1
