@@ -12,6 +12,7 @@ spec:
         {{- toYaml .Values.ckanHelmValues | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
+    namespace: datagovuk
   syncPolicy:
     automated:
       prune: true
