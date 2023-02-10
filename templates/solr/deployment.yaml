@@ -12,6 +12,10 @@ spec:
       labels:
         app: {{ .Release.Name }}-solr
     spec:
+      securityContext:
+        runAsUser: 8983
+        runAsGroup: 8983
+        fsGroup: 8983
       {{- if .Values.solr.persistence.enabled }}
       initContainers:
         - name: fix-volume-permissions

@@ -12,6 +12,10 @@ spec:
       labels:
         app: {{ .Release.Name }}-pycsw
     spec:
+      securityContext:
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
       {{- include "ckan.pycsw-init" . | nindent 6 }}
       containers:
         - name: pycsw
