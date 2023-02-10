@@ -8,8 +8,8 @@ spec:
     repoURL: https://github.com/alphagov/govuk-ckan-chart
     path: charts/ckan
     helm:
-      values:
-        {{- toYaml .ckanHelmValues | nindent 8 }}
+      values: |
+        {{- toYaml .Values.ckanHelmValues | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:

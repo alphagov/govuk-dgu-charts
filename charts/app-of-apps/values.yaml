@@ -1,0 +1,3 @@
+ckanHelmValues:
+  ckan:
+    count: 1
