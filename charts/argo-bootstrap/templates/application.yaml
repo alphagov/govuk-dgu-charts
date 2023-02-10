@@ -8,7 +8,7 @@ spec:
     repoURL: https://github.com/alphagov/govuk-ckan-chart
     path: charts/app-of-apps
     helm:
-      valuesFiles:
+      valueFiles:
         - values.yaml
         - values-{{ .Values.environment }}.yaml
   destination:
