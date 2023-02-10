@@ -24,3 +24,21 @@ jobs:
 
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yaml
+
+      - name: Helm template
+        run: |
+          mkdir helm-dist
+          for c in $(ls charts)
+          do
+            helm template "${c}" "charts/${c}" --output-dir helm-dist
+          done
+
+      - name: kubeconform
+        uses: docker://ghcr.io/yannh/kubeconform:v0.5.0
+        with:
+          entrypoint: /kubeconform
+          args: >
+            -kubernetes-version 1.23.0
+            -schema-location default
+            -summary
+            helm-dist
