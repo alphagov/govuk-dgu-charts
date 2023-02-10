@@ -1,0 +1,5 @@
+apiVersion: v2
+name: app-of-apps
+description: Deploys CKAN applications
+type: application
+version: 1.0.0

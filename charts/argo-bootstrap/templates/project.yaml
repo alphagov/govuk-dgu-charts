@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: datagovuk
+spec:
+  description: ArgoCD project containing data.gov.uk applications.
+  sourceRepos:
+    - '*'
+  destinations:
+    - namespace: datagovuk
+      server: https:/kubernetes.default.svc
+  orphanedResources:
+    warn: false

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: argo-bootstrap
+description: Bootstraps CKAN in Argo CD
+type: application
+version: 1.0.0

@@ -1,0 +1,48 @@
+ckanHelmValues:
+  ckan:
+    config:
+      site:
+        url: "https://ckan.eks.integration.govuk.digital"
+        title: "data.gov.uk"
+      dbHost: "ckan-postgres.integration.govuk-internal.digital"
+      redis:
+        host: "backend-redis.integration.govuk-internal.digital"
+      smtp:
+        server: "email-smtp.eu-west-1.amazonaws.com:587"
+        user: "AKIATB5RC4XX4VZIWMF7"
+        mailFrom: "team@data.gov.uk"
+        starttls: "True"
+      s3:
+        bucketName: "datagovuk-integration-ckan-organogram"
+        regionName: "eu-west-1"
+        urlPrefix: "https://s3-eu-west-1.amazonaws.com/datagovuk-integration-ckan-organogram/"
+    serviceAccount:
+      enabled: true
+      name: ckan
+      iamRoleARN: arn:aws:iam::210287912431:role/ckan-govuk
+  solr:
+    enabled: true
+    image: "ghcr.io/kentsanggds/solr:6.6.2"
+    persistence:
+      enabled: true
+      persistentVolumeClaimName: solr
+  postgres:
+    enabled: false
+  redis:
+    enabled: false
+  ingress:
+    host: ckan.eks.integration.govuk.digital
+    ingressClassName: aws-alb
+    annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+    tls:
+      enabled: true
+  dev:
+    enabled: false
+  gather:
+    count: 0
+  fetch:
+    count: 0

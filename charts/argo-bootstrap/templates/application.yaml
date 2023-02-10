@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dgu-app-of-apps
+spec:
+  project: datagovuk
+  source:
+    repoURL: https://github.com/alphagov/govuk-ckan-chart
+    path: charts/app-of-apps
+    helm:
+      valuesFiles:
+        - values.yaml
+        - values-{{ .Values.environment }}.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: datagovuk
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
