@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  govuk-ckan:
+  - apiVersion: v2
+    created: "2023-02-10T11:56:48.628553876Z"
+    description: CKAN
+    digest: 13f0cdae26bfbfc4f4a58d52e48f8b4b6b4382b078b1d2d523a9742db0bfca4d
+    name: govuk-ckan
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-ckan-chart/releases/download/govuk-ckan-1.0.1/govuk-ckan-1.0.1.tgz
+    version: 1.0.1
+generated: "2023-02-10T11:56:48.628658376Z"
