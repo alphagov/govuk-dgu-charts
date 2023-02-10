@@ -8,6 +8,6 @@ spec:
     - '*'
   destinations:
     - namespace: datagovuk
-      server: https:/kubernetes.default.svc
+      server: https://kubernetes.default.svc
   orphanedResources:
     warn: false
