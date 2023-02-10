@@ -2,11 +2,13 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ckan
+  namespace: {{ .Release.Namespace }}
 spec:
   project: datagovuk
   source:
     repoURL: https://github.com/alphagov/govuk-ckan-chart
     path: charts/ckan
+    targetRevision: HEAD
     helm:
       values: |
         {{- toYaml .Values.ckanHelmValues | nindent 8 }}
