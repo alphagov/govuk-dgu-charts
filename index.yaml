@@ -1,5 +1,25 @@
 apiVersion: v1
 entries:
+  app-of-apps:
+  - apiVersion: v2
+    created: "2023-02-10T12:53:51.575935386Z"
+    description: Deploys CKAN applications
+    digest: f6440afeef0a21061cb2d75f9be70b97fb76ee4244e3efa83f854e3387199b0a
+    name: app-of-apps
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-ckan-chart/releases/download/app-of-apps-1.0.0/app-of-apps-1.0.0.tgz
+    version: 1.0.0
+  argo-bootstrap:
+  - apiVersion: v2
+    created: "2023-02-10T12:53:51.740675388Z"
+    description: Bootstraps CKAN in Argo CD
+    digest: 14cb888af0c375ce9286efd38ee064439d9b8363f75de1e8edb5ddc0b2a04354
+    name: argo-bootstrap
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-ckan-chart/releases/download/argo-bootstrap-1.0.0/argo-bootstrap-1.0.0.tgz
+    version: 1.0.0
   govuk-ckan:
   - apiVersion: v2
     created: "2023-02-10T11:56:48.628553876Z"
@@ -10,4 +30,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-ckan-chart/releases/download/govuk-ckan-1.0.1/govuk-ckan-1.0.1.tgz
     version: 1.0.1
-generated: "2023-02-10T11:56:48.628658376Z"
+generated: "2023-02-10T12:53:51.740681088Z"
