@@ -1,4 +1,4 @@
-### Quickstart
+### Quickstart for local development cluster
 
 - use k3d framework
 
@@ -14,7 +14,7 @@
 
   - build the docker image with the tag matching the port of the registry
 
-`docker build -t localhost:53492/ckan:2.9.7-alphagov -f Dockerfile .`
+`docker build -t localhost:53492/ckan:2.9.7 -f Dockerfile .`
 
   - update the values.yaml so that the entry in the helm chart for the ckan image should match the registry name and port - 
 
@@ -32,7 +32,7 @@ Add `dev.data.gov.uk` after kubernetes.docker.internal on the sameline in the `/
 
   - Then install the helm chart
 
-  `helm install ckan-test ./`
+  `helm install ckan-test ./charts/ckan/`
 
   - See the cluster being created and running
 
