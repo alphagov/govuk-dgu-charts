@@ -89,3 +89,11 @@ pycsw:
     annotations:
     tls:
       enabled: false
+
+externalSecret:
+  enabled: false
+  name: ckan
+  key: dgu/ckan
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore

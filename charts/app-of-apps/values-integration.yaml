@@ -46,3 +46,5 @@ ckanHelmValues:
     count: 1
   fetch:
     count: 1
+  externalSecret:
+    enabled: true
