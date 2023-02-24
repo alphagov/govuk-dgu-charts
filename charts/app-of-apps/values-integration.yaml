@@ -23,7 +23,6 @@ ckanHelmValues:
       iamRoleARN: arn:aws:iam::210287912431:role/ckan-govuk
   solr:
     enabled: true
-    image: "ghcr.io/kentsanggds/solr:6.6.2"
     persistence:
       enabled: true
       persistentVolumeClaimName: solr
