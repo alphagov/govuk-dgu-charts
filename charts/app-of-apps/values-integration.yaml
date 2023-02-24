@@ -13,6 +13,7 @@ ckanHelmValues:
         mailFrom: "team@data.gov.uk"
         starttls: "True"
       s3:
+        useIamServiceAccount: true
         bucketName: "datagovuk-integration-ckan-organogram"
         regionName: "eu-west-1"
         urlPrefix: "https://s3-eu-west-1.amazonaws.com/datagovuk-integration-ckan-organogram/"
