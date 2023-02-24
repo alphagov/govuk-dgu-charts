@@ -51,14 +51,14 @@ ckan:
 
 solr:
   enabled: true
-  image: ghcr.io/kentsanggds/solr:6.6.2
+  image: ghcr.io/alphagov/solr:6.6.2
   persistence:
     enabled: false
     persistentVolumeClaimName: "solr"
 # This postgres instance is for development purposes only
 postgres:
   enabled: true
-  image: ghcr.io/samsimpson1/postgis
+  image: ghcr.io/alphagov/postgis:13-3.1
   persistence:
     enabled: false
     persistentVolumeClaimName: "postgres"
@@ -81,7 +81,7 @@ fetch:
 
 pycsw:
   count: 1
-  image: ghcr.io/kentsanggds/pycsw:2.6.1
+  image: ghcr.io/alphagov/pycsw:2.6.1
   ingress:
     enabled: true
     host: pycsw.data.gov.uk
