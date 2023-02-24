@@ -1,6 +1,6 @@
 ckan:
   count: 1
-  image: ghcr.io/kentsanggds/ckan:2.9.7
+  image: ghcr.io/alphagov/ckan:2.9.7
   serviceAccount:
     enabled: false
     iamRoleARN: ""
