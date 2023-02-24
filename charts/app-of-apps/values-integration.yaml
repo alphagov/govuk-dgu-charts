@@ -1,5 +1,6 @@
 ckanHelmValues:
   ckan:
+    image: ghcr.io/kentsanggds/ckan:2.9.7
     config:
       site:
         url: "https://ckan.eks.integration.govuk.digital"
