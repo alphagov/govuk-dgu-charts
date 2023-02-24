@@ -93,7 +93,7 @@ pycsw:
 externalSecret:
   enabled: false
   name: ckan
-  key: dgu/ckan
+  key: govuk/dgu/ckan
   secretStoreRef:
     name: aws-secretsmanager
     kind: ClusterSecretStore
