@@ -12,7 +12,7 @@ spec:
             - name: ckan
               image: {{ .Values.ckan.image }}
               imagePullPolicy: Always
-              command: [ ckan, search-index, rebuild, -r, --force ]
+              command: [ ckan, datagovuk, reindex-recent ]
               env:
                 {{- include "ckan.environment-variables" . | nindent 16 }}
               volumeMounts:
