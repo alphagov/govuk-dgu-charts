@@ -32,4 +32,10 @@ spec:
             - name: PYCSW_CONFIG
               value: /config/pycsw.cfg
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 3
       {{ include "ckan.pycsw-volumes" . | nindent 6 }}
