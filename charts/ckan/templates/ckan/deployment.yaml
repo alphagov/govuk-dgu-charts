@@ -64,6 +64,12 @@ spec:
           args: ["/ckan-entrypoint.sh && ckan run --host 0.0.0.0"]
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 3
       volumes:
         - name: ckan-init
           configMap:
