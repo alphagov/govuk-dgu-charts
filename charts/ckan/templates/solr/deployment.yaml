@@ -41,6 +41,12 @@ spec:
             - name: data
               mountPath: /opt/solr/server/solr/ckan/data
           {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /solr/ckan/admin/ping
+              port: solr
+            initialDelaySeconds: 10
+            periodSeconds: 3
       {{- if .Values.solr.persistence.enabled }}
       volumes:
         - name: data
