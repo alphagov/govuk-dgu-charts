@@ -14,3 +14,5 @@ data:
     ckan config-tool $CKAN_INI "ckan.datagovuk.s3_aws_access_key_id = $CKAN_AWS_ACCESS_KEY_ID"
     ckan config-tool $CKAN_INI "ckan.datagovuk.s3_aws_secret_access_key = $CKAN_AWS_ACCESS_KEY_SECRET"
     {{- end }}
+
+    /ckan-entrypoint.sh

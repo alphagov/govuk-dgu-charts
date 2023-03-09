@@ -61,12 +61,12 @@ spec:
               mountPath: /config
               readOnly: true
           command: ["/bin/sh", "-c"]
-          args: ["/ckan-entrypoint.sh && ckan run --host 0.0.0.0"]
+          args: ["ckan run --host 0.0.0.0"]
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthcheck
               port: http
             initialDelaySeconds: 10
             periodSeconds: 3
