@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
             - name: ckan
-              image: {{ .Values.ckan.image }}
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
               imagePullPolicy: Always
               command: [ ckan, datagovuk, reindex-recent ]
               env:
