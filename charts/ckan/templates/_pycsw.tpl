@@ -1,7 +1,7 @@
 {{- define "ckan.pycsw-init" -}}
 initContainers:
   - name: config-set
-    image: {{ .Values.pycsw.image }}
+    image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "pycsw" "files" $.Files) }}'
     command: [ "/bin/sh", "-c", '. /init/init.sh']
     imagePullPolicy: Always
     env:
