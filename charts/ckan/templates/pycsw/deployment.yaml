@@ -19,7 +19,7 @@ spec:
       {{- include "ckan.pycsw-init" . | nindent 6 }}
       containers:
         - name: pycsw
-          image: {{ .Values.pycsw.image }}
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "pycsw" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
             - name: http
