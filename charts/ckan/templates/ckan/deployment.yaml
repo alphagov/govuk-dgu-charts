@@ -51,7 +51,7 @@ spec:
               mountPath: /init
       containers:
         - name: ckan
-          image: {{ .Values.ckan.image }}
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
             - name: http
