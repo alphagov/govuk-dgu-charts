@@ -21,7 +21,7 @@ spec:
       {{- if .Values.solr.persistence.enabled }}
       initContainers:
         - name: fix-volume-permissions
-          image: {{ .Values.solr.image }}
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "solr" "files" $.Files) }}'
           command: [ bash, -c, "chown -R solr:solr /data" ]
           securityContext:
             runAsUser: 0
@@ -32,7 +32,7 @@ spec:
       {{- end }}
       containers:
         - name: solr
-          image: {{ .Values.solr.image }}
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "solr" "files" $.Files) }}'
           ports:
             - name: solr
               containerPort: 8983

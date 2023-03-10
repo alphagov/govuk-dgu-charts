@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: harvest-fetch
-          image: {{ .Values.ckan.image }}
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
           imagePullPolicy: Always
           volumeMounts:
             - name: production-ini

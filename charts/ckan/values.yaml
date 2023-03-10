@@ -1,6 +1,5 @@
 ckan:
   count: 1
-  image: ghcr.io/alphagov/ckan:2.9.7
   serviceAccount:
     enabled: false
     iamRoleARN: ""
@@ -51,7 +50,6 @@ ckan:
 
 solr:
   enabled: true
-  image: ghcr.io/alphagov/solr:6.6.2
   persistence:
     enabled: false
     persistentVolumeClaimName: "solr"
@@ -78,10 +76,10 @@ gather:
   count: 1
 fetch:
   count: 1
+environment: test
 
 pycsw:
   count: 1
-  image: ghcr.io/alphagov/pycsw:2.6.1
   ingress:
     enabled: true
     host: pycsw.data.gov.uk
