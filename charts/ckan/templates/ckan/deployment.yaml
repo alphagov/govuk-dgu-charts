@@ -61,7 +61,7 @@ spec:
               mountPath: /config
               readOnly: true
           command: ["/bin/sh", "-c"]
-          args: ["ckan run --host 0.0.0.0"]
+          args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application"]
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
           livenessProbe:
