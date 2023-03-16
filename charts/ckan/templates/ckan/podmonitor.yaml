@@ -1,0 +1,28 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ .Release.Name }}-ckan
+  labels:
+    app: {{ .Release.Name }}-ckan
+    helm.sh/chart: govuk-ckan-charts
+    app.kubernetes.io/name: ckan
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-ckan
+  podMetricsEndpoints:
+  - port: http
+    metricRelabelings:
+    - action: replace
+      sourceLabels: ["__name__"]
+      targetLabel: __name__
+      regex: flask_http_request_total
+      replacement: http_requests_total
+    - action: replace
+      sourceLabels: ["__name__"]
+      targetLabel: __name__
+      regex: flask_http_request_duration_seconds_bucket
+      replacement: http_request_duration_seconds
+{{- end }}

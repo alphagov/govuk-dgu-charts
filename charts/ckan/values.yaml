@@ -95,3 +95,6 @@ externalSecret:
   secretStoreRef:
     name: aws-secretsmanager
     kind: ClusterSecretStore
+
+monitoring:
+  enabled: false
