@@ -13,3 +13,6 @@ data:
     ckan config-tool $CKAN_INI "ckan.plugins = harvest ckan_harvester spatial_metadata spatial_query spatial_harvest_metadata_api gemini_csw_harvester gemini_waf_harvester gemini_doc_harvester"
     ckan config-tool $CKAN_INI "ckan.i18n_directory ="
     ckan config-tool $CKAN_INI "who.config_file = /config/who.ini"
+
+    # run init script
+    /pycsw-entrypoint.sh
