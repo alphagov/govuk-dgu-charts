@@ -1,2 +1,3 @@
 repository: ghcr.io/alphagov/pycsw
 tag: 4f2b5aa0ce9fc91ebe9b0e3926d9541347cf08cd
+branch: downgrade-spatial-sha
