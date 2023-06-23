@@ -12,7 +12,7 @@ spec:
             - name: ckan
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
               imagePullPolicy: Always
-              command: [ ckan, search-index, rebuild, -r ]
+              command: [ ckan, search-index, rebuild, -r, -i ]
               env:
                 {{- include "ckan.environment-variables" . | nindent 16 }}
               volumeMounts:
