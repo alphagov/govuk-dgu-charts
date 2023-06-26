@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-ckan-chart
     path: charts/ckan
-    targetRevision: HEAD
+    targetRevision: debug-pycsw
     helm:
       values: |
         {{- toYaml .Values.ckanHelmValues | nindent 8 }}
