@@ -15,4 +15,4 @@ data:
     ckan config-tool $CKAN_INI "who.config_file = /config/who.ini"
 
     # run init script
-    /pycsw-entrypoint.sh
+    # /pycsw-entrypoint.sh
