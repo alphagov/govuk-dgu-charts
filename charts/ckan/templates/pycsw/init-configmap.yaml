@@ -18,4 +18,4 @@ data:
     sed "s/database=\${CKAN_SQLALCHEMY_URL}/database=$CKAN_SQLALCHEMY_URL/g" -i /config/pycsw.cfg
 
     # run init script
-    # /pycsw-entrypoint.sh
+    /pycsw-entrypoint.sh
