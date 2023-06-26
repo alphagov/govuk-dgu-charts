@@ -15,7 +15,7 @@ data:
 
     # update CKAN_SQLALCHEMY_URL used to be pycsw database
     export CKAN_SQLALCHEMY_URL=$(echo $CKAN_SQLALCHEMY_URL | sed 's/ckan_production/ckan_pycsw_production/g' | sed 's/\//\\\//g')
-    sed "s/database=\$(CKAN_SQLALCHEMY_URL)/database=$CKAN_SQLALCHEMY_URL/g" -i /config/pycsw.cfg
+    sed "s/database=\${CKAN_SQLALCHEMY_URL}/database=$CKAN_SQLALCHEMY_URL/g" -i /config/pycsw.cfg
 
     # run init script
     # /pycsw-entrypoint.sh
