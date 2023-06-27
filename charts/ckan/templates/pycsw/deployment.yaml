@@ -28,15 +28,14 @@ spec:
             - name: config
               mountPath: /config
           command: ["/bin/sh", "-c", "python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
-          # command: ["/bin/sh", "-c", "tail -f /dev/null"]
           env:
             - name: PYCSW_CONFIG
               value: /config/pycsw.cfg
             {{ include "ckan.environment-variables" . | nindent 12 }}
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 3
       {{ include "ckan.pycsw-volumes" . | nindent 6 }}
