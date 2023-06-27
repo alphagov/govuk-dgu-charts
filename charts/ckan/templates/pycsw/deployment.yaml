@@ -27,8 +27,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-          # command: ["/bin/sh", "-c", "python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
-          command: ["/bin/sh", "-c", "tail -f /dev/null"]
+          command: ["/bin/sh", "-c", "python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
+          # command: ["/bin/sh", "-c", "tail -f /dev/null"]
           env:
             - name: PYCSW_CONFIG
               value: /config/pycsw.cfg
