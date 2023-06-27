@@ -16,9 +16,9 @@ data:
     ckan config-tool $CKAN_INI "ckan.i18n_directory="
 
     # update CKAN_SQLALCHEMY_URL to use pycsw database
-    export CKAN_SQLALCHEMY_URL=$(echo $CKAN_SQLALCHEMY_URL | sed 's/ckan_production/ckan_pycsw_production/g')
-    export PYCSW_SQLALCHEMY_URL=$(echo $CKAN_SQLALCHEMY_URL | sed 's/\//\\\//g')
-    sed "s/database=\${CKAN_SQLALCHEMY_URL}/database=$PYCSW_SQLALCHEMY_URL/g" -i /config/pycsw.cfg
+    # export CKAN_SQLALCHEMY_URL=$(echo $CKAN_SQLALCHEMY_URL | sed 's/ckan_production/ckan_pycsw_production/g')
+    # export PYCSW_SQLALCHEMY_URL=$(echo $CKAN_SQLALCHEMY_URL | sed 's/\//\\\//g')
+    # sed "s/database=\${CKAN_SQLALCHEMY_URL}/database=$PYCSW_SQLALCHEMY_URL/g" -i /config/pycsw.cfg
 
     # run init script
     /pycsw-entrypoint.sh
