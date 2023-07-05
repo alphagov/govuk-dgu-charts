@@ -39,7 +39,7 @@ spec:
           {{- if .Values.solr.persistence.enabled }}
           volumeMounts:
             - name: data
-              mountPath: /opt/solr/server/solr/ckan/data
+              mountPath: /var/solr/data
           {{- end }}
           livenessProbe:
             httpGet:
