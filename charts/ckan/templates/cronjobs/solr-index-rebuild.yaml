@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-solr-index-rebuild
 spec:
-  schedule: "0 1 * * *"
+  schedule: "15 14 * * *"
   jobTemplate:
     spec:
       template:
