@@ -41,6 +41,12 @@ spec:
             - name: data
               mountPath: /var/solr/data
           {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /solr/ckan/admin/ping
+              port: solr
+            initialDelaySeconds: 10
+            periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /solr/ckan/admin/ping
