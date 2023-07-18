@@ -1,0 +1,13 @@
+{{- if not $.Values.dev.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: solr
+spec:
+  resources:
+    requests:
+      storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+{{- end }}
