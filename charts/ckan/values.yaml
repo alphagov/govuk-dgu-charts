@@ -4,6 +4,8 @@ ckan:
     enabled: false
     iamRoleARN: ""
   config:
+    command:
+      args: "ckan run --host 0.0.0.0"
     site:
       id: "dgu"
       url: "http://dev.data.gov.uk:8081"

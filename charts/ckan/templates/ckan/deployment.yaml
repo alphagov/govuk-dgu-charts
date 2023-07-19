@@ -61,7 +61,7 @@ spec:
               mountPath: /config
               readOnly: true
           command: ["/bin/sh", "-c"]
-          args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+          args: [{{ .Values.ckan.config.command.args }}]
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
           livenessProbe:
