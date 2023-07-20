@@ -8,8 +8,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Release.Name }}-solr
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
