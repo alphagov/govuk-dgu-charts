@@ -61,7 +61,7 @@ spec:
               mountPath: /config
               readOnly: true
           command: ["/bin/sh", "-c"]
-          args: [{{ .Values.ckan.config.command.args }}]
+          args: {{ .Values.ckan.config.command.args }}
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
           livenessProbe:
