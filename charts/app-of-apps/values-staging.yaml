@@ -1,5 +1,5 @@
 ckanHelmValues:
-  environment: integration
+  environment: staging
   ckan:
     config:
       command:
@@ -7,25 +7,25 @@ ckanHelmValues:
       probes:
         enabled: true
       site:
-        url: "https://ckan.eks.integration.govuk.digital"
+        url: "https://ckan.eks.staging.govuk.digital"
         title: "data.gov.uk"
-      dbHost: "ckan-postgres.integration.govuk-internal.digital"
+      dbHost: "ckan-postgres.staging.govuk-internal.digital"
       redis:
-        host: "backend-redis.integration.govuk-internal.digital"
+        host: "backend-redis.staging.govuk-internal.digital"
       smtp:
         server: "email-smtp.eu-west-1.amazonaws.com:587"
-        user: "AKIATB5RC4XX4VZIWMF7"
+        user: "AKIA2EQZDNSGRK55CPNS"
         mailFrom: "team@data.gov.uk"
         starttls: "True"
       s3:
         useIamServiceAccount: true
-        bucketName: "datagovuk-integration-ckan-organogram"
+        bucketName: "datagovuk-staging-ckan-organogram"
         regionName: "eu-west-1"
-        urlPrefix: "https://s3-eu-west-1.amazonaws.com/datagovuk-integration-ckan-organogram/"
+        urlPrefix: "https://s3-eu-west-1.amazonaws.com/datagovuk-staging-ckan-organogram/"
     serviceAccount:
       enabled: true
       name: ckan
-      iamRoleARN: arn:aws:iam::210287912431:role/ckan-govuk
+      iamRoleARN: arn:aws:iam::696911096973:role/ckan-govuk
   solr:
     enabled: true
     persistence:
@@ -36,7 +36,7 @@ ckanHelmValues:
   redis:
     enabled: false
   ingress:
-    host: ckan.eks.integration.govuk.digital
+    host: ckan.eks.staging.govuk.digital
     ingressClassName: aws-alb
     annotations:
       alb.ingress.kubernetes.io/scheme: internet-facing

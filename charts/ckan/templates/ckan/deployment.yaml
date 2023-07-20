@@ -61,15 +61,26 @@ spec:
               mountPath: /config
               readOnly: true
           command: ["/bin/sh", "-c"]
-          args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+          args: {{ .Values.ckan.config.command.args }}
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          {{- if .Values.ckan.config.probes.enabled }}
           livenessProbe:
             httpGet:
               path: /healthcheck
               port: http
-            initialDelaySeconds: 10
-            periodSeconds: 3
+            initialDelaySeconds: 600
+            periodSeconds: 60
+            timeoutSeconds: 30
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            initialDelaySeconds: 600
+            failureThreshold: 60
+            periodSeconds: 120
+            timeoutSeconds: 60
+          {{- end }}
       volumes:
         - name: ckan-init
           configMap:
