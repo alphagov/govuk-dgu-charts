@@ -1,11 +1,10 @@
 ckanHelmValues:
   environment: integration
   ckan:
+    command: ["/bin/sh", "-c", "gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    probes:
+      enabled: true
     config:
-      command:
-        args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
-      probes:
-        enabled: true
       site:
         url: "https://ckan.eks.integration.govuk.digital"
         title: "data.gov.uk"
@@ -26,6 +25,10 @@ ckanHelmValues:
       enabled: true
       name: ckan
       iamRoleARN: arn:aws:iam::210287912431:role/ckan-govuk
+  pycsw:
+    args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
+    probes:
+      enabled: false
   solr:
     enabled: true
     persistence:
