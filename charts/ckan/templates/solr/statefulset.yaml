@@ -1,9 +1,10 @@
 {{- if .Values.solr.enabled }}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}-solr
 spec:
+  serviceName: "solr"
   selector:
     matchLabels:
       app: {{ .Release.Name }}-solr
