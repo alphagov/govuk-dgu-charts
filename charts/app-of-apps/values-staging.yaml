@@ -4,6 +4,8 @@ ckanHelmValues:
     config:
       command:
         args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+      probes:
+        enabled: false
       site:
         url: "https://ckan.eks.staging.govuk.digital"
         title: "data.gov.uk"

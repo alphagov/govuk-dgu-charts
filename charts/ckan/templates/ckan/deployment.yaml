@@ -64,6 +64,7 @@ spec:
           args: {{ .Values.ckan.config.command.args }}
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          {{- if .Values.ckan.config.probes.enabled }}
           livenessProbe:
             httpGet:
               path: /healthcheck
@@ -79,6 +80,7 @@ spec:
             failureThreshold: 60
             periodSeconds: 120
             timeoutSeconds: 60
+          {{- end }}
       volumes:
         - name: ckan-init
           configMap:
