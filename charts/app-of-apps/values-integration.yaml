@@ -5,7 +5,7 @@ ckanHelmValues:
       command:
         args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
       probes:
-        enabled: false
+        enabled: true
       site:
         url: "https://ckan.eks.integration.govuk.digital"
         title: "data.gov.uk"
