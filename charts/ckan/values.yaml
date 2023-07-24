@@ -3,7 +3,7 @@ ckan:
   serviceAccount:
     enabled: false
     iamRoleARN: ""
-  command: ["/bin/sh", "-c", "ckan run --host 0.0.0.0"]
+  args: ["ckan run --host 0.0.0.0"]
   probes:
     enabled: false
   config:
@@ -83,7 +83,7 @@ environment: test
 
 pycsw:
   count: 1
-  command: ["/bin/sh", "-c", "python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
+  args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
   probes:
     enabled: false
   ingress:

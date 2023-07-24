@@ -1,7 +1,7 @@
 ckanHelmValues:
   environment: staging
   ckan:
-    command: ["/bin/sh", "-c", "gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
     probes:
       enabled: true
     config:
