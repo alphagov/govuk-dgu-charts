@@ -37,3 +37,17 @@ Add `dev.data.gov.uk` after kubernetes.docker.internal on the sameline in the `/
   - See the cluster being created and running
 
   `kubectl get pods`
+
+### Useful tips
+
+#### How to test chart changes
+
+In order to test the changes in EKS follow these steps:
+
+- disable the auto-sync in the `dgu-app-of-apps` application.
+  - edit the target revision to be the branch you want to test and manually sync it.
+- edit the revision of the branch to be the branch you want to test in the `ckan` applications (not in the `dgu-app-of-apps` space).
+  - you may need to delete the app that has been updated in order to pick up the change.
+- if you make further changes to the chart you may need to manually sync the `dgu-app-of-apps`.
+- if it is not syncing you may need to check the sync status and terminate any running processes.
+- after testing is complete remember to turn on the auto sync in `dgu-app-of-apps`.

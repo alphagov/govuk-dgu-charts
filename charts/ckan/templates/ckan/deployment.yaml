@@ -60,11 +60,12 @@ spec:
             - name: config
               mountPath: /config
               readOnly: true
+          # command: {{ .Values.ckan.command }}
           command: ["/bin/sh", "-c"]
-          args: {{ .Values.ckan.config.command.args }}
+          args: {{ .Values.ckan.args }}
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
-          {{- if .Values.ckan.config.probes.enabled }}
+          {{- if .Values.ckan.probes.enabled }}
           livenessProbe:
             httpGet:
               path: /healthcheck

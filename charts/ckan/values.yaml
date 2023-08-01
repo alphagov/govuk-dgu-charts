@@ -3,11 +3,10 @@ ckan:
   serviceAccount:
     enabled: false
     iamRoleARN: ""
+  args: ["ckan run --host 0.0.0.0"]
+  probes:
+    enabled: false
   config:
-    command:
-      args: ["ckan run --host 0.0.0.0"]
-    probes:
-      enabled: false
     site:
       id: "dgu"
       url: "http://dev.data.gov.uk:8081"
@@ -84,6 +83,9 @@ environment: test
 
 pycsw:
   count: 1
+  args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
+  probes:
+    enabled: false
   ingress:
     enabled: true
     host: pycsw.data.gov.uk

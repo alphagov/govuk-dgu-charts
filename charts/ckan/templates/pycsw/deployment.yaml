@@ -27,15 +27,18 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-          command: ["/bin/sh", "-c", "python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
+          command: ["/bin/sh", "-c"]
+          args: {{ .Values.pycsw.args }}
           env:
             - name: PYCSW_CONFIG
               value: /config/pycsw.cfg
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          {{- if .Values.pycsw.probes.enabled }}
           livenessProbe:
             httpGet:
               path: /
               port: http
             initialDelaySeconds: 10
             periodSeconds: 3
+          {{- end }}
       {{ include "ckan.pycsw-volumes" . | nindent 6 }}
