@@ -60,7 +60,6 @@ spec:
             - name: config
               mountPath: /config
               readOnly: true
-          # command: {{ .Values.ckan.command }}
           command: ["/bin/sh", "-c"]
           args: {{ .Values.ckan.args }}
           env:
