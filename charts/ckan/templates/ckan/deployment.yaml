@@ -60,7 +60,6 @@ spec:
             - name: config
               mountPath: /config
               readOnly: true
-          # command: {{ .Values.ckan.command }}
           command: ["/bin/sh", "-c"]
           args: {{ .Values.ckan.args }}
           env:
@@ -70,9 +69,14 @@ spec:
             httpGet:
               path: /healthcheck
               port: http
-            initialDelaySeconds: 600
             periodSeconds: 60
             timeoutSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 5
           startupProbe:
             httpGet:
               path: /healthcheck
