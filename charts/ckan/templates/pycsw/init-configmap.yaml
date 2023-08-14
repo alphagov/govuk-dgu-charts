@@ -12,13 +12,11 @@ data:
     # update production.ini
     ckan config-tool $CKAN_INI "ckan.plugins = harvest ckan_harvester spatial_metadata spatial_query spatial_harvest_metadata_api gemini_csw_harvester gemini_waf_harvester gemini_doc_harvester"
     ckan config-tool $CKAN_INI "who.config_file = /config/who.ini"
-    # remove i18n directory as not needed for pycsw
-    ckan config-tool $CKAN_INI "ckan.i18n_directory="
+    # set i18n directory to ckan default
+    ckan config-tool $CKAN_INI "ckan.i18n_directory=/usr/lib/ckan/venv/src/ckan/ckan/i18n"
 
-    # update CKAN_SQLALCHEMY_URL to use pycsw database
-    export CKAN_SQLALCHEMY_URL=$(echo $CKAN_SQLALCHEMY_URL | sed 's/ckan_production/ckan_pycsw_production/g')
-    export PYCSW_SQLALCHEMY_URL=$(echo $CKAN_SQLALCHEMY_URL | sed 's/\//\\\//g')
-    sed "s/database=\${CKAN_SQLALCHEMY_URL}/database=$PYCSW_SQLALCHEMY_URL/g" -i /config/pycsw.cfg
+    # Set CKAN_SQLALCHEMY_URL for database url
+    sed "s|database=\${CKAN_SQLALCHEMY_URL}|database=$CKAN_SQLALCHEMY_URL|g" -i /config/pycsw.cfg
 
     # run init script
     /pycsw-entrypoint.sh
