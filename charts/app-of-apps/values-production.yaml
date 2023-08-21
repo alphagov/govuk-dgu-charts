@@ -1,0 +1,59 @@
+ckanHelmValues:
+  environment: production
+  ckan:
+    args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    probes:
+      enabled: true
+    config:
+      site:
+        url: "https://ckan.eks.production.govuk.digital"
+        title: "data.gov.uk"
+      dbHost: "ckan-postgres.production.govuk-internal.digital"
+      redis:
+        host: "backend-redis.production.govuk-internal.digital"
+      smtp:
+        server: "email-smtp.eu-west-1.amazonaws.com:587"
+        user: "AKIASQDMCZ2ESUFDLZ6D"
+        mailFrom: "team@data.gov.uk"
+        starttls: "True"
+      s3:
+        useIamServiceAccount: true
+        bucketName: "datagovuk-production-ckan-organogram"
+        regionName: "eu-west-1"
+        urlPrefix: "https://s3-eu-west-1.amazonaws.com/datagovuk-production-ckan-organogram/"
+    serviceAccount:
+      enabled: true
+      name: ckan
+      iamRoleARN: arn:aws:iam::172025368201:role/ckan-govuk
+  pycsw:
+    count: 1
+    args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
+    probes:
+      enabled: false
+  solr:
+    enabled: true
+    persistence:
+      enabled: true
+      persistentVolumeClaimName: solr
+  postgres:
+    enabled: false
+  redis:
+    enabled: false
+  ingress:
+    host: ckan.eks.production.govuk.digital
+    ingressClassName: aws-alb
+    annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+    tls:
+      enabled: true
+  dev:
+    enabled: false
+  gather:
+    count: 1
+  fetch:
+    count: 1
+  externalSecret:
+    enabled: true
