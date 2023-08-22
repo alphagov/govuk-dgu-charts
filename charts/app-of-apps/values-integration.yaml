@@ -1,7 +1,8 @@
 ckanHelmValues:
   environment: integration
   ckan:
-    args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    # args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    args: ["tail -f /dev/null"]
     probes:
       enabled: true
     config:
