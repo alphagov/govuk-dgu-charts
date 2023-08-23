@@ -30,6 +30,7 @@ ckanHelmValues:
     args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
     probes:
       enabled: true
+    suspendCronjob: true
   solr:
     enabled: true
     persistence:
