@@ -3,7 +3,7 @@ ckanHelmValues:
   ckan:
     args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
     probes:
-      enabled: true
+      enabled: false
     config:
       site:
         url: "https://ckan.eks.production.govuk.digital"
