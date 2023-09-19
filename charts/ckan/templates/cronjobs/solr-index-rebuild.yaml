@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-solr-index-rebuild
 spec:
-  schedule: "0 8-22 * * 0"
+  schedule: "0 8-22 * * *"
   suspend: false
   concurrencyPolicy: Forbid
   jobTemplate:
