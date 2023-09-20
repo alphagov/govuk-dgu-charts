@@ -97,6 +97,9 @@ data:
     ckan.harvest.mq.hostname = {{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}
     ckan.harvest.mq.port = {{ .Values.ckan.config.redis.port | default "6379" }}
     ckan.harvest.mq.redis_db = {{ .Values.ckan.config.redis.db_number | default "1" }}
+
+    # 12 hours timeout
+    ckan.harvest.timeout = 720
     
     ckan.redis.url = redis://{{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}:{{ .Values.ckan.config.redis.port | default "6379" }}/{{ .Values.ckan.config.redis.db_number | default "1" }}
 
