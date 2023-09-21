@@ -6,7 +6,7 @@ ckanHelmValues:
       enabled: false
     config:
       site:
-        url: "https://ckan.eks.staging.govuk.digital"
+        url: "https://ckan.staging.govuk.digital"
         title: "data.gov.uk"
       dbHost: "ckan-postgres.staging.govuk-internal.digital"
       redis:
@@ -40,7 +40,7 @@ ckanHelmValues:
   redis:
     enabled: false
   ingress:
-    host: ckan.eks.staging.govuk.digital
+    host: ckan.staging.govuk.digital
     ingressClassName: aws-alb
     annotations:
       alb.ingress.kubernetes.io/scheme: internet-facing
