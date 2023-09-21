@@ -47,6 +47,7 @@ ckanHelmValues:
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
       alb.ingress.kubernetes.io/ssl-redirect: "443"
+      alb.ingress.kubernetes.io/inbound-cidrs: 51.149.8.0/25, 52.208.24.161/32
     tls:
       enabled: true
   dev:
