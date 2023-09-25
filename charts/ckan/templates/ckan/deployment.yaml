@@ -76,14 +76,15 @@ spec:
               path: /healthcheck
               port: http
             periodSeconds: 5
-            timeoutSeconds: 5
+            successThreshold: 3
+            timeoutSeconds: 10
           startupProbe:
             httpGet:
               path: /healthcheck
               port: http
-            initialDelaySeconds: 600
+            initialDelaySeconds: 60
             failureThreshold: 60
-            periodSeconds: 120
+            periodSeconds: 10
             timeoutSeconds: 60
           {{- end }}
       volumes:
