@@ -3,7 +3,7 @@ ckan:
   serviceAccount:
     enabled: false
     iamRoleARN: ""
-  args: ["ckan run --host 0.0.0.0"]
+  args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
   probes:
     enabled: false
   config:
