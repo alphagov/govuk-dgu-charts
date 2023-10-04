@@ -10,7 +10,7 @@ ckanHelmValues:
         title: "data.gov.uk"
       dbHost: "ckan-postgres.integration.govuk-internal.digital"
       redis:
-        host: "backend-redis.integration.govuk-internal.digital"
+        host: "shared-redis-govuk.eks.integration.govuk-internal.digital"
       smtp:
         server: "email-smtp.eu-west-1.amazonaws.com:587"
         user: "AKIATB5RC4XX4VZIWMF7"
