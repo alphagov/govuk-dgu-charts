@@ -26,9 +26,9 @@ Add `dev.data.gov.uk` after kubernetes.docker.internal on the sameline in the `/
 
 - Creating the cluster
 
-  - Start by applying `super-secret.yaml`
+  - Start by applying `local-dev.yaml`
 
-  `kubectl apply -f super-secret.yaml`
+  `kubectl apply -f local-dev.yaml`
 
   - Then install the helm chart
 
