@@ -104,3 +104,9 @@ externalSecret:
 
 monitoring:
   enabled: false
+
+opensearch:
+  image: opensearchproject/opensearch
+  persistence:
+    enabled: false
+    persistentVolumeClaimName: "opensearch"
