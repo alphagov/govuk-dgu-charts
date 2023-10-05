@@ -38,6 +38,10 @@ Add `dev.data.gov.uk` after kubernetes.docker.internal on the sameline in the `/
 
   `kubectl get pods`
 
+  - Switching to the cluster
+
+  `kubectl config use-context k3d-local-ckan`
+
 ### Useful tips
 
 #### How to test chart changes
