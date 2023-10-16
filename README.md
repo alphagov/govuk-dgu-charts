@@ -22,7 +22,7 @@
 
 - To use a nice url update `/etc/hosts` 
 
-Add `dev.data.gov.uk` after kubernetes.docker.internal on the sameline in the `/etc/hosts` file
+Add `ckan.dev.govuk.digital` after kubernetes.docker.internal on the sameline in the `/etc/hosts` file
 
 - Creating the cluster
 
@@ -32,7 +32,7 @@ Add `dev.data.gov.uk` after kubernetes.docker.internal on the sameline in the `/
 
   - Then install the helm chart
 
-  `helm install ckan-test ./charts/dgu/`
+  `helm install dgu-dev ./charts/dgu/`
 
   - See the cluster being created and running
 

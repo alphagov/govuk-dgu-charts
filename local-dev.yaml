@@ -4,8 +4,8 @@ metadata:
   name: ckan
 type: Opaque
 stringData:
-  sqlalchemy_url: "postgresql://ckan:ckan@ckan-test-postgres/ckan"
-  publish_sqlalchemy_url: "postgresql://ckan:ckan@ckan-test-postgres/publish"
+  sqlalchemy_url: "postgresql://ckan:ckan@dgu-dev-postgres/ckan"
+  publish_sqlalchemy_url: "postgresql://ckan:ckan@dgu-dev-postgres/publish"
   solr_password: "ckan"
   smtp_password: "ckan"
   beaker_session_secret: "9EZiPwkeS+cZpqb0VDWrN+Q0M"
