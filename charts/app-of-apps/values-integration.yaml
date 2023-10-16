@@ -5,6 +5,7 @@ ckanHelmValues:
     probes:
       enabled: false
     config:
+      dbInit: false
       site:
         url: "https://ckan.eks.integration.govuk.digital"
         title: "data.gov.uk"

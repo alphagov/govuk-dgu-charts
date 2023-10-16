@@ -4,6 +4,7 @@ ckanHelmValues:
     probes:
       enabled: true
     config:
+      dbInit: false
       site:
         url: "https://ckan.publishing.service.gov.uk"
         title: "data.gov.uk"
