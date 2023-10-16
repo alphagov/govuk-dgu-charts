@@ -1,5 +1,5 @@
-{{- if .Values.ingress.enabled }}
-{{- with .Values.ingress }}
+{{- if .Values.ckan.ingress.enabled }}
+{{- with .Values.ckan.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
