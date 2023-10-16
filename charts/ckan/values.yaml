@@ -4,12 +4,20 @@ ckan:
     enabled: false
     iamRoleARN: ""
   args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
+  ingress:
+    enabled: true
+    host: ckan.dev.govuk.digital
+    ingressClassName: ""
+    annotations:
+    tls:
+      enabled: false
   probes:
     enabled: false
   config:
+    dbInit: true
     site:
       id: "dgu"
-      url: "http://dev.data.gov.uk:8081"
+      url: "http://ckan.dev.govuk.digital:8081"
       title: "dev.data.gov.uk"
       description: "Data publisher"
     mock_harvest_source: "https://ckan-static-mock-harvest-source.cloudapps.digital/"
@@ -66,19 +74,13 @@ postgres:
 redis:
   enabled: true
   image: redis:6.2.5-alpine3.14
-ingress:
-  enabled: true
-  host: dev.data.gov.uk
-  ingressClassName: ""
-  annotations:
-  tls:
-    enabled: false
 dev:
   enabled: true
 gather:
   count: 1
 fetch:
   count: 1
+
 environment: test
 
 pycsw:
@@ -110,3 +112,31 @@ opensearch:
   persistence:
     enabled: false
     persistentVolumeClaimName: "opensearch"
+
+publish:
+  count: 1
+  args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
+  probes:
+    enabled: false
+  config:
+    sqlalchemyUrlSecretKeyRef:
+      name: ckan
+      key: publish_sqlalchemy_url
+    dbHost: ""
+    redis:
+      host: ""
+      port: "6379"
+      db_number: "1"
+    org:
+      schedule: "*/10 * * * *"
+
+find:
+  count: 1
+  args: ["bin/rails s -b 0.0.0.0"]
+  ingress:
+    enabled: true
+    host: find.data.gov.uk
+    ingressClassName: ""
+    annotations:
+    tls:
+      enabled: false
