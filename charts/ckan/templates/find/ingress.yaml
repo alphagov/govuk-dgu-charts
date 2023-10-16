@@ -1,0 +1,30 @@
+{{- if .Values.find.ingress.enabled }}
+{{- with .Values.find.ingress }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: find
+  {{- if not (empty .annotations) }}
+  annotations:
+    {{- toYaml .annotations | trim | nindent 4 }}
+  {{- end }}
+spec:
+  {{ if not (empty .ingressClassName) }}ingressClassName: {{ .ingressClassName }}{{ end }}
+  rules:
+    - host: {{ .host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Release.Name }}-find
+                port:
+                  number: 3000
+  {{- if .tls.enabled }}
+  tls:
+    - hosts:
+      - {{ .host }}
+  {{- end }}
+{{- end }}
+{{- end }}
