@@ -7,7 +7,7 @@ spec:
   project: datagovuk
   source:
     repoURL: https://github.com/alphagov/govuk-ckan-chart
-    path: charts/ckan
+    path: charts/dgu
     targetRevision: HEAD
     helm:
       values: |
