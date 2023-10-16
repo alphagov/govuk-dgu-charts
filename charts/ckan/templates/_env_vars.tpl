@@ -5,6 +5,8 @@
     secretKeyRef:
       name: {{ .sqlalchemyUrlSecretKeyRef.name }}
       key: {{ .sqlalchemyUrlSecretKeyRef.key }}
+- name: CKAN_DB_INIT
+  value: "{{ .dbInit | default "false" }}"
 - name: CKAN_DB_HOST
   value: {{ .dbHost | default (print $.Release.Name "-postgres") }}
 - name: CKAN_SOLR_URL
