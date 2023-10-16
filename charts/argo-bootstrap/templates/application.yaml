@@ -5,7 +5,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/alphagov/govuk-ckan-chart
+    repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/app-of-apps
     helm:
       valueFiles:

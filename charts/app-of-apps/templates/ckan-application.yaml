@@ -6,7 +6,7 @@ metadata:
 spec:
   project: datagovuk
   source:
-    repoURL: https://github.com/alphagov/govuk-ckan-chart
+    repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/dgu
     targetRevision: HEAD
     helm:
