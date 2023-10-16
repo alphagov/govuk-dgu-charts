@@ -32,7 +32,7 @@ Add `dev.data.gov.uk` after kubernetes.docker.internal on the sameline in the `/
 
   - Then install the helm chart
 
-  `helm install ckan-test ./charts/ckan/`
+  `helm install ckan-test ./charts/dgu/`
 
   - See the cluster being created and running
 
