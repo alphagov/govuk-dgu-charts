@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-publish-package
+spec:
+  schedule: "*/10 * * * *"
+  concurrencyPolicy: Forbid  
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: publish
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
+              imagePullPolicy: Always
+              command: [ bin/rails, runner, CKAN::V26::PackageSyncWorker.new.perform ]
+              env:
+                {{- include "publish.environment-variables" . | nindent 16 }}
+          restartPolicy: OnFailure
