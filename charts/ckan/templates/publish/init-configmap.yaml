@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-publish-init
+data:
+  init.sh: |
+    while ! pg_isready -d $DATABASE_URL; do
+      sleep 1;
+    done
+
+    bin/setup
+    bin/rails db:setup
+    bundle exec rails db:create && bundle exec rails db:schema:load
+
+    # wait until CKAN is ready
+    until [ "$health" = 'OK' ]; do
+        health="$(curl -fsSL "$CKAN_URL/healthcheck")"
+        if [ "$health" != 'OK' ]; then
+            echo "CKAN is unavailable - sleeping"
+            sleep 10
+        fi
+    done
+
+    echo "CKAN is available..."
