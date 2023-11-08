@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-opensearch
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-opensearch
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-opensearch
+    spec:
+      containers:
+        - name: opensearch
+          image: {{ .Values.opensearch.image }}
+          ports:
+            - name: host-port
+              containerPort: 9200
+            - name: node-port
+              containerPort: 9600
+          env:
+            - name: bootstrap.memory_lock
+              value: "true" # along with the memlock settings below, disables swapping
+            - name: OPENSEARCH_JAVA_OPTS
+              value: -Xms512m -Xmx512m # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+            - name: DISABLE_INSTALL_DEMO_CONFIG
+              value: "true" # disables execution of install_demo_configuration.sh bundled with security plugin, which installs demo certificates and security configurations to OpenSearch
+            - name: DISABLE_SECURITY_PLUGIN
+              value: "true" # disables security plugin entirely in OpenSearch by setting plugins.security.disabled: true in opensearch.yml
+            - name: discovery.type
+              value: single-node
+          {{- if .Values.opensearch.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/opensearch/data
+          {{- end }}
+      {{- if .Values.opensearch.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.opensearch.persistence.persistentVolumeClaimName }}
+      {{- end }}

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-publish
+spec:
+  replicas: {{ .Values.publish.count }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-publish
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-publish
+    spec:
+      securityContext:
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
+      initContainers:
+        - name: config-set
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
+          command: [ "/bin/sh", "-c", '. /init/init.sh']
+          imagePullPolicy: Always
+          env:
+            {{ include "publish.environment-variables" . | nindent 12 }}
+          volumeMounts:
+            - name: publish-init
+              mountPath: /init
+      containers:
+        - name: publish
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: {{ .Values.publish.args }}
+          env:
+            {{ include "publish.environment-variables" . | nindent 12 }}
+      volumes:
+        - name: publish-init
+          configMap:
+            name: {{ .Release.Name }}-publish-init

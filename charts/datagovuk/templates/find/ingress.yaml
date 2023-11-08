@@ -1,9 +1,9 @@
-{{- if .Values.ckan.ingress.enabled }}
-{{- with .Values.ckan.ingress }}
+{{- if .Values.find.ingress.enabled }}
+{{- with .Values.find.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ckan
+  name: find
   {{- if not (empty .annotations) }}
   annotations:
     {{- toYaml .annotations | trim | nindent 4 }}
@@ -18,16 +18,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Release.Name }}-ckan
+                name: {{ $.Release.Name }}-find
                 port:
-                  number: 5000
-          - path: /csw
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $.Release.Name }}-pycsw
-                port:
-                  number: 8000
+                  number: 3000
   {{- if .tls.enabled }}
   tls:
     - hosts:

@@ -5,7 +5,7 @@ metadata:
   name: {{ .Release.Name }}-ckan
   labels:
     app: {{ .Release.Name }}-ckan
-    helm.sh/chart: govuk-ckan-charts
+    helm.sh/chart: govuk-dgu-charts
     app.kubernetes.io/name: ckan
     app.kubernetes.io/managed-by: Helm
 spec:
