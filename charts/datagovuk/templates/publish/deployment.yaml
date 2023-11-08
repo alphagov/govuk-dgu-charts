@@ -13,12 +13,9 @@ spec:
         app: {{ .Release.Name }}-publish
     spec:
       securityContext:
-        runAsUser: 0
-        runAsGroup: 0
-        fsGroup: 0
-        # runAsUser: 900
-        # runAsGroup: 900
-        # fsGroup: 900
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
       initContainers:
         - name: config-set
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
