@@ -1,7 +1,7 @@
 ckanHelmValues:
   environment: staging
   ckan:
-    count: 3
+    count: 1
     probes:
       enabled: true
     config:
