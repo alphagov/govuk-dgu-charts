@@ -66,4 +66,14 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-ckan-chart/releases/download/govuk-ckan-1.0.1/govuk-ckan-1.0.1.tgz
     version: 1.0.1
-generated: "2023-02-10T15:20:33.694691189Z"
+  govuk-datagovuk:
+  - apiVersion: v2
+    created: "2023-11-09T11:32:33.496080053Z"
+    description: data.gov.uk
+    digest: 33747050a9f086e39e81579cabe6c39f02edd65c2af679c2f208346ccd9cc74c
+    name: govuk-datagovuk
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-dgu-charts/releases/download/govuk-datagovuk-1.0.0/govuk-datagovuk-1.0.0.tgz
+    version: 1.0.0
+generated: "2023-11-09T11:32:33.496112052Z"
