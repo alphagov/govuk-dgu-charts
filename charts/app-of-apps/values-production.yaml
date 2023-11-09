@@ -1,6 +1,7 @@
 ckanHelmValues:
   environment: production
   ckan:
+    count: 2
     probes:
       enabled: true
     config:
