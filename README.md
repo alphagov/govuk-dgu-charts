@@ -32,7 +32,7 @@ Add `ckan.dev.govuk.digital` after kubernetes.docker.internal on the sameline in
 
   - Then install the helm chart
 
-  `helm install dgu-dev ./charts/dgu/`
+  `helm install datagovuk-dev ./charts/datagovuk/`
 
   - See the cluster being created and running
 
