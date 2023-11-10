@@ -2,6 +2,16 @@ ckanHelmValues:
   environment: staging
   ckan:
     count: 1
+    ingress:
+      host: ckan.eks.staging.govuk.digital
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+      tls:
+        enabled: true
     probes:
       enabled: true
     config:
@@ -40,16 +50,6 @@ ckanHelmValues:
     enabled: false
   redis:
     enabled: false
-  ingress:
-    host: ckan.eks.staging.govuk.digital
-    ingressClassName: aws-alb
-    annotations:
-      alb.ingress.kubernetes.io/scheme: internet-facing
-      alb.ingress.kubernetes.io/target-type: ip
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: "443"
-    tls:
-      enabled: true
   dev:
     enabled: false
   gather:
