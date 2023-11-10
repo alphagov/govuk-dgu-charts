@@ -2,6 +2,18 @@ ckanHelmValues:
   environment: production
   ckan:
     count: 2
+    ingress:
+      host: ckan.publishing.service.gov.uk
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:172025368201:certificate/b315cd63-5ca1-4c7b-8d3b-914eccc024f8"
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-dgu-lb-logs-temp,access_logs.s3.prefix=ckan
+      tls:
+        enabled: true
     probes:
       enabled: true
     config:
@@ -40,18 +52,6 @@ ckanHelmValues:
     enabled: false
   redis:
     enabled: false
-  ingress:
-    host: ckan.publishing.service.gov.uk
-    ingressClassName: aws-alb
-    annotations:
-      alb.ingress.kubernetes.io/scheme: internet-facing
-      alb.ingress.kubernetes.io/target-type: ip
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: "443"
-      alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:172025368201:certificate/b315cd63-5ca1-4c7b-8d3b-914eccc024f8"
-      alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-dgu-lb-logs-temp,access_logs.s3.prefix=ckan
-    tls:
-      enabled: true
   dev:
     enabled: false
   gather:

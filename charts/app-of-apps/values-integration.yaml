@@ -2,6 +2,16 @@ ckanHelmValues:
   environment: integration
   ckan:
     args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    ingress:
+      host: ckan.eks.integration.govuk.digital
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+      tls:
+        enabled: true
     probes:
       enabled: false
     config:
@@ -39,16 +49,6 @@ ckanHelmValues:
     enabled: false
   redis:
     enabled: false
-  ingress:
-    host: ckan.eks.integration.govuk.digital
-    ingressClassName: aws-alb
-    annotations:
-      alb.ingress.kubernetes.io/scheme: internet-facing
-      alb.ingress.kubernetes.io/target-type: ip
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: "443"
-    tls:
-      enabled: true
   dev:
     enabled: false
   gather:
