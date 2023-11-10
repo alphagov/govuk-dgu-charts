@@ -106,37 +106,3 @@ externalSecret:
 
 monitoring:
   enabled: false
-
-opensearch:
-  image: opensearchproject/opensearch
-  persistence:
-    enabled: false
-    persistentVolumeClaimName: "opensearch"
-
-publish:
-  count: 1
-  args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
-  probes:
-    enabled: false
-  config:
-    sqlalchemyUrlSecretKeyRef:
-      name: ckan
-      key: publish_sqlalchemy_url
-    dbHost: ""
-    redis:
-      host: ""
-      port: "6379"
-      db_number: "1"
-    org:
-      schedule: "*/10 * * * *"
-
-find:
-  count: 1
-  args: ["bin/rails s -b 0.0.0.0"]
-  ingress:
-    enabled: true
-    host: find.data.gov.uk
-    ingressClassName: ""
-    annotations:
-    tls:
-      enabled: false
