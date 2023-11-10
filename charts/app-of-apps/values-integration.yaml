@@ -57,3 +57,24 @@ ckanHelmValues:
     count: 1
   externalSecret:
     enabled: true
+
+datagovukHelmValues:
+  environment: integration
+  publish:
+    count: 1
+    args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
+    probes:
+      enabled: false
+    config:
+      ckanReleaseName: "ckan-dev"
+      sqlalchemyUrlSecretKeyRef:
+        name: ckan
+        key: publish_sqlalchemy_url
+      dbHost: ""
+      redis:
+        host: ""
+        port: "6379"
+        db_number: "1"
+      org:
+        schedule: "*/10 * * * *"
+
