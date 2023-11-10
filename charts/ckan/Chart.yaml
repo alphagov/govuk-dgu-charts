@@ -2,4 +2,4 @@ apiVersion: v2
 name: govuk-ckan
 description: CKAN
 type: application
-version: 1.0.1
+version: 1.1.0
