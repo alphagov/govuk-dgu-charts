@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  app-of-apps:
+  - apiVersion: v2
+    created: "2023-11-10T10:38:52.348542494Z"
+    description: Deploys CKAN applications
+    digest: c672a6e89ed87bfe9d3c40501953ff644da763396cc2dacd054856c8334be196
+    name: app-of-apps
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-dgu-charts/releases/download/app-of-apps-1.0.0/app-of-apps-1.0.0.tgz
+    version: 1.0.0
+generated: "2023-11-10T10:38:52.348548494Z"
