@@ -1,5 +1,5 @@
 {{- define "find.environment-variables" -}}
-{{- $environment := eq .Values.environment "test" | ternary "development" "{{ .Values.environment }}" -}}
+{{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
 - name: ES_HOST
   value: http://{{ $.Release.Name }}-opensearch
 - name: RAILS_ENV
