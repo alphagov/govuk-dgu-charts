@@ -1,5 +1,5 @@
 {{- define "publish.environment-variables" -}}
-{{- $environment := eq .Values.environment "test" | ternary "development" "{{ .Values.environment }}" -}}
+{{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
 - name: CKAN_URL
   value: http://{{ .Values.publish.config.ckanReleaseName }}-ckan:5000
 - name: DATABASE_URL
