@@ -66,7 +66,7 @@ datagovukHelmValues:
     probes:
       enabled: false
     config:
-      ckanReleaseName: "ckan-dev"
+      ckanReleaseName: "ckan"
       sqlalchemyUrlSecretKeyRef:
         name: ckan
         key: publish_sqlalchemy_url
