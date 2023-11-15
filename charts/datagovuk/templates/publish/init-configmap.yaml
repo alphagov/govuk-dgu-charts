@@ -8,9 +8,12 @@ data:
       sleep 1;
     done
 
+    ## no permissions to create database so remove
+    # bin/rails db:setup
+    # bundle exec rails db:create && 
+
     bin/setup
-    bin/rails db:setup
-    bundle exec rails db:create && bundle exec rails db:schema:load
+    bundle exec rails db:schema:load
 
     # wait until CKAN is ready
     until [ "$health" = 'OK' ]; do
