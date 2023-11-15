@@ -72,7 +72,7 @@ datagovukHelmValues:
         key: publish_sqlalchemy_url
       dbHost: ""
       redis:
-        host: ""
+        host: "shared-redis-govuk.eks.integration.govuk-internal.digital"
         port: "6379"
         db_number: "1"
       org:

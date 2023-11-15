@@ -2,7 +2,7 @@
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
 {{- with .Values.publish.config }}
 - name: CKAN_URL
-  value: http://{{ .Values.publish.config.ckanReleaseName }}-ckan:5000
+  value: http://{{ .ckanReleaseName }}-ckan:5000
 - name: DATABASE_URL
   valueFrom:
     secretKeyRef:
@@ -13,7 +13,7 @@
 - name: RAILS_ENV
   value: {{ $environment }}
 - name: REDIS_HOST
-  value: redis://{{ .redis.host | default (print "ckan-redis") }}/{{ .redis.db_number | default "1" }}
+  value: redis://{{ .redis.host | default "ckan-redis" }}/{{ .redis.db_number | default "1" }}
 - name: ES_INDEX
   value: datasets-{{ $environment }}
 - name: RAILS_LOG_TO_STDOUT
