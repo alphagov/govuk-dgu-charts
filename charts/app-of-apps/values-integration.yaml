@@ -78,7 +78,7 @@ datagovukHelmValues:
       org:
         schedule: "*/10 * * * *"
   find:
-    count: 0
+    count: 1
     args: ["bin/rails s -b 0.0.0.0"]
     probes:
       enabled: false

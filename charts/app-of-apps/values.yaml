@@ -10,4 +10,4 @@ datagovukHelmValues:
     count: 1
 
   find:
-    count: 0
+    count: 1
