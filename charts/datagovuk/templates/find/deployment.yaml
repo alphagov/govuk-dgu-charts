@@ -33,3 +33,10 @@ spec:
               port: http
             periodSeconds: 60
             timeoutSeconds: 30
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /srv/app/datagovuk_find/tmp
+      volumes:
+        - name: app-tmp
+          emptyDir: {}
+
