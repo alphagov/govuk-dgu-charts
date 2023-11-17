@@ -18,6 +18,10 @@ spec:
         fsGroup: 900
       initContainers:
         - name: config-set
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
           command: [ "/bin/sh", "-c", '. /init/init.sh']
           imagePullPolicy: Always
