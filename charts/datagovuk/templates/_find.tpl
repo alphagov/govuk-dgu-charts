@@ -10,6 +10,8 @@
   value: "1"
 - name: RAILS_DEVELOPMENT_HOSTS
   value: {{ .Values.find.ingress.host }}
+- name: RAILS_SERVE_STATIC_FILES
+  value: "1"
 - name: SECRET_KEY_BASE
   value: "test00001111222233334444"
 {{- end }}
