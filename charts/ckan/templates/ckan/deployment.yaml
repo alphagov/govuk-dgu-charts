@@ -12,14 +12,10 @@ spec:
       labels:
         app: {{ .Release.Name }}-ckan
     spec:
-      # securityContext:
-      #   runAsUser: 900
-      #   runAsGroup: 900
-      #   fsGroup: 900
       securityContext:
-        runAsUser: 0
-        runAsGroup: 0
-        fsGroup: 0
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
       {{ if .Values.ckan.serviceAccount.enabled }}serviceAccountName: {{ .Values.ckan.serviceAccount.name | default (print "ckan-" .Release.Name) }}{{- end }}
       initContainers:
         - name: config-set
