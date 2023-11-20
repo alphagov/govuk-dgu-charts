@@ -13,7 +13,7 @@
 - name: RAILS_ENV
   value: {{ $environment }}
 - name: REDIS_HOST
-  value: redis://{{ .redis.host | default "ckan-redis" }}/{{ .redis.db_number | default "1" }}
+  value: redis://{{ .redis.host | default "ckan-redis" }}/{{ .redis.dbNumber | default "1" }}
 - name: ES_INDEX
   value: datasets-{{ $environment }}
 - name: RAILS_LOG_TO_STDOUT

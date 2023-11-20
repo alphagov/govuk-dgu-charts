@@ -96,12 +96,12 @@ data:
     ckan.harvest.mq.type = redis
     ckan.harvest.mq.hostname = {{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}
     ckan.harvest.mq.port = {{ .Values.ckan.config.redis.port | default "6379" }}
-    ckan.harvest.mq.redis_db = {{ .Values.ckan.config.redis.db_number | default "1" }}
+    ckan.harvest.mq.redis_db = {{ .Values.ckan.config.redis.dbNumber | default "1" }}
 
     # 12 hours timeout
     ckan.harvest.timeout = 720
     
-    ckan.redis.url = redis://{{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}:{{ .Values.ckan.config.redis.port | default "6379" }}/{{ .Values.ckan.config.redis.db_number | default "1" }}
+    ckan.redis.url = redis://{{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}:{{ .Values.ckan.config.redis.port | default "6379" }}/{{ .Values.ckan.config.redis.dbNumber | default "1" }}
 
     ckan.spatial.validator.profiles = iso19139eden,constraints-1.4,gemini2-1.3
     ckan.spatial.validator.reject = true

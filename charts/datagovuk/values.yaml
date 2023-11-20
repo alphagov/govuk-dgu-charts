@@ -20,7 +20,7 @@ publish:
     redis:
       host: "ckan-dev"
       port: "6379"
-      db_number: "1"
+      dbNumber: "1"
     org:
       schedule: "*/10 * * * *"
 

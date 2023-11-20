@@ -28,7 +28,7 @@ ckan:
     redis:
       host: ""
       port: "6379"
-      db_number: "1"
+      dbNumber: "1"
     beakerSessionSecretKeyRef:
       name: ckan
       key: beaker_session_secret
