@@ -23,7 +23,7 @@ spec:
             runAsGroup: 0
             fsGroup: 0
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
-          command: [ "/bin/sh", "-c", '. /init/init.sh']
+          command: [ "/bin/sh", '/init/init.sh']
           imagePullPolicy: Always
           volumeMounts:
             - name: find-init
