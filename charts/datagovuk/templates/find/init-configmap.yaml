@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Release.Name }}-find-init
-data:
-  init.sh: |
-    # remove server.pid upon new deployment
-    rm -rf /srv/app/datagovuk_find/tmp/pids/server.pid
