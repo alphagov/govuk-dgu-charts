@@ -16,18 +16,6 @@ spec:
         runAsUser: 900
         runAsGroup: 900
         fsGroup: 900
-      initContainers:
-        - name: config-set
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-            fsGroup: 0
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
-          command: [ "/bin/sh", '/init/init.sh']
-          imagePullPolicy: Always
-          volumeMounts:
-            - name: find-init
-              mountPath: /init
       containers:
         - name: find
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
