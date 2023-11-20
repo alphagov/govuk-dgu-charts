@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-publish
 spec:
-  replicas: {{ .Values.publish.count }}
+  replicas: {{ .Values.publish.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-publish

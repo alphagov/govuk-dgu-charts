@@ -1,7 +1,7 @@
 ckanHelmValues:
   environment: production
   ckan:
-    count: 2
+    replicaCount: 2
     ingress:
       host: ckan.publishing.service.gov.uk
       ingressClassName: aws-alb
@@ -39,7 +39,7 @@ ckanHelmValues:
       name: ckan
       iamRoleARN: arn:aws:iam::172025368201:role/ckan-govuk
   pycsw:
-    count: 1
+    replicaCount: 1
     args: ["gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120"]
     probes:
       enabled: true
@@ -55,8 +55,8 @@ ckanHelmValues:
   dev:
     enabled: false
   gather:
-    count: 1
+    replicaCount: 1
   fetch:
-    count: 1
+    replicaCount: 1
   externalSecret:
     enabled: true

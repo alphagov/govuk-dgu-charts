@@ -1,13 +1,13 @@
 ckanHelmValues:
   ckan:
-    count: 1
+    replicaCount: 1
 
   monitoring:
     enabled: true
 
 datagovukHelmValues:
   publish:
-    count: 1
+    replicaCount: 1
 
   find:
-    count: 1
+    replicaCount: 1

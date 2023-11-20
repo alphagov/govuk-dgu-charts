@@ -52,16 +52,16 @@ ckanHelmValues:
   dev:
     enabled: false
   gather:
-    count: 1
+    replicaCount: 1
   fetch:
-    count: 1
+    replicaCount: 1
   externalSecret:
     enabled: true
 
 datagovukHelmValues:
   environment: integration
   publish:
-    count: 1
+    replicaCount: 1
     args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
     probes:
       enabled: false
@@ -78,7 +78,7 @@ datagovukHelmValues:
       org:
         schedule: "*/10 * * * *"
   find:
-    count: 1
+    replicaCount: 1
     args: ["bin/rails s -b 0.0.0.0"]
     probes:
       enabled: false

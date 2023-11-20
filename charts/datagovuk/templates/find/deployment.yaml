@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-find
 spec:
-  replicas: {{ .Values.find.count }}
+  replicas: {{ .Values.find.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-find

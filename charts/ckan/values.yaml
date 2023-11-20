@@ -1,5 +1,5 @@
 ckan:
-  count: 1
+  replicaCount: 1
   serviceAccount:
     enabled: false
     iamRoleARN: ""
@@ -77,14 +77,14 @@ redis:
 dev:
   enabled: true
 gather:
-  count: 1
+  replicaCount: 1
 fetch:
-  count: 1
+  replicaCount: 1
 
 environment: test
 
 pycsw:
-  count: 1
+  replicaCount: 1
   args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
   probes:
     enabled: false

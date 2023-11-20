@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-pycsw
 spec:
-  replicas: {{ .Values.pycsw.count }}
+  replicas: {{ .Values.pycsw.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-pycsw
