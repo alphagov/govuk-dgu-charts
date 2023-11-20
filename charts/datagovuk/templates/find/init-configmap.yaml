@@ -4,19 +4,5 @@ metadata:
   name: {{ .Release.Name }}-find-init
 data:
   init.sh: |
-    while ! pg_isready -d $DATABASE_URL; do
-      sleep 1;
-    done
-
-    bin/rails db:setup
-    bundle exec rails db:create && bundle exec rails db:schema:load
-
-    # wait until CKAN is ready
-    until [ "$health" = 'OK' ]; do
-        health="$(curl -fsSL "$CKAN_URL/healthcheck")"
-        if [ "$health" != 'OK' ]; then
-            echo "CKAN is unavailable - sleeping"
-            sleep 10
-        fi
-    done
-    echo "CKAN is available..."
+    # remove server.pid upon new deployment
+    rm -rf /srv/app/datagovuk_find/tmp/pids/server.pid

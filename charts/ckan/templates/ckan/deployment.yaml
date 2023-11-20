@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-ckan
 spec:
-  replicas: {{ .Values.ckan.count }}
+  replicas: {{ .Values.ckan.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-ckan

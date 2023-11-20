@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-fetch
 spec:
-  replicas: {{ .Values.fetch.count }}
+  replicas: {{ .Values.fetch.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-fetch

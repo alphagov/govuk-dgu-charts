@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-find
 spec:
-  replicas: {{ .Values.find.count }}
+  replicas: {{ .Values.find.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-find
@@ -16,6 +16,18 @@ spec:
         runAsUser: 900
         runAsGroup: 900
         fsGroup: 900
+      initContainers:
+        - name: config-set
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
+          command: [ "/bin/sh", '/init/init.sh']
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: find-init
+              mountPath: /init
       containers:
         - name: find
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
@@ -33,3 +45,13 @@ spec:
               port: http
             periodSeconds: 60
             timeoutSeconds: 30
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /srv/app/datagovuk_find/tmp
+      volumes:
+        - name: app-tmp
+          emptyDir: {}
+        - name: find-init
+          configMap:
+            name: {{ .Release.Name }}-find-init
+

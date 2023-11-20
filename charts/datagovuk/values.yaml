@@ -7,25 +7,25 @@ opensearch:
     persistentVolumeClaimName: "opensearch"
 
 publish:
-  count: 1
+  replicaCount: 1
   args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
   probes:
     enabled: false
   config:
     ckanReleaseName: "ckan-dev"
     sqlalchemyUrlSecretKeyRef:
-      name: ckan
+      name: datagovuk
       key: publish_sqlalchemy_url
     dbHost: ""
     redis:
-      host: ""
+      host: "ckan-dev"
       port: "6379"
-      db_number: "1"
+      dbNumber: "1"
     org:
       schedule: "*/10 * * * *"
 
 find:
-  count: 1
+  replicaCount: 1
   args: ["bin/rails s -b 0.0.0.0"]
   ingress:
     enabled: true
@@ -34,3 +34,21 @@ find:
     annotations:
     tls:
       enabled: false
+  config:
+    secretKeyBaseSecretKeyRef:
+      name: datagovuk
+      key: secret_key_base
+    zendeskApiKeySecretKeyRef:
+      name: datagovuk
+      key: zendesk_api_key
+    zendeskUsernameSecretKeyRef:
+      name: datagovuk
+      key: zendesk_username
+
+externalSecret:
+  enabled: false
+  name: datagovuk
+  key: govuk/dgu/datagovuk
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
