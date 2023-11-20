@@ -14,7 +14,7 @@ publish:
   config:
     ckanReleaseName: "ckan-dev"
     sqlalchemyUrlSecretKeyRef:
-      name: ckan
+      name: datagovuk
       key: publish_sqlalchemy_url
     dbHost: ""
     redis:
@@ -34,3 +34,21 @@ find:
     annotations:
     tls:
       enabled: false
+  config:
+    secretKeyBaseSecretKeyRef:
+      name: datagovuk
+      key: secret_key_base
+    zendeskApiKeySecretKeyRef:
+      name: datagovuk
+      key: zendesk_api_key
+    zendeskUsernameSecretKeyRef:
+      name: datagovuk
+      key: zendesk_username
+
+externalSecret:
+  enabled: false
+  name: datagovuk
+  key: govuk/dgu/datagovuk
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
