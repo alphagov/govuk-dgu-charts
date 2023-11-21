@@ -55,3 +55,7 @@ In order to test the changes in EKS follow these steps:
 - if you make further changes to the chart you may need to manually sync the `dgu-app-of-apps`.
 - if it is not syncing you may need to check the sync status and terminate any running processes.
 - after testing is complete remember to turn on the auto sync in `dgu-app-of-apps`.
+
+### Github API token permissions
+
+When creating fine-grained API tokens, ensure that read/write permissions for PRs and Content are allowed (this will allow for PR and commit creation) and that CI user is used to create the PRs.
