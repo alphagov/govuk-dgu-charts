@@ -60,3 +60,12 @@ ckanHelmValues:
     replicaCount: 1
   externalSecret:
     enabled: true
+
+datagovukHelmValues:
+  environment: production
+  publish:
+    replicaCount: 0
+  find:
+    replicaCount: 0
+  opensearch:
+    replicaCount: 0
