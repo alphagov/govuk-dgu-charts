@@ -1,5 +1,7 @@
 ### Quickstart for local development cluster
 
+This is useful for developing and testing app changes locally, for apps that you are not developing, just copy the image repository and tag from the integration environment to pull down that image.
+
 - use k3d framework
 
 [k3d](https://k3d.io/v5.4.6/) so that we don't need to worry about creating an ingress controller. This will be more aligned with how we run the cluster on EKS as that manages the ingress for us.
@@ -22,7 +24,7 @@
 
 - To use a nice url update `/etc/hosts` 
 
-Add `ckan.dev.govuk.digital` after kubernetes.docker.internal on the sameline in the `/etc/hosts` file
+Add `ckan.dev.govuk.digital` after `kubernetes.docker.internal` on the sameline in the `/etc/hosts` file
 
 - Creating the cluster
 
@@ -32,17 +34,19 @@ Add `ckan.dev.govuk.digital` after kubernetes.docker.internal on the sameline in
 
   - Then install the helm chart
 
+  `helm install ckan-dev ./charts/ckan/`
+
   `helm install datagovuk-dev ./charts/datagovuk/`
 
   - See the cluster being created and running
 
   `kubectl get pods`
 
-  - Switching to the cluster
+### Useful tips
+
+### Switching to the local dev cluster
 
   `kubectl config use-context k3d-local-ckan`
-
-### Useful tips
 
 #### How to test chart changes
 
