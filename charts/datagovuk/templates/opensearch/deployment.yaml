@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-opensearch
 spec:
+  replicas: {{ .Values.opensearch.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-opensearch

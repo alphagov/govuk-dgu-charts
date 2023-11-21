@@ -11,3 +11,6 @@ datagovukHelmValues:
 
   find:
     replicaCount: 1
+
+  opensearch:
+    replicaCount: 1
