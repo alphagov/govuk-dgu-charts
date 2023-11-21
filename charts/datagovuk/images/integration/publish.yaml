@@ -1,2 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk_publish
-tag: b31f03c62843e59157f813537659622d18e2b2c2
+tag: 19e18e6bb73937513eab703e7cb7a72530af14ed
+branch: main
