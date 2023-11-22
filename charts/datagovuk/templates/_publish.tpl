@@ -25,5 +25,15 @@
     secretKeyRef:
       name: {{ .sentryDsnSecretKeyRef.name }}
       key: {{ .sentryDsnSecretKeyRef.key }}
+- name: GOVUK_APP_DOMAIN
+  valueFrom:
+    secretKeyRef:
+      name: {{ .govukAppDomainSecretKeyRef.name }}
+      key: {{ .govukAppDomainSecretKeyRef.key }}
+- name: FIND_URL
+  valueFrom:
+    secretKeyRef:
+      name: {{ .findUrlSecretKeyRef.name }}
+      key: {{ .findUrlSecretKeyRef.key }}  
 {{- end }}
 {{- end }}
