@@ -12,21 +12,28 @@
   value: {{ .Values.find.ingress.host }}
 - name: RAILS_SERVE_STATIC_FILES
   value: "1"
+{{- with .Values.find.config }}
 - name: SECRET_KEY_BASE
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.find.config.secretKeyBaseSecretKeyRef.name }}
-      key: {{ .Values.find.config.secretKeyBaseSecretKeyRef.key }}
+      name: {{ .secretKeyBaseSecretKeyRef.name }}
+      key: {{ .secretKeyBaseSecretKeyRef.key }}
+- name: SENTRY_DSN
+  valueFrom:
+    secretKeyRef:
+      name: {{ .sentryDsnSecretKeyRef.name }}
+      key: {{ .sentryDsnSecretKeyRef.key }}
 - name: ZENDESK_API_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.find.config.zendeskApiKeySecretKeyRef.name }}
-      key: {{ .Values.find.config.zendeskApiKeySecretKeyRef.key }}
+      name: {{ .zendeskApiKeySecretKeyRef.name }}
+      key: {{ .zendeskApiKeySecretKeyRef.key }}
 - name: ZENDESK_END_POINT
   value: "https://govuk.zendesk.com/api/v2"
 - name: ZENDESK_USERNAME
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.find.config.zendeskUsernameSecretKeyRef.name }}
-      key: {{ .Values.find.config.zendeskUsernameSecretKeyRef.key }}
+      name: {{ .zendeskUsernameSecretKeyRef.name }}
+      key: {{ .zendeskUsernameSecretKeyRef.key }}
+{{- end }}
 {{- end }}

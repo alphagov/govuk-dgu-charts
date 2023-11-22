@@ -10,13 +10,14 @@ opensearch:
 publish:
   replicaCount: 1
   args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
-  probes:
-    enabled: false
   config:
     ckanReleaseName: "ckan-dev"
     sqlalchemyUrlSecretKeyRef:
       name: datagovuk
       key: publish_sqlalchemy_url
+    sentryDsnSecretKeyRef:
+      name: datagovuk
+      key: sentry_dsn
     dbHost: ""
     redis:
       host: "ckan-dev"
@@ -45,6 +46,9 @@ find:
     zendeskUsernameSecretKeyRef:
       name: datagovuk
       key: zendesk_username
+    sentryDsnSecretKeyRef:
+      name: datagovuk
+      key: sentry_dsn
 
 externalSecret:
   enabled: false

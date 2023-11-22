@@ -20,5 +20,10 @@
   value: "1"
 - name: CKAN_REDIRECTION_URL
   value: ckan
+- name: SENTRY_DSN
+  valueFrom:
+    secretKeyRef:
+      name: {{ .sentryDsnSecretKeyRef.name }}
+      key: {{ .sentryDsnSecretKeyRef.key }}
 {{- end }}
 {{- end }}

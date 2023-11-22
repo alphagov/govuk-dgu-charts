@@ -64,8 +64,6 @@ datagovukHelmValues:
   publish:
     replicaCount: 1
     args: [ "bundle exec rake db:migrate db:seed && bundle exec sidekiq" ]
-    probes:
-      enabled: false
     config:
       ckanReleaseName: "ckan"
       sqlalchemyUrlSecretKeyRef:
@@ -81,8 +79,6 @@ datagovukHelmValues:
   find:
     replicaCount: 1
     args: [ "bin/rails s -b 0.0.0.0" ]
-    probes:
-      enabled: false
     ingress:
       host: find.eks.staging.govuk.digital
       ingressClassName: aws-alb
