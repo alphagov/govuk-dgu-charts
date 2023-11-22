@@ -1,6 +1,7 @@
 environment: test
 
 opensearch:
+  replicaCount: 1
   image: opensearchproject/opensearch
   persistence:
     enabled: false

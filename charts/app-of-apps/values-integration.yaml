@@ -92,6 +92,8 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
       tls:
         enabled: true
+  opensearch:
+    replicaCount: 1
   externalSecret:
     enabled: true
 
