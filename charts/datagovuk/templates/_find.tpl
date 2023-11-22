@@ -17,6 +17,11 @@
     secretKeyRef:
       name: {{ .Values.find.config.secretKeyBaseSecretKeyRef.name }}
       key: {{ .Values.find.config.secretKeyBaseSecretKeyRef.key }}
+- name: SENTRY_DSN
+  valueFrom:
+    secretKeyRef:
+      name: {{ .sentryDsnSecretKeyRef.name }}
+      key: {{ .sentryDsnSecretKeyRef.key }}
 - name: ZENDESK_API_KEY
   valueFrom:
     secretKeyRef:
