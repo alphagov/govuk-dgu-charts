@@ -13,6 +13,17 @@ stringData:
   aws_secret_access_key: "test"
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: datagovuk
+type: Opaque
+stringData:
+  publish_sqlalchemy_url: "postgresql://ckan:ckan@ckan-dev-postgres/publish"
+  secret_key_base: "dummy"
+  zendesk_api_key: "dummy"
+  zendesk_username: "dummy"
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: solr
