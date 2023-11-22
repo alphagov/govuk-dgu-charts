@@ -2,14 +2,16 @@
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
 - name: CKAN_DOMAIN
   value: {{ .Values.find.config.ckanDomain }}
-- name: GOVUK_APP_DOMAIN
-  value: "www.gov.uk"
 - name: ES_HOST
   value: http://{{ $.Release.Name }}-opensearch
-- name: RAILS_ENV
-  value: {{ $environment }}
 - name: ES_INDEX
   value: datasets-{{ $environment }}
+- name: GOVUK_APP_DOMAIN
+  value: "www.gov.uk"
+- name: GOVUK_WEBSITE_ROOT
+  value: "https://www.gov.uk"
+- name: RAILS_ENV
+  value: {{ $environment }}
 - name: RAILS_LOG_TO_STDOUT
   value: "1"
 - name: RAILS_DEVELOPMENT_HOSTS
