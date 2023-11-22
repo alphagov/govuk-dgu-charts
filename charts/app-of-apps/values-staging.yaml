@@ -62,8 +62,38 @@ ckanHelmValues:
 datagovukHelmValues:
   environment: staging
   publish:
-    replicaCount: 0
+    replicaCount: 1
+    args: [ "bundle exec rake db:migrate db:seed && bundle exec sidekiq" ]
+    probes:
+      enabled: false
+    config:
+      ckanReleaseName: "ckan"
+      sqlalchemyUrlSecretKeyRef:
+        name: datagovuk
+        key: publish_sqlalchemy_url
+      dbHost: ""
+      redis:
+        host: "shared-redis-govuk.eks.staging.govuk-internal.digital"
+        port: "6379"
+        dbNumber: "1"
+      org:
+        schedule: "*/10 * * * *"
   find:
-    replicaCount: 0
+    replicaCount: 1
+    args: [ "bin/rails s -b 0.0.0.0" ]
+    probes:
+      enabled: false
+    ingress:
+      host: find.eks.staging.govuk.digital
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+      tls:
+        enabled: true
   opensearch:
-    replicaCount: 0
+    replicaCount: 1
+  externalSecret:
+    enabled: true
