@@ -42,6 +42,7 @@ find:
     tls:
       enabled: false
   config:
+    ckanDomain: "ckan.publishing.service.gov.uk"
     secretKeyBaseSecretKeyRef:
       name: datagovuk
       key: secret_key_base
