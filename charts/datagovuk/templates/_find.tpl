@@ -1,5 +1,9 @@
 {{- define "find.environment-variables" -}}
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
+- name: CKAN_DOMAIN
+  value: {{ .Values.find.config.ckanDomain }}
+- name: GOVUK_APP_DOMAIN
+  value: "www.gov.uk"
 - name: ES_HOST
   value: http://{{ $.Release.Name }}-opensearch
 - name: RAILS_ENV
