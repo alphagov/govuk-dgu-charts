@@ -17,8 +17,13 @@ publish:
       key: publish_sqlalchemy_url
     sentryDsnSecretKeyRef:
       name: datagovuk
-      key: sentry_dsn
-    dbHost: ""
+      key: publish_sentry_dsn
+    findUrlSecretKeyRef:
+      name: datagovuk
+      key: find_url
+    govukAppDomainSecretKeyRef:
+      name: datagovuk
+      key: govuk_app_domain
     redis:
       host: "ckan-dev"
       port: "6379"
@@ -48,7 +53,7 @@ find:
       key: zendesk_username
     sentryDsnSecretKeyRef:
       name: datagovuk
-      key: sentry_dsn
+      key: find_sentry_dsn
 
 externalSecret:
   enabled: false
