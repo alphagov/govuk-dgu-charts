@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-techdocs
+spec:
+  selector:
+    app: {{ .Release.Name }}-techdocs
+  ports:
+    - name: http
+      protocol: TCP
+      port: 4567
+      targetPort: http

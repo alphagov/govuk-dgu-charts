@@ -56,6 +56,16 @@ find:
       name: datagovuk
       key: find_sentry_dsn
 
+techdocs:
+  replicaCount: 1
+  ingress:
+    enabled: true
+    host: techdocs.dev.govuk.digital
+    ingressClassName: ""
+    annotations:
+    tls:
+      enabled: false
+
 externalSecret:
   enabled: false
   name: datagovuk

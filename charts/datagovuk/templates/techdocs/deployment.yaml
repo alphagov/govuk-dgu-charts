@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-techdocs
+spec:
+  replicas: {{ .Values.techdocs.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-techdocs
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-techdocs
+    spec:
+      securityContext:
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
+      containers:
+        - name: techdocs
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "techdocs" "files" $.Files) }}'
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 4567
+          command: ["/bin/sh", "-c"]
+          args: ["bundle exec middleman server"]
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 60
+            timeoutSeconds: 30
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /srv/app/datagovuk_tech_docs/tmp
+      volumes:
+        - name: app-tmp
+          emptyDir: {}

@@ -88,6 +88,19 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
       tls:
         enabled: true
+  techdocs:
+    replicaCount: 1
+    ingress:
+      enabled: true
+      host: datagovuk-docs.eks.integration.govuk.digital
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+      tls:
+        enabled: true
   opensearch:
     replicaCount: 1
   externalSecret:

@@ -1,0 +1,30 @@
+{{- if .Values.techdocs.ingress.enabled }}
+{{- with .Values.techdocs.ingress }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: techdocs
+  {{- if not (empty .annotations) }}
+  annotations:
+    {{- toYaml .annotations | trim | nindent 4 }}
+  {{- end }}
+spec:
+  {{ if not (empty .ingressClassName) }}ingressClassName: {{ .ingressClassName }}{{ end }}
+  rules:
+    - host: {{ .host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Release.Name }}-techdocs
+                port:
+                  number: 4567
+  {{- if .tls.enabled }}
+  tls:
+    - hosts:
+      - {{ .host }}
+  {{- end }}
+{{- end }}
+{{- end }}
