@@ -1,5 +1,7 @@
 {{- define "publish.environment-variables" -}}
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
+- name: FIND_URL
+  value: {{ .Values.find.ingress.host }}
 {{- with .Values.publish.config }}
 - name: CKAN_URL
   value: http://{{ .ckanReleaseName }}-ckan:5000
@@ -30,10 +32,5 @@
     secretKeyRef:
       name: {{ .govukAppDomainSecretKeyRef.name }}
       key: {{ .govukAppDomainSecretKeyRef.key }}
-- name: FIND_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .findUrlSecretKeyRef.name }}
-      key: {{ .findUrlSecretKeyRef.key }}  
 {{- end }}
 {{- end }}
