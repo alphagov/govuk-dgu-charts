@@ -75,7 +75,7 @@ datagovukHelmValues:
       org:
         schedule: "*/10 * * * *"
   find:
-    replicaCount: 1
+    replicaCount: 2
     args: [ "bin/rails s -b 0.0.0.0" ]
     ingress:
       host: find.eks.production.govuk.digital
@@ -85,8 +85,10 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/target-type: ip
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
         alb.ingress.kubernetes.io/ssl-redirect: "443"
-      tls:
-        enabled: true
+        alb.ingress.kubernetes.io/conditions.datagovuk-find: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "www.data.gov.uk"
+            ]}}]
   opensearch:
     replicaCount: 1
   externalSecret:
