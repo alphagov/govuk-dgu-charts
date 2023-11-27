@@ -21,10 +21,5 @@ spec:
                 name: {{ $.Release.Name }}-find
                 port:
                   number: 3000
-  {{- if .tls.enabled }}
-  tls:
-    - hosts:
-      - {{ .host }}
-  {{- end }}
 {{- end }}
 {{- end }}
