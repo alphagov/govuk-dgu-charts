@@ -18,9 +18,6 @@ publish:
     sentryDsnSecretKeyRef:
       name: datagovuk
       key: publish_sentry_dsn
-    findUrlSecretKeyRef:
-      name: datagovuk
-      key: find_url
     govukAppDomainSecretKeyRef:
       name: datagovuk
       key: govuk_app_domain
@@ -33,7 +30,7 @@ publish:
 
 find:
   replicaCount: 1
-  args: ["bin/rails s -b 0.0.0.0"]
+  args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
   ingress:
     enabled: true
     host: find.data.gov.uk

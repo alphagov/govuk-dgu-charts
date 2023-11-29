@@ -28,9 +28,6 @@
       name: {{ .sentryDsnSecretKeyRef.name }}
       key: {{ .sentryDsnSecretKeyRef.key }}
 - name: GOVUK_APP_DOMAIN
-  valueFrom:
-    secretKeyRef:
-      name: {{ .govukAppDomainSecretKeyRef.name }}
-      key: {{ .govukAppDomainSecretKeyRef.key }}
+  value: "www.gov.uk"
 {{- end }}
 {{- end }}
