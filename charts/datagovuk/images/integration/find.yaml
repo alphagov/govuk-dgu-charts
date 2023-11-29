@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk_find
-tag: 2c508683024bdc5f0c4fb6cc0c896100b48c338f
-branch: main
+tag: 03ea154a0df1406dda3135ecc8fff185cb884953
+branch: use-govuk-ruby-image
