@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-publish-package
 spec:
   schedule: "*/10 * * * *"
+  suspend: true
   concurrencyPolicy: Forbid  
   jobTemplate:
     spec:

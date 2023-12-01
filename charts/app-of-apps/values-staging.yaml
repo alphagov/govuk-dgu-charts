@@ -62,7 +62,7 @@ ckanHelmValues:
 datagovukHelmValues:
   environment: staging
   publish:
-    replicaCount: 1
+    replicaCount: 0
     args: [ "bundle exec rake db:migrate db:seed && bundle exec sidekiq" ]
     config:
       ckanReleaseName: "ckan"

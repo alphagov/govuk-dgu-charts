@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-publish-org
 spec:
   schedule: "{{ .Values.publish.config.org.schedule }}"
+  suspend: true
   concurrencyPolicy: Forbid  
   jobTemplate:
     spec:
