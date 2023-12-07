@@ -15,7 +15,7 @@
 - name: RAILS_ENV
   value: {{ $environment }}
 - name: REDIS_HOST
-  value: {{ .redis.host | default "ckan-redis" }}
+  value: {{ .redis.host | default "dgu-redis" }}
 - name: ES_INDEX
   value: datasets-{{ $environment }}
 - name: RAILS_LOG_TO_STDOUT
