@@ -1,0 +1,14 @@
+{{- if $.Values.dev.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-static-harvest-source
+spec:
+  selector:
+    app: {{ .Release.Name }}-static-harvest-source
+  ports:
+    - name: http
+      protocol: TCP
+      port: 11088
+      targetPort: http
+{{- end }}
