@@ -16,6 +16,8 @@
   value: {{ $environment }}
 - name: REDIS_HOST
   value: {{ .redis.host | default "dgu-redis" }}
+- name: REDIS_URL
+  value: redis://{{ .redis.host | default "dgu-redis" }}/{{ .redis.dbNumber | default "1" }}
 - name: ES_INDEX
   value: datasets-{{ $environment }}
 - name: RAILS_LOG_TO_STDOUT
