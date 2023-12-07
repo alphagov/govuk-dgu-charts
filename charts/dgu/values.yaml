@@ -1,0 +1,9 @@
+environment: test
+
+redis:
+  replicaCount: 1
+  enabled: true
+  image: redis:6.2.5-alpine3.14
+  persistence:
+    enabled: true
+    persistentVolumeClaimName: "redis"
