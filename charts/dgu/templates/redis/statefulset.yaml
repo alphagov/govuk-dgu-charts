@@ -1,9 +1,9 @@
-{{- if .Values.redis.enabled }}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}-redis
 spec:
+  serviceName: "redis"
   selector:
     matchLabels:
       app: {{ .Release.Name }}-redis
@@ -18,4 +18,3 @@ spec:
           ports:
             - name: redis
               containerPort: 6379
-{{- end }}

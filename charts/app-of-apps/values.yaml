@@ -14,3 +14,7 @@ datagovukHelmValues:
 
   opensearch:
     replicaCount: 1
+
+dguHelmValues:
+  redis:
+    replicaCount: 1

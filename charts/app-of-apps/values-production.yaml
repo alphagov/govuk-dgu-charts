@@ -93,3 +93,7 @@ datagovukHelmValues:
     replicaCount: 1
   externalSecret:
     enabled: true
+
+dguHelmValues:
+  redis:
+    replicaCount: 0

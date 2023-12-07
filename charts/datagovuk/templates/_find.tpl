@@ -27,8 +27,8 @@
 - name: SENTRY_DSN
   valueFrom:
     secretKeyRef:
-      name: {{ .sentryDsnSecretKeyRef.name }}
-      key: {{ .sentryDsnSecretKeyRef.key }}
+      name: {{ .findSentryDsnSecretKeyRef.name }}
+      key: {{ .findSentryDsnSecretKeyRef.key }}
 - name: ZENDESK_API_KEY
   valueFrom:
     secretKeyRef:

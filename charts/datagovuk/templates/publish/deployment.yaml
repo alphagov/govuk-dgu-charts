@@ -26,6 +26,8 @@ spec:
           volumeMounts:
             - name: publish-init
               mountPath: /init
+            - name: app-tmp
+              mountPath: /srv/app/datagovuk_publish/tmp
       containers:
         - name: publish
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
@@ -38,3 +40,5 @@ spec:
         - name: publish-init
           configMap:
             name: {{ .Release.Name }}-publish-init
+        - name: app-tmp
+          emptyDir: {}

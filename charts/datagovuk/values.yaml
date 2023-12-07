@@ -15,14 +15,14 @@ publish:
     sqlalchemyUrlSecretKeyRef:
       name: datagovuk
       key: publish_sqlalchemy_url
-    sentryDsnSecretKeyRef:
+    publishSentryDsnSecretKeyRef:
       name: datagovuk
       key: publish_sentry_dsn
     govukAppDomainSecretKeyRef:
       name: datagovuk
       key: govuk_app_domain
     redis:
-      host: "ckan-dev"
+      host: "dgu-dev-redis"
       port: "6379"
       dbNumber: "1"
     org:
@@ -36,8 +36,6 @@ find:
     host: find.data.gov.uk
     ingressClassName: ""
     annotations:
-    tls:
-      enabled: false
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
     secretKeyBaseSecretKeyRef:
@@ -49,7 +47,7 @@ find:
     zendeskUsernameSecretKeyRef:
       name: datagovuk
       key: zendesk_username
-    sentryDsnSecretKeyRef:
+    findSentryDsnSecretKeyRef:
       name: datagovuk
       key: find_sentry_dsn
 

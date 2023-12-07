@@ -1,3 +1,5 @@
+environment: test
+
 ckan:
   replicaCount: 1
   serviceAccount:
@@ -26,7 +28,7 @@ ckan:
       key: sqlalchemy_url
     dbHost: ""
     redis:
-      host: ""
+      host: "dgu-dev-redis"
       port: "6379"
       dbNumber: "1"
     beakerSessionSecretKeyRef:
@@ -81,20 +83,11 @@ gather:
 fetch:
   replicaCount: 1
 
-environment: test
-
 pycsw:
   replicaCount: 1
   args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
   probes:
     enabled: false
-  ingress:
-    enabled: true
-    host: pycsw.data.gov.uk
-    ingressClassName: ""
-    annotations:
-    tls:
-      enabled: false
 
 externalSecret:
   enabled: false
