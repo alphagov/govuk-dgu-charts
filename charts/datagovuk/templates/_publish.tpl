@@ -15,7 +15,7 @@
 - name: RAILS_ENV
   value: {{ $environment }}
 - name: REDIS_HOST
-  value: redis://{{ .redis.host | default "ckan-redis" }}/{{ .redis.dbNumber | default "1" }}
+  value: {{ .redis.host | default "ckan-redis" }}
 - name: ES_INDEX
   value: datasets-{{ $environment }}
 - name: RAILS_LOG_TO_STDOUT
@@ -25,8 +25,8 @@
 - name: SENTRY_DSN
   valueFrom:
     secretKeyRef:
-      name: {{ .sentryDsnSecretKeyRef.name }}
-      key: {{ .sentryDsnSecretKeyRef.key }}
+      name: {{ .publishSentryDsnSecretKeyRef.name }}
+      key: {{ .publishSentryDsnSecretKeyRef.key }}
 - name: GOVUK_APP_DOMAIN
   value: "www.gov.uk"
 {{- end }}
