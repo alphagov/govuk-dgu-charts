@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dgu
+  namespace: cluster-services
+spec:
+  project: datagovuk
+  source:
+    repoURL: https://github.com/alphagov/govuk-dgu-charts
+    path: charts/dgu
+    targetRevision: HEAD
+    helm:
+      values: |
+        {{- toYaml .Values.dguHelmValues | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: datagovuk
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=false
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - ApplyOutOfSyncOnly=true
