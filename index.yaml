@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   app-of-apps:
   - apiVersion: v2
+    created: "2023-12-08T15:03:27.146701623Z"
+    description: Deploys DGU applications
+    digest: c50fcc11a870fc8e1733de29338c08b28751d351314473799db3a215fe903ea1
+    name: app-of-apps
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-dgu-charts/releases/download/app-of-apps-1.2.1/app-of-apps-1.2.1.tgz
+    version: 1.2.1
+  - apiVersion: v2
     created: "2023-12-07T15:50:11.352086213Z"
     description: Deploys CKAN applications
     digest: 339d82af83bbfb6831dd1cd4e46d8e03f20ba452394d55ae59b2d1f9282362de
@@ -68,4 +77,14 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-dgu-charts/releases/download/govuk-dgu-1.1.0/govuk-dgu-1.1.0.tgz
     version: 1.1.0
-generated: "2023-12-07T15:50:11.812833029Z"
+  govuk-dgu-shared:
+  - apiVersion: v2
+    created: "2023-12-08T15:03:27.675891901Z"
+    description: DGU shared resources
+    digest: 57e4a74b9fb6a29017cebd430e99027f9cfc764efc91a989342f33f35b3e760b
+    name: govuk-dgu-shared
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-dgu-charts/releases/download/govuk-dgu-shared-1.1.0/govuk-dgu-shared-1.1.0.tgz
+    version: 1.1.0
+generated: "2023-12-08T15:03:27.675914843Z"
