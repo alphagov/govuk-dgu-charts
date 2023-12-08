@@ -22,7 +22,7 @@ publish:
       name: datagovuk
       key: govuk_app_domain
     redis:
-      host: "dgu-dev-redis"
+      host: "dgu-shared-dev-redis"
       port: "6379"
       dbNumber: "1"
     org:

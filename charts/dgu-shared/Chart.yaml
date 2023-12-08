@@ -1,5 +1,5 @@
 apiVersion: v2
-name: govuk-dgu
+name: govuk-dgu-shared
 description: DGU shared resources
 type: application
 version: 1.1.0
