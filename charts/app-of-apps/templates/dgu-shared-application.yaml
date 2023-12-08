@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dgu
+  name: dgu-shared
   namespace: cluster-services
 spec:
   project: datagovuk
