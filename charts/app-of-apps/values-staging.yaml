@@ -48,8 +48,6 @@ ckanHelmValues:
       persistentVolumeClaimName: solr
   postgres:
     enabled: false
-  redis:
-    enabled: false
   dev:
     enabled: false
   gather:
@@ -72,8 +70,6 @@ datagovukHelmValues:
       dbHost: ""
       redis:
         host: "shared-redis-govuk.eks.staging.govuk-internal.digital"
-        port: "6379"
-        dbNumber: "1"
       org:
         schedule: "*/10 * * * *"
   find:
@@ -96,6 +92,6 @@ datagovukHelmValues:
   externalSecret:
     enabled: true
 
-dguHelmValues:
+dguSharedHelmValues:
   redis:
     replicaCount: 0

@@ -50,8 +50,6 @@ ckanHelmValues:
       persistentVolumeClaimName: solr
   postgres:
     enabled: false
-  redis:
-    enabled: false
   dev:
     enabled: false
   gather:
@@ -94,6 +92,6 @@ datagovukHelmValues:
   externalSecret:
     enabled: true
 
-dguHelmValues:
+dguSharedHelmValues:
   redis:
     replicaCount: 0
