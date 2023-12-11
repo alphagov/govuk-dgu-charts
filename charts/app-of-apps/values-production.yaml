@@ -23,7 +23,7 @@ ckanHelmValues:
         title: "data.gov.uk"
       dbHost: "ckan-postgres.production.govuk-internal.digital"
       redis:
-        host: "shared-redis-govuk.eks.production.govuk-internal.digital"
+        host: "dgu-shared-redis"
       smtp:
         server: "email-smtp.eu-west-1.amazonaws.com:587"
         user: "AKIASQDMCZ2EZRPSFZRO"
@@ -67,9 +67,7 @@ datagovukHelmValues:
     config:
       ckanReleaseName: "ckan"
       redis:
-        host: "shared-redis-govuk.eks.production.govuk-internal.digital"
-        port: "6379"
-        dbNumber: "1"
+        host: "dgu-shared-redis"
       org:
         schedule: "*/10 * * * *"
   find:
@@ -94,4 +92,4 @@ datagovukHelmValues:
 
 dguSharedHelmValues:
   redis:
-    replicaCount: 0
+    replicaCount: 1
