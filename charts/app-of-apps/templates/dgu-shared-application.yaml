@@ -11,7 +11,7 @@ spec:
     targetRevision: HEAD
     helm:
       values: |
-        {{- toYaml .Values.dguHelmValues | nindent 8 }}
+        {{- toYaml .Values.dguSharedHelmValues | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: datagovuk
