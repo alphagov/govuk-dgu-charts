@@ -8,6 +8,8 @@
   value: datasets-{{ $environment }}
 - name: GOVUK_APP_DOMAIN
   value: "www.gov.uk"
+- name: GOVUK_PROMETHEUS_EXPORTER
+  value: "force"
 - name: GOVUK_WEBSITE_ROOT
   value: "https://www.gov.uk"
 - name: RAILS_ENV
