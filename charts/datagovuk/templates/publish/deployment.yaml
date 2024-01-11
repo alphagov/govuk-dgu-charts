@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-publish
 spec:
   replicas: {{ .Values.publish.replicaCount }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ .Release.Name }}-publish

@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-pycsw
 spec:
   replicas: {{ .Values.pycsw.replicaCount }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ .Release.Name }}-pycsw
