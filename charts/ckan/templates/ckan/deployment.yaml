@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-ckan
 spec:
   replicas: {{ .Values.ckan.replicaCount }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ .Release.Name }}-ckan

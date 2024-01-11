@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-find
 spec:
   replicas: {{ .Values.find.replicaCount }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ .Release.Name }}-find

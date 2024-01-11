@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-postgres
 spec:
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ .Release.Name }}-postgres
