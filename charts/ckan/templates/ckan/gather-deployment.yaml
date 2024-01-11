@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-gather
 spec:
   replicas: {{ .Values.gather.replicaCount }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ .Release.Name }}-gather

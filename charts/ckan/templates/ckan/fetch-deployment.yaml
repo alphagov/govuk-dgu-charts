@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-fetch
 spec:
   replicas: {{ .Values.fetch.replicaCount }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ .Release.Name }}-fetch
