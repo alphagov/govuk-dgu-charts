@@ -217,7 +217,7 @@ data:
     propagate = 0
     
     [logger_ckanext]
-    level = DEBUG
+    level = INFO
     handlers = console
     ; handlers = console
     qualname = ckanext
