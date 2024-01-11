@@ -224,12 +224,6 @@ data:
     args = (sys.stderr,)
     level = NOTSET
     formatter = generic
-    
-    [handler_file]
-    class = logging.handlers.RotatingFileHandler
-    formatter = generic
-    level = NOTSET
-    args = ("/var/log/ckan/ckan.log", "a", 20000000, 9)
-    
+
     [formatter_generic]
     format = %(asctime)s %(levelname)-5.5s [%(name)s] %(message)s
