@@ -81,7 +81,7 @@ datagovukHelmValues:
     replicaCount: 1
     args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
     ingress:
-      host: staging.data.gov.uk
+      host: find.eks.staging.govuk.digital
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
@@ -95,7 +95,8 @@ datagovukHelmValues:
           access_logs.s3.prefix=elb/www-datagovuk
         alb.ingress.kubernetes.io/conditions.datagovuk-find: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "www.staging.data.gov.uk"
+              "www.staging.data.gov.uk",
+              "staging.data.gov.uk"
           ]}}]
   opensearch:
     replicaCount: 1

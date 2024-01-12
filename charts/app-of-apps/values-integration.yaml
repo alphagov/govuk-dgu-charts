@@ -82,7 +82,7 @@ datagovukHelmValues:
     replicaCount: 1
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     ingress:
-      host: integration.data.gov.uk
+      host: find.eks.integration.govuk.digital
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
@@ -96,7 +96,8 @@ datagovukHelmValues:
           access_logs.s3.prefix=elb/www-datagovuk
         alb.ingress.kubernetes.io/conditions.datagovuk-find: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "www.integration.data.gov.uk"
+              "www.integration.data.gov.uk",
+              "integration.data.gov.uk"
           ]}}]
   opensearch:
     replicaCount: 1
