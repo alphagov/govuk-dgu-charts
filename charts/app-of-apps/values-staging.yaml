@@ -9,7 +9,12 @@ ckanHelmValues:
         alb.ingress.kubernetes.io/scheme: internet-facing
         alb.ingress.kubernetes.io/target-type: ip
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/shield-advanced-protection: "true"
         alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-staging-aws-logging,
+          access_logs.s3.prefix=elb/ckan-datagovuk
       tls:
         enabled: true
     probes:
@@ -82,11 +87,16 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/scheme: internet-facing
         alb.ingress.kubernetes.io/target-type: ip
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/shield-advanced-protection: "true"
         alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-staging-aws-logging,
+          access_logs.s3.prefix=elb/www-datagovuk
         alb.ingress.kubernetes.io/conditions.datagovuk-find: >
-            [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "www.staging.data.gov.uk"
-            ]}}]
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "www.staging.data.gov.uk"
+          ]}}]
   opensearch:
     replicaCount: 1
   externalSecret:
