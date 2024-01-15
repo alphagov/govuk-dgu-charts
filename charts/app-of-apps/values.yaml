@@ -15,6 +15,9 @@ datagovukHelmValues:
   opensearch:
     replicaCount: 1
 
+  monitoring:
+    enabled: true
+
 dguSharedHelmValues:
   redis:
     replicaCount: 1
