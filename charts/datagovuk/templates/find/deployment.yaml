@@ -24,6 +24,8 @@ spec:
           ports:
             - name: http
               containerPort: 3000
+            - name: metrics
+              containerPort: {{ .Values.monitoring.metricsPort }}
           command: ["/bin/sh", "-c"]
           args: {{ .Values.find.args }}
           env:
