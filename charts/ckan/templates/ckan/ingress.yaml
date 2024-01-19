@@ -20,7 +20,7 @@ spec:
               service:
                 name: {{ $.Release.Name }}-ckan
                 port:
-                  number: 5000
+                  number: {{ $.Values.ckan.service.port }}
           - path: /csw
             pathType: Prefix
             backend:

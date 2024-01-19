@@ -1,3 +1,4 @@
+{{- $fullName := print .Release.Name "-ckan" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -56,7 +57,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: http
-              containerPort: 5000
+              containerPort: {{ .Values.ckan.appPort }}
           volumeMounts:
             - name: config
               mountPath: /config
@@ -88,6 +89,44 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 60
           {{- end }}
+        - name: nginx
+          image: "{{ .Values.ckan.nginx.image.repository }}:{{ .Values.ckan.nginx.image.tag }}"
+          imagePullPolicy: {{ .Values.ckan.nginx.image.pullPolicy | default "Always" }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.ckan.nginx.port }}
+          livenessProbe: &nginx-probe
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 2
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 20
+          readinessProbe:
+            <<: *nginx-probe  # Intentionally same path as liveness.
+            failureThreshold: 2
+            timeoutSeconds: 15
+          {{- with .Values.ckan.nginx.resources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-tmp
+              mountPath: /tmp
+            {{- with .Values.ckan.nginx.extraVolumeMounts }}
+              {{ . | toYaml | trim | nindent 12 }}
+            {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
       volumes:
         - name: ckan-init
           configMap:
@@ -96,4 +135,9 @@ spec:
           configMap:
             name: {{ .Release.Name }}-ckan-production-ini
         - name: config
+          emptyDir: {}
+        - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
+          configMap:
+            name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
+        - name: nginx-tmp
           emptyDir: {}

@@ -5,6 +5,7 @@ ckan:
   serviceAccount:
     enabled: false
     iamRoleARN: ""
+  appPort: 5000
   args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
   ingress:
     enabled: true
@@ -61,11 +62,67 @@ ckan:
           name: ckan
           key: aws_secret_access_key
 
+  service:
+    annotations: {}
+    port: 80
+
+  nginx:
+    image:
+      repository: public.ecr.aws/nginx/nginx
+      pullPolicy: Always
+      tag: stable-perl
+    port: 8080
+    proxyConnectTimeout: 1s
+    proxyReadTimeout: 15s
+    clientMaxBodySize: 1M
+    configMap:
+      create: true
+      name: ""
+    extraVolumeMounts: []
+    denyCrawlers: false
+    safelist:
+      # Used by: ckan.publishing.service.gov.uk
+      # Used for: internationalisation of form controls
+      - "/i18n"
+
+      # Used by: ckan.publishing.service.gov.uk
+      # Used for: finding members
+      - "/2/util/user/autocomplete"
+
+      # Used by: datagovuk_publish
+      # Used for: ckan_v26_ckan_org_sync
+      - "/action/organization_list"
+      - "/action/organization_show"
+
+      # Used by: datagovuk_publish
+      # Used for: ckan_v26_package_sync job
+      # Used by: pycsw data load in ckanext-spatial
+      # Used for: syncing csw with ckan database
+      - "/search/dataset"
+
+      # Used by: datagovuk_publish
+      # Used for: ckan_v26_package_sync job
+      - "/action/package_show"
+
+      # Used by: datagovuk_publish
+      # Used for: determining filetype
+      - "/2/util/resource/format_autocomplete"
+
+      # Used by: datagovuk_find
+      # Used for: addtional metadata links for datasets
+      - "/2/rest/harvestobject"
+
+      # Additional endpoints requested by users
+      - "/action/package_search"
+      - "/action/package_list"
+      - "/action/harvest_source_list"
+
 solr:
   enabled: true
   persistence:
     enabled: false
     persistentVolumeClaimName: "solr"
+
 # This postgres instance is for development purposes only
 postgres:
   enabled: true
