@@ -4,7 +4,7 @@
   value: {{ .Values.find.ingress.host }}
 {{- with .Values.publish.config }}
 - name: CKAN_URL
-  value: http://{{ .ckanReleaseName }}-ckan:5000
+  value: http://{{ .ckanReleaseName }}-ckan:{{ .ckanPort }}
 - name: DATABASE_URL
   valueFrom:
     secretKeyRef:
@@ -15,9 +15,9 @@
 - name: RAILS_ENV
   value: {{ $environment }}
 - name: REDIS_HOST
-  value: {{ .redis.host | default "dgu-redis" }}
+  value: {{ .redis.host | default "dgu-shared-redis" }}
 - name: REDIS_URL
-  value: redis://{{ .redis.host | default "dgu-redis" }}/{{ .redis.dbNumber | default "1" }}
+  value: redis://{{ .redis.host | default "dgu-shared-redis" }}/{{ .redis.dbNumber | default "1" }}
 - name: ES_INDEX
   value: datasets-{{ $environment }}
 - name: RAILS_LOG_TO_STDOUT
