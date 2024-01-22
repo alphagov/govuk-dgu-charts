@@ -68,9 +68,9 @@ ckan:
 
   nginx:
     image:
-      repository: public.ecr.aws/nginx/nginx
+      repository: nginx
       pullPolicy: Always
-      tag: stable-perl
+      tag: stable
     port: 8080
     proxyConnectTimeout: 1s
     proxyReadTimeout: 15s
