@@ -38,12 +38,6 @@ data:
       sendfile        on;
       keepalive_timeout  65;
 
-      # Set GOVUK-Request-Id if not set
-      map $http_govuk_request_id $govuk_request_id {
-        default $http_govuk_request_id;
-        ''      "$pid-$msec-$remote_addr-$request_length";
-      }
-
       # Default values for response headers. These values are used when the
       # header is not already set on the incoming response.
       # https://serverfault.com/a/598106
@@ -61,7 +55,6 @@ data:
         '"@timestamp":"$time_iso8601",'
         '"body_bytes_sent":$body_bytes_sent,'
         '"bytes_sent":$bytes_sent,'
-        '"govuk_request_id":"$govuk_request_id",'
         '"http_host":"$http_host",'
         '"http_referer":"$http_referer",'
         '"http_user_agent":"$http_user_agent",'
@@ -104,7 +97,6 @@ data:
         location / {
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
-          proxy_set_header GOVUK-Request-Id $govuk_request_id;
           proxy_pass         http://{{ $fullName }};
           proxy_redirect     off;
           client_max_body_size {{ .Values.ckan.nginx.clientMaxBodySize }};
@@ -120,7 +112,6 @@ data:
         location ~ ^/(api|api/3){{ $path }} {
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
-          proxy_set_header GOVUK-Request-Id $govuk_request_id;
           proxy_pass         http://{{ $fullName }}/$uri$is_args$args;
           proxy_redirect     off;
           client_max_body_size {{ $.Values.ckan.nginx.clientMaxBodySize }};
