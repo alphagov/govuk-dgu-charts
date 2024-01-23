@@ -14,6 +14,8 @@
   value: "https://www.gov.uk"
 - name: RAILS_ENV
   value: {{ $environment }}
+- name: RAILS_LOG_LEVEL
+  value: "warn"
 - name: RAILS_LOG_TO_STDOUT
   value: "1"
 - name: RAILS_DEVELOPMENT_HOSTS
