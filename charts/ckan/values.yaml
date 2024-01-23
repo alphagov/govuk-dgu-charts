@@ -122,6 +122,9 @@ solr:
   persistence:
     enabled: false
     persistentVolumeClaimName: "solr"
+  extraEnv:
+    - name: SOLR_LOG_LEVEL
+      value: WARN
 
 # This postgres instance is for development purposes only
 postgres:

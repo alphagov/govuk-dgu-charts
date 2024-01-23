@@ -32,6 +32,10 @@ spec:
       containers:
         - name: solr
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "solr" "files" $.Files) }}'
+          env:
+            {{- with .Values.solr.extraEnv }}
+              {{ . | toYaml | nindent 12 }}
+            {{- end }}
           ports:
             - name: solr
               containerPort: 8983
