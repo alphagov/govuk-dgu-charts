@@ -72,9 +72,9 @@ ckan:
       pullPolicy: Always
       tag: stable
     port: 8080
-    proxyConnectTimeout: 1s
-    proxyReadTimeout: 15s
-    clientMaxBodySize: 1M
+    proxyConnectTimeout: 2s
+    proxyReadTimeout: 30s
+    clientMaxBodySize: 50M
     configMap:
       create: true
       name: ""
