@@ -3,12 +3,18 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-pycsw-load
 spec:
-  schedule: "0 0 * * *"
+  schedule: "1 47 * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 2
   jobTemplate:
     spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 171000  # 171000 s = 47.5 hours.
       template:
         spec:
           {{- include "ckan.pycsw-init" . | nindent 10 }}
+          restartPolicy: Never
           containers:
             - name: pycsw
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "pycsw" "files" $.Files) }}'
@@ -21,5 +27,4 @@ spec:
               volumeMounts:
                 - name: config
                   mountPath: /config
-          restartPolicy: OnFailure
           {{ include "ckan.pycsw-volumes" . | nindent 10 }}
