@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-postgres
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   revisionHistoryLimit: 2
   selector:

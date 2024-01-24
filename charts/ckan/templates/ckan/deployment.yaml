@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-ckan
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.ckan.replicaCount }}
   revisionHistoryLimit: 2
