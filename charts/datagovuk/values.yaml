@@ -12,7 +12,6 @@ publish:
   args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
   config:
     ckanReleaseName: "ckan-dev"
-    ckanPort: 5000
     sqlalchemyUrlSecretKeyRef:
       name: datagovuk
       key: publish_sqlalchemy_url
