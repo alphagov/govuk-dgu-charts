@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-opensearch
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.opensearch.replicaCount }}
   revisionHistoryLimit: 2

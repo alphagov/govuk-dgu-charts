@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-fetch
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.fetch.replicaCount }}
   revisionHistoryLimit: 2
