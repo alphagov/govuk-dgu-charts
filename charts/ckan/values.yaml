@@ -68,7 +68,7 @@ ckan:
 
   nginx:
     image:
-      repository: nginx
+      repository: public.ecr.aws/nginx/nginx
       pullPolicy: Always
       tag: stable
     port: 8080
