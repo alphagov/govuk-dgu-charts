@@ -19,7 +19,7 @@ spec:
             - name: pycsw
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "pycsw" "files" $.Files) }}'
               imagePullPolicy: Always
-              command: [ "/bin/sh", "-c", "ckan ckan-pycsw load -p $CKAN_CONFIG/pycsw.cfg -u http://{{ .Release.Name }}-ckan:{{ .Values.ckan.appPort }}" ]
+              command: [ "/bin/sh", "-c", "ckan ckan-pycsw load -p $CKAN_CONFIG/pycsw.cfg -u http://{{ .Release.Name }}-ckan:{{ .Values.ckan.service.port }}" ]
               env:
                 - name: PYCSW_CONFIG
                   value: /config/pycsw.cfg
