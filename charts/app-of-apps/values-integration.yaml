@@ -101,6 +101,8 @@ datagovukHelmValues:
           ]}}]
   opensearch:
     replicaCount: 1
+    persistence:
+      enabled: true
   externalSecret:
     enabled: true
 
