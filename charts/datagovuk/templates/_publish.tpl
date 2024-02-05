@@ -11,7 +11,7 @@
       name: {{ .sqlalchemyUrlSecretKeyRef.name }}
       key: {{ .sqlalchemyUrlSecretKeyRef.key }}
 - name: ES_HOST
-  value: http://{{ $.Release.Name }}-opensearch:9200
+  value: http://{{ $.Release.Name }}-opensearch-sts:9200
 - name: RAILS_ENV
   value: {{ $environment }}
 - name: REDIS_HOST
