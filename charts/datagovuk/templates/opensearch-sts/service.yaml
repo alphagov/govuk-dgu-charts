@@ -7,10 +7,8 @@ spec:
     app: {{ .Release.Name }}-opensearch-sts
   ports:
     - name: host-port
-      protocol: TCP
       port: 9200
       targetPort: host-port
     - name: node-port
-      protocol: TCP
       port: 9600
       targetPort: node-port
