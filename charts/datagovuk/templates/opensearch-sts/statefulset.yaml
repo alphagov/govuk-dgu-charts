@@ -1,20 +1,33 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}-opensearch
+  name: {{ .Release.Name }}-opensearch-sts
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.opensearch.replicaCount }}
   revisionHistoryLimit: 2
+  serviceName: "opensearch"
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-opensearch
+      app: {{ .Release.Name }}-opensearch-sts
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-opensearch
+        app: {{ .Release.Name }}-opensearch-sts
     spec:
+      {{- if .Values.opensearch.persistence.enabled }}
+      initContainers:
+        - name: fix-volume-permissions
+          image: {{ .Values.opensearch.image }}
+          command: [ bash, -c, "chown -R opensearch:opensearch /usr/share/opensearch/data"]
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/opensearch/data
+      {{- end }}
       containers:
         - name: opensearch
           image: {{ .Values.opensearch.image }}
@@ -43,5 +56,5 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: opensearch
+            claimName: {{ .Values.opensearch.persistence.persistentVolumeClaimName }}
       {{- end }}

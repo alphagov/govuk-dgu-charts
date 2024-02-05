@@ -103,6 +103,7 @@ datagovukHelmValues:
     replicaCount: 1
     persistence:
       enabled: true
+      persistentVolumeClaimName: opensearch-sts
   externalSecret:
     enabled: true
 
