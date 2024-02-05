@@ -43,5 +43,5 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.opensearch.persistence.persistentVolumeClaimName }}
+            claimName: opensearch
       {{- end }}
