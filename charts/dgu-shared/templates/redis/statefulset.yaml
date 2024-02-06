@@ -12,9 +12,32 @@ spec:
       labels:
         app: {{ .Release.Name }}-redis
     spec:
+      {{- if .Values.redis.persistence.enabled }}
+      initContainers:
+        - name: fix-volume-permissions
+          image: {{ .Values.redis.image }}
+          command: [ sh, -c, "chown -R redis:redis /data"]
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      {{- end }}
       containers:
         - name: redis
           image: {{ .Values.redis.image }}
           ports:
             - name: redis
               containerPort: 6379
+          {{- if .Values.redis.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          {{- end }}
+      {{- if .Values.redis.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.redis.persistence.persistentVolumeClaimName }}
+      {{- end }}
