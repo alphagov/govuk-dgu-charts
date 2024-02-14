@@ -38,6 +38,7 @@ find:
     annotations:
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
+    gaTrackingId: ""
     secretKeyBaseSecretKeyRef:
       name: datagovuk
       key: secret_key_base
