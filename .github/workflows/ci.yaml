@@ -40,6 +40,7 @@ jobs:
           args: >
             -kubernetes-version 1.23.0
             -schema-location default
-            -schema-location "https://github.com/alphagov/govuk-helm-charts/raw/main/schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json"
+            -schema-location
+            "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
             -summary
             helm-dist
