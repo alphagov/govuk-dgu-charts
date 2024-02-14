@@ -39,6 +39,9 @@ spec:
           args: {{ .Values.publish.args }}
           env:
             {{ include "publish.environment-variables" . | nindent 12 }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.monitoring.metricsPort }}
       volumes:
         - name: publish-init
           configMap:
