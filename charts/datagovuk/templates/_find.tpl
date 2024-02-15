@@ -23,6 +23,10 @@
 - name: RAILS_SERVE_STATIC_FILES
   value: "1"
 {{- with .Values.find.config }}
+{{- with .gaTrackingId }}
+- name: GA_TRACKING_ID
+  value: {{ . }}
+{{- end }}
 - name: SECRET_KEY_BASE
   valueFrom:
     secretKeyRef:
