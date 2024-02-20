@@ -1,0 +1,17 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ .Release.Name }}-publish
+  labels:
+    app: {{ .Release.Name }}-publish
+    helm.sh/chart: govuk-dgu-charts
+    app.kubernetes.io/name: publish
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-publish
+  podMetricsEndpoints:
+  - port: metrics
+{{- end }}
