@@ -27,7 +27,6 @@ publish:
 
 find:
   replicaCount: 1
-  args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
   ingress:
     enabled: true
     host: find.data.gov.uk
