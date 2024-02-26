@@ -4,12 +4,7 @@ metadata:
   name: {{ .Release.Name }}-publish-init
 data:
   init.sh: |
-    while ! pg_isready -d $DATABASE_URL; do
-      sleep 1;
-    done
-
-    bin/setup
-    bundle exec rails db:schema:load
+    rake db:migrate db:seed
 
     # wait until CKAN is ready
     until [ "$health" = 'OK' ]; do
