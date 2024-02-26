@@ -9,7 +9,7 @@ opensearch:
 
 publish:
   replicaCount: 1
-  args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
+  args: ["bundle exec sidekiq"]
   config:
     ckanReleaseName: "ckan-dev"
     sqlalchemyUrlSecretKeyRef:
