@@ -15,10 +15,6 @@ ckanHelmValues:
           access_logs.s3.enabled=true,
           access_logs.s3.bucket=govuk-integration-aws-logging,
           access_logs.s3.prefix=elb/ckan-datagovuk
-        alb.ingress.kubernetes.io/conditions.ckan-datagovuk: >
-          [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.integration.publishing.service.gov.uk"
-          ]}}]
       tls:
         enabled: true
     probes:
