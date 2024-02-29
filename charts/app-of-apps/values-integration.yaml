@@ -19,6 +19,10 @@ ckanHelmValues:
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "ckan.integration.publishing.service.gov.uk"
           ]}}]
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "ckan.integration.publishing.service.gov.uk"
+          ]}}]
       tls:
         enabled: true
     probes:
