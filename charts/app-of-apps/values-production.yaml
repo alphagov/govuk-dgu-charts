@@ -3,7 +3,7 @@ ckanHelmValues:
   ckan:
     replicaCount: 2
     ingress:
-      host: ckan.publishing.service.gov.uk
+      host: ckan.eks.production.govuk.digital
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
@@ -17,6 +17,10 @@ ckanHelmValues:
           access_logs.s3.enabled=true,
           access_logs.s3.bucket=govuk-production-aws-logging,
           access_logs.s3.prefix=elb/ckan-datagovuk
+        alb.ingress.kubernetes.io/conditions.ckan-datagovuk: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "ckan.publishing.service.gov.uk"
+          ]}}]
       tls:
         enabled: true
     probes:
