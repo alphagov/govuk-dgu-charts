@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/ckan
-    targetRevision: HEAD
+    targetRevision: upgrade-ckan-2.10
     helm:
       values: |
         {{- toYaml .Values.ckanHelmValues | nindent 8 }}
