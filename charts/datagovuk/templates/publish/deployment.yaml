@@ -35,8 +35,6 @@ spec:
         - name: publish
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
           imagePullPolicy: Always
-          command: ["/bin/sh", "-c"]
-          args: {{ .Values.publish.args }}
           env:
             {{ include "publish.environment-variables" . | nindent 12 }}
           ports:
