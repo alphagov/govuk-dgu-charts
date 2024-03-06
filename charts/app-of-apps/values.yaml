@@ -8,6 +8,7 @@ ckanHelmValues:
 datagovukHelmValues:
   publish:
     replicaCount: 1
+    dbSetup: "no"
 
   find:
     replicaCount: 1

@@ -24,6 +24,8 @@
   value: "1"
 - name: CKAN_REDIRECTION_URL
   value: ckan
+- name: DB_SETUP
+  value: "{{ .dbSetup }}"
 - name: SENTRY_DSN
   valueFrom:
     secretKeyRef:
