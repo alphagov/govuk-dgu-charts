@@ -11,6 +11,7 @@ publish:
   replicaCount: 1
   config:
     ckanReleaseName: "ckan-dev"
+    dbSetup: "no"
     sqlalchemyUrlSecretKeyRef:
       name: datagovuk
       key: publish_sqlalchemy_url

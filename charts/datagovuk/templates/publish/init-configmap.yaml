@@ -4,6 +4,10 @@ metadata:
   name: {{ .Release.Name }}-publish-init
 data:
   init.sh: |
+    if [ "$DB_SETUP" = 'yes' ]; then
+      bin/rails db:setup
+    fi 
+
     rake db:migrate db:seed
 
     # wait until CKAN is ready
