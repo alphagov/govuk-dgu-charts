@@ -12,8 +12,6 @@
   value: "force"
 - name: GOVUK_WEBSITE_ROOT
   value: "https://www.gov.uk"
-- name: RAILS_ENV
-  value: {{ $environment }}
 - name: RAILS_LOG_LEVEL
   value: "warn"
 - name: RAILS_LOG_TO_STDOUT
