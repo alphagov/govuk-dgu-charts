@@ -16,15 +16,23 @@ This is useful for developing and testing app changes locally, for apps that you
 
   - build the docker image with the tag matching the port of the registry
 
-`docker build -t localhost:53492/ckan:2.9.7 -f Dockerfile .`
+`docker build -t localhost:53492/ckan:2.9.9 -f docker/ckan/2.9.9 .Dockerfile .`
+
+  - NOTE: for Publish and Find build the dev.Dockerfile version
+
+`docker build -t localhost:53492/datagovuk_publish:dev -f docker/dev.Dockerfile .`
+
+  - push the docker image up to your local registry
+
+  `docker push localhost:53492/ckan:2.9.9`
 
   - update the values.yaml so that the entry in the helm chart for the ckan image should match the registry name and port - 
 
-`image: local-registry:53492/ckan:2.9.7`
+`image: local-registry:53492/ckan:2.9.9`
 
 - To use a nice url update `/etc/hosts` 
 
-Add `ckan.dev.govuk.digital` after `kubernetes.docker.internal` on the sameline in the `/etc/hosts` file
+Add `ckan.dev.govuk.digital` and `find.data.gov.uk` after `kubernetes.docker.internal` on the sameline in the `/etc/hosts` file
 
 - Creating the cluster
 
