@@ -15,10 +15,6 @@ spec:
       labels:
         app: {{ .Release.Name }}-find
     spec:
-      securityContext:
-        runAsUser: 900
-        runAsGroup: 900
-        fsGroup: 900
       containers:
         - name: find
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
@@ -28,8 +24,6 @@ spec:
               containerPort: 3000
             - name: metrics
               containerPort: {{ .Values.monitoring.metricsPort }}
-          command: ["/bin/sh", "-c"]
-          args: {{ .Values.find.args }}
           env:
             {{ include "find.environment-variables" . | nindent 12 }}
           livenessProbe:
