@@ -9,9 +9,7 @@ metadata:
     {{- toYaml .annotations | trim | nindent 4 }}
   {{- end }}
 spec:
-  {{- with .ingressClassName }}
-  ingressClassName: {{ . }}
-  {{- end }}
+  {{ if not (empty .ingressClassName) }}ingressClassName: {{ .ingressClassName }}{{ end }}
   rules:
     - host: {{ .host }}
       http:

@@ -4,6 +4,7 @@ ckanHelmValues:
     args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
     ingress:
       host: ckan.eks.integration.govuk.digital
+      ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
         alb.ingress.kubernetes.io/target-type: ip
@@ -90,6 +91,7 @@ datagovukHelmValues:
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     ingress:
       host: find.eks.integration.govuk.digital
+      ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
         alb.ingress.kubernetes.io/target-type: ip
