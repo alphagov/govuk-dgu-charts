@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-harvester-run
 spec:
-  schedule: "0 8-22 * * *"
+  schedule: "0 7-22 * * *"
   jobTemplate:
     spec:
       template:
