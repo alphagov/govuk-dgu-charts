@@ -27,6 +27,18 @@
 - name: GA_TRACKING_ID
   value: {{ . }}
 {{- end }}
+{{- with .googleTagManagerId }}
+- name: GOOGLE_TAG_MANAGER_ID
+  value: {{ . }}
+{{- end }}
+{{- with .googleTagManagerAuth }}
+- name: GOOGLE_TAG_MANAGER_AUTH
+  value: {{ . }}
+{{- end }}
+{{- with .googleTagManagerPreview }}
+- name: GOOGLE_TAG_MANAGER_PREVIEW
+  value: {{ . }}
+{{- end }}
 - name: SECRET_KEY_BASE
   valueFrom:
     secretKeyRef:

@@ -36,6 +36,9 @@ find:
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
     gaTrackingId: ""
+    googleTagManagerId: ""
+    googleTagManagerAuth: ""
+    googleTagManagerPreview: ""
     secretKeyBaseSecretKeyRef:
       name: datagovuk
       key: secret_key_base
