@@ -88,6 +88,7 @@ datagovukHelmValues:
     args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
     config:
       gaTrackingId: UA-10855508-1
+      googleTagManagerId: GTM-M875Q8TH
     ingress:
       host: find.eks.production.govuk.digital
       ingressClassName: aws-alb

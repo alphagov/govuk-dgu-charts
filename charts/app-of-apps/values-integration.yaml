@@ -89,6 +89,9 @@ datagovukHelmValues:
   find:
     replicaCount: 1
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
+    config:
+      googleTagManagerAuth: 5FunvYw9Lsi6YtwO0jllcQ
+      googleTagManagerPreview: env-38
     ingress:
       host: find.eks.integration.govuk.digital
       ingressClassName: aws-alb
