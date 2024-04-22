@@ -90,6 +90,7 @@ datagovukHelmValues:
     replicaCount: 1
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
+      googleTagManagerId: GTM-M875Q8TH
       googleTagManagerAuth: 5FunvYw9Lsi6YtwO0jllcQ
       googleTagManagerPreview: env-38
     ingress:
