@@ -7,6 +7,9 @@ data:
     # copy production.ini
     cp /map/production.ini /config
 
+    # copy production-2.10.ini
+    cp /map-2.10/production-2.10.ini /config
+
     # update production.ini
     ckan config-tool $CKAN_INI "beaker.session.secret=$CKAN_BEAKER_SESSION_SECRET"
 

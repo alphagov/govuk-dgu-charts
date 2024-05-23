@@ -34,6 +34,8 @@ data:
     beaker.session.key = ckan
 
     beaker.session.secret = placeholder
+    beaker.session.validate_key = please_update
+    beaker.session.encrypt_key = please_update
     app_instance_uuid = fdee5057-84ad-4b96-804a-d8c2dc027721
 
     who.config_file = /etc/ckan/who.ini
