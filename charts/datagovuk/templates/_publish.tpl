@@ -12,8 +12,6 @@
       key: {{ .sqlalchemyUrlSecretKeyRef.key }}
 - name: ES_HOST
   value: http://{{ $.Release.Name }}-opensearch-sts:9200
-- name: RAILS_ENV
-  value: {{ $environment }}
 - name: REDIS_HOST
   value: {{ .redis.host | default "dgu-shared-redis" }}
 - name: REDIS_URL
@@ -24,6 +22,8 @@
   value: "1"
 - name: CKAN_REDIRECTION_URL
   value: ckan
+- name: DB_SETUP
+  value: "{{ .dbSetup }}"
 - name: SENTRY_DSN
   valueFrom:
     secretKeyRef:

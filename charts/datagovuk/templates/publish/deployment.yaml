@@ -15,10 +15,6 @@ spec:
       labels:
         app: {{ .Release.Name }}-publish
     spec:
-      securityContext:
-        runAsUser: 900
-        runAsGroup: 900
-        fsGroup: 900
       initContainers:
         - name: config-set
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
@@ -35,8 +31,6 @@ spec:
         - name: publish
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "publish" "files" $.Files) }}'
           imagePullPolicy: Always
-          command: ["/bin/sh", "-c"]
-          args: {{ .Values.publish.args }}
           env:
             {{ include "publish.environment-variables" . | nindent 12 }}
           ports:

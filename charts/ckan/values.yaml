@@ -17,6 +17,7 @@ ckan:
   probes:
     enabled: false
   config:
+    ckanIni: /config/production.ini
     dbInit: true
     site:
       id: "dgu"

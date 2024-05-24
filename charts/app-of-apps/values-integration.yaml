@@ -77,7 +77,7 @@ datagovukHelmValues:
     config:
       ckanReleaseName: "ckan"
       sqlalchemyUrlSecretKeyRef:
-        name: ckan
+        name: datagovuk
         key: publish_sqlalchemy_url
       dbHost: ""
       redis:
