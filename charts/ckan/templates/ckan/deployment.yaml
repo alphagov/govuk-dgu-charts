@@ -49,9 +49,6 @@ spec:
             - name: production-ini
               mountPath: /map
               readOnly: true
-            - name: production-ini-2-10
-              mountPath: /map-2.10
-              readOnly: true
             - name: config
               mountPath: /config
             - name: ckan-init
@@ -138,10 +135,7 @@ spec:
             name: {{ .Release.Name }}-ckan-init
         - name: production-ini
           configMap:
-            name: {{ .Release.Name }}-ckan-production-ini
-        - name: production-ini-2-10
-          configMap:
-            name: {{ .Release.Name }}-ckan-production-ini-2-10
+            name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
         - name: config
           emptyDir: {}
         - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}

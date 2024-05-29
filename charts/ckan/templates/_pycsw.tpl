@@ -34,7 +34,7 @@ volumes:
       name: {{ .Release.Name }}-pycsw-init
   - name: production-ini
     configMap:
-      name: {{ .Release.Name }}-ckan-production-ini
+      name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
   - name: config
     emptyDir: {}
 {{- end }}
