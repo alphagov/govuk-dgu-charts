@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-ckan-production-ini-2-10
 data:
-  production-2.10.ini: |
+  production.ini: |
     #
     # CKAN configuration
     #
