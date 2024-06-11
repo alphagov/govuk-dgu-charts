@@ -36,6 +36,9 @@ ckan:
     beakerSessionSecretKeyRef:
       name: ckan
       key: beaker_session_secret
+    beakerSessionValidateKeyRef:
+      name: ckan
+      key: beaker_session_validate_key
     solr:
       url: ""
       user: ""

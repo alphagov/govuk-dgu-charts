@@ -28,11 +28,6 @@ spec:
           imagePullPolicy: Always
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
-            - name: CKAN_BEAKER_SESSION_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.ckan.config.beakerSessionSecretKeyRef.name }}
-                  key: {{ .Values.ckan.config.beakerSessionSecretKeyRef.key }}
             {{- if .Values.dev.enabled }}
             - name: CKAN_AWS_ACCESS_KEY_ID
               valueFrom:

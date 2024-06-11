@@ -5,6 +5,16 @@
     secretKeyRef:
       name: {{ .sqlalchemyUrlSecretKeyRef.name }}
       key: {{ .sqlalchemyUrlSecretKeyRef.key }}
+- name: CKAN_BEAKER_SESSION_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: {{ .beakerSessionSecretKeyRef.name }}
+      key: {{ .beakerSessionSecretKeyRef.key }}
+- name: CKAN_BEAKER_SESSION_VALIDATE_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ .beakerSessionValidateKeyRef.name }}
+      key: {{ .beakerSessionValidateKeyRef.key }}
 - name: CKAN_DB_INIT
   value: "{{ .dbInit | default "false" }}"
 - name: CKAN_DB_HOST
