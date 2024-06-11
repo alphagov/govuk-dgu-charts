@@ -29,6 +29,7 @@ ckanHelmValues:
         enabled: true
     probes:
       enabled: true
+    ckanIniConfigMap: ckan-production-ini
     config:
       dbInit: false
       site:
