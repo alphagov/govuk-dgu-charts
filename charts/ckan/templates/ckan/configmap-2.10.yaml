@@ -162,7 +162,7 @@ data:
     search.facets.default = 10
     ckan.extra_resource_fields = 
     ckan.search.rows_max = 1000
-    ckan.group_and_organization_list_max = 1000
+    ckan.group_and_organization_list_max = 2000
     ckan.group_and_organization_list_all_fields_max = 25
     solr_timeout = 60
 
