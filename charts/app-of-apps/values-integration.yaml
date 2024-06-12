@@ -31,7 +31,7 @@ ckanHelmValues:
     config:
       dbInit: false
       site:
-        url: "https://ckan.eks.integration.govuk.digital"
+        url: "https://ckan.integration.publishing.service.gov.uk"
         title: "data.gov.uk"
       dbHost: "ckan-postgres.integration.govuk-internal.digital"
       redis:
