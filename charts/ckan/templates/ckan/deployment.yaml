@@ -28,11 +28,6 @@ spec:
           imagePullPolicy: Always
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
-            - name: CKAN_BEAKER_SESSION_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.ckan.config.beakerSessionSecretKeyRef.name }}
-                  key: {{ .Values.ckan.config.beakerSessionSecretKeyRef.key }}
             {{- if .Values.dev.enabled }}
             - name: CKAN_AWS_ACCESS_KEY_ID
               valueFrom:
@@ -48,9 +43,6 @@ spec:
           volumeMounts:
             - name: production-ini
               mountPath: /map
-              readOnly: true
-            - name: production-ini-2-10
-              mountPath: /map-2.10
               readOnly: true
             - name: config
               mountPath: /config
@@ -138,10 +130,7 @@ spec:
             name: {{ .Release.Name }}-ckan-init
         - name: production-ini
           configMap:
-            name: {{ .Release.Name }}-ckan-production-ini
-        - name: production-ini-2-10
-          configMap:
-            name: {{ .Release.Name }}-ckan-production-ini-2-10
+            name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
         - name: config
           emptyDir: {}
         - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}

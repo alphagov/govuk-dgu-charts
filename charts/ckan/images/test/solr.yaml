@@ -1,2 +1,3 @@
 repository: ghcr.io/alphagov/solr
-tag: v1.3.0
+tag: "2.10"
+branch: main

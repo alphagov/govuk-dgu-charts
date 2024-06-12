@@ -6,11 +6,6 @@ initContainers:
     imagePullPolicy: Always
     env:
       {{- include "ckan.environment-variables" . | nindent 6 }}
-      - name: CKAN_BEAKER_SESSION_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: {{ .Values.ckan.config.beakerSessionSecretKeyRef.name }}
-            key: {{ .Values.ckan.config.beakerSessionSecretKeyRef.key }}
     volumeMounts:
       - name: pycsw-cfg
         mountPath: /pycsw
@@ -34,7 +29,7 @@ volumes:
       name: {{ .Release.Name }}-pycsw-init
   - name: production-ini
     configMap:
-      name: {{ .Release.Name }}-ckan-production-ini
+      name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
   - name: config
     emptyDir: {}
 {{- end }}
