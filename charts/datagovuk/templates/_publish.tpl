@@ -3,6 +3,8 @@
 - name: FIND_URL
   value: {{ .Values.find.ingress.host }}
 {{- with .Values.publish.config }}
+- name: RAILS_ENV
+  value: {{ $environment }}
 - name: CKAN_URL
   value: http://{{ .ckanReleaseName }}-ckan
 - name: DATABASE_URL
