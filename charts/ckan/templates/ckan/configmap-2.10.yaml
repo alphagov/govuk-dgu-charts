@@ -174,7 +174,7 @@ data:
     ckan.cors.origin_whitelist = 
 
     ## Plugins Settings ############################################################
-    ckan.plugins = activity dcat harvest ckan_harvester dcat_rdf_harvester dcat_json_harvester dcat_json_interface spatial_metadata spatial_query spatial_harvest_metadata_api gemini_csw_harvester gemini_waf_harvester gemini_doc_harvester inventory_harvester datagovuk_publisher_form datagovuk
+    ckan.plugins = activity datagovuk_publisher_form datagovuk dcat harvest ckan_harvester dcat_rdf_harvester dcat_json_harvester dcat_json_interface spatial_metadata spatial_query spatial_harvest_metadata_api gemini_csw_harvester gemini_waf_harvester gemini_doc_harvester inventory_harvester
     ckan.resource_proxy.timeout = 5
 
     # Harvesting settings
@@ -219,7 +219,7 @@ data:
     ckan.template_head_end = 
     ckan.template_footer_end = 
     ckan.template_title_delimiter = -
-    extra_template_paths = 
+    extra_template_paths = datagovuk/tempates
     extra_public_paths = 
     ckan.base_public_folder = public-bs3
     ckan.base_templates_folder = templates-bs3
