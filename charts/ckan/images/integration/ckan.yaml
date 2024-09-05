@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/ckan
-tag: 72215c9c4839ece1bf021a2b817d5e1d471cffe6
-branch: main
+tag: eb4f48135a9fccfc47eb82e7367ce263b535065b
+branch: fix-create-pr-git-pull
