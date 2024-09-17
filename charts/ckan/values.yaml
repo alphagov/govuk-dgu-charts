@@ -83,7 +83,7 @@ ckan:
       create: true
       name: ""
     extraVolumeMounts: []
-    denyCrawlers: false
+    denyCrawlers: true
     safelist:
       # Used by: ckan.publishing.service.gov.uk
       # Used for: internationalisation of form controls
