@@ -1,3 +1,5 @@
-repository: ghcr.io/alphagov/ckan
-tag: da48eb5b549c703c0f16f1943849340754c3f68f
+# repository: ghcr.io/alphagov/ckan
+# tag: 531001e942b2cdf702cdac1ab7a0854294242fc0
+repository: local-registry:52278/ckan
+tag: 2.10.4-d 
 branch: main
