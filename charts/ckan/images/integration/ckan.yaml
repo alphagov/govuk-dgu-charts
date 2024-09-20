@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/ckan
-tag: 72215c9c4839ece1bf021a2b817d5e1d471cffe6
-branch: main
+tag: 1d652712fe7fced2f146c48d8e85fa8740a69b40
+branch: dj-maisy/arm-workflow
