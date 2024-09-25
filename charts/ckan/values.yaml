@@ -120,6 +120,8 @@ ckan:
       - "/action/package_search"
       - "/action/package_list"
       - "/action/harvest_source_list"
+  staticHarvestSource:
+    enabled: true
 
 solr:
   enabled: true
@@ -160,9 +162,6 @@ externalSecret:
   secretStoreRef:
     name: aws-secretsmanager
     kind: ClusterSecretStore
-
-staticHarvestSource:
-  enabled: 1
 
 monitoring:
   enabled: false
