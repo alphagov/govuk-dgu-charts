@@ -74,6 +74,8 @@ ckanHelmValues:
     replicaCount: 1
   externalSecret:
     enabled: true
+  staticHarvestSource:
+    enabled: false
 
 datagovukHelmValues:
   environment: production

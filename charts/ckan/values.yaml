@@ -161,5 +161,8 @@ externalSecret:
     name: aws-secretsmanager
     kind: ClusterSecretStore
 
+staticHarvestSource:
+  enabled: 1
+
 monitoring:
   enabled: false

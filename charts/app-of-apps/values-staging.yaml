@@ -114,6 +114,8 @@ datagovukHelmValues:
       persistentVolumeClaimName: opensearch-sts
   externalSecret:
     enabled: true
+  staticHarvestSource:
+    enabled: true
 
 dguSharedHelmValues:
   redis:
