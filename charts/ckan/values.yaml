@@ -122,6 +122,8 @@ ckan:
       - "/action/harvest_source_list"
   staticHarvestSource:
     enabled: true
+  dynamicHarvestSource:
+    enabled: true
 
 solr:
   enabled: true

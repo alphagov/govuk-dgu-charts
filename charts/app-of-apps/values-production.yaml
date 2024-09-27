@@ -56,6 +56,8 @@ ckanHelmValues:
       denyCrawlers: false
     staticHarvestSource:
       enabled: false
+    dynamicHarvestSource:
+      enabled: false
   pycsw:
     replicaCount: 1
     args: ["gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120"]

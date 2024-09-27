@@ -1,0 +1,31 @@
+{{- if $.Values.dev.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-dynamic-harvest-source
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 0
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-dynamic-harvest-source
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-dynamic-harvest-source
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+        - name: dynamic-harvest-source
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "dynamic-harvest-source" "files" $.Files) }}'
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8001
+          command: ["/bin/sh", "-c", "sleep 3000"]
+{{- end }}
