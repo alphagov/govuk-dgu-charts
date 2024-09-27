@@ -1,4 +1,4 @@
-{{- if $.Values.dev.enabled }}
+{{- if $.Values.dynamicHarvestSource.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
