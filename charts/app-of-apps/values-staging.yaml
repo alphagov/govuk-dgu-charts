@@ -2,8 +2,8 @@ ckanHelmValues:
   environment: staging
   ckan:
     replicaCount: 1
-    args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
-    # args: ["sleep 30000"]
+    # args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
+    args: ["sleep 30000"]
 
     ingress:
       host: ckan.eks.staging.govuk.digital
@@ -29,8 +29,8 @@ ckanHelmValues:
       tls:
         enabled: true
     probes:
-      # enabled: false
-      enabled: true
+      enabled: false
+      # enabled: true
     ckanIniConfigMap: ckan-production-ini-2-10
     config:
       dbInit: false
