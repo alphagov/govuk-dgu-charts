@@ -116,6 +116,8 @@ datagovukHelmValues:
               "www.integration.data.gov.uk",
               "integration.data.gov.uk"
           ]}}]
+    config:
+      ckanDomain: "ckan.integration.publishing.service.gov.uk"
   opensearch:
     replicaCount: 1
     persistence:
