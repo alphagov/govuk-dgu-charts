@@ -107,6 +107,8 @@ datagovukHelmValues:
               "www.staging.data.gov.uk",
               "staging.data.gov.uk"
           ]}}]
+    config:
+      ckanDomain: "ckan.staging.publishing.service.gov.uk"
   opensearch:
     replicaCount: 1
     persistence:
