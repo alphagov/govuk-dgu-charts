@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk_find
-tag: 7b1f67b5ef8914147cf4b7484c4374e5e2c2381d
-branch: main
+tag: 8752c21334979f9f4ef9ec61606f13487419f2df
+branch: test-solr-changes
