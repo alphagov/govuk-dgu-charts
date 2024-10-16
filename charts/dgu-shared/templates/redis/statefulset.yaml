@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-redis
+        app.kubernetes.io/arch: {{ .Values.redis.arch }}
     spec:
       {{- if .Values.redis.persistence.enabled }}
       initContainers:
@@ -40,4 +41,13 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.redis.persistence.persistentVolumeClaimName }}
+      {{- end }}
+      {{- if eq "arm64" .Values.redis.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.redis.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.redis.arch }}
       {{- end }}

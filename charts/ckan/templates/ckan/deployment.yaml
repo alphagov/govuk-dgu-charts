@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-ckan
+        app.kubernetes.io/arch: {{ .Values.ckan.arch }}
     spec:
       securityContext:
         runAsUser: 900
@@ -138,3 +139,12 @@ spec:
             name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
         - name: nginx-tmp
           emptyDir: {}
+      {{- if eq "arm64" .Values.ckan.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.ckan.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.ckan.arch }}
+      {{- end }}

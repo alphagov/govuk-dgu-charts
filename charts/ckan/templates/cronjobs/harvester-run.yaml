@@ -24,3 +24,12 @@ spec:
             - name: production-ini
               configMap:
                 name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+          {{- if eq "arm64" .Values.ckan.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.ckan.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.ckan.arch }}
+          {{- end }}

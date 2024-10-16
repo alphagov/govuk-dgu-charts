@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-opensearch-sts
+        app.kubernetes.io/arch: {{ .Values.opensearch.arch }}
     spec:
       {{- if .Values.opensearch.persistence.enabled }}
       initContainers:
@@ -57,4 +58,13 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.opensearch.persistence.persistentVolumeClaimName }}
+      {{- end }}
+      {{- if eq "arm64" .Values.opensearch.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.opensearch.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.opensearch.arch }}
       {{- end }}

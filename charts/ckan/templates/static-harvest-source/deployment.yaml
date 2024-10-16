@@ -27,4 +27,13 @@ spec:
           ports:
             - name: http
               containerPort: 11088
+      {{- if eq "arm64" .Values.ckan.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.ckan.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.ckan.arch }}
+      {{- end }}
 {{- end }}
