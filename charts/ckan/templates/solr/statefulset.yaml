@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-solr
+        app.kubernetes.io/arch: {{ .Values.solr.arch }}
     spec:
       securityContext:
         runAsUser: 8983
@@ -72,5 +73,14 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.solr.persistence.persistentVolumeClaimName }}
+      {{- end }}
+      {{- if eq "arm64" .Values.solr.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.solr.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.solr.arch }}
       {{- end }}
 {{- end }}

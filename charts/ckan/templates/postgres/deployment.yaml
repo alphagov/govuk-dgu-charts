@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-postgres
+        app.kubernetes.io/arch: {{ .Values.postgres.arch }}
     spec:
       containers:
         - name: postgres
@@ -36,5 +37,14 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.postgres.persistence.persistentVolumeClaimName }}
+      {{- end }}
+      {{- if eq "arm64" .Values.postgres.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.postgres.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.postgres.arch }}
       {{- end }}
 {{- end }}

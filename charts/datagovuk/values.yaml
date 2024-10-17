@@ -2,6 +2,7 @@ environment: test
 
 opensearch:
   replicaCount: 1
+  arch: arm64
   image: opensearchproject/opensearch
   persistence:
     enabled: false
@@ -9,6 +10,7 @@ opensearch:
 
 publish:
   replicaCount: 1
+  arch: arm64
   config:
     ckanReleaseName: "ckan-dev"
     dbSetup: "no"
@@ -28,6 +30,7 @@ publish:
 
 find:
   replicaCount: 1
+  arch: arm64
   args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
   ingress:
     enabled: true
