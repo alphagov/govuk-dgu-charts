@@ -6,6 +6,7 @@ ckan:
     enabled: false
     iamRoleARN: ""
   appPort: 5000
+  arch: arm64
   args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
   ingress:
     enabled: true
@@ -123,6 +124,7 @@ ckan:
 
 solr:
   enabled: true
+  arch: arm64
   persistence:
     enabled: false
     persistentVolumeClaimName: "solr"
@@ -133,6 +135,7 @@ solr:
 # This postgres instance is for development purposes only
 postgres:
   enabled: true
+  arch: arm64
   image: ghcr.io/alphagov/postgis:13-3.1
   persistence:
     enabled: false
@@ -149,6 +152,7 @@ fetch:
 
 pycsw:
   replicaCount: 1
+  arch: arm64
   args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
   probes:
     enabled: false

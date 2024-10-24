@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-pycsw
+        app.kubernetes.io/arch: {{ .Values.pycsw.arch }}
     spec:
       securityContext:
         runAsUser: 900
@@ -45,3 +46,12 @@ spec:
             periodSeconds: 3
           {{- end }}
       {{ include "ckan.pycsw-volumes" . | nindent 6 }}
+      {{- if eq "arm64" .Values.pycsw.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.pycsw.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.pycsw.arch }}
+      {{- end }}
