@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/dgu-shared
-    targetRevision: HEAD
+    targetRevision: dj-maisy/dgu-arm-integration
     helm:
       values: |
         {{- toYaml .Values.dguSharedHelmValues | nindent 8 }}
