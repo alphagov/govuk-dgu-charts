@@ -13,13 +13,13 @@ spec:
         - values-{{ .Values.environment }}.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: datagovuk
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true
       - PrunePropagationPolicy=foreground
       - PruneLast=true
       - ApplyOutOfSyncOnly=true
