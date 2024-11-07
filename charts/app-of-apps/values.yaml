@@ -1,3 +1,6 @@
+argoNamespace: cluster-services
+appNamespace: datagovuk
+
 ckanHelmValues:
   ckan:
     replicaCount: 1
