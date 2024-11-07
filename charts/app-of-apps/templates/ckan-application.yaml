@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/ckan
-    targetRevision: HEAD
+    targetRevision: move-argo-bootstrap-to-datagovuk-namespace
     helm:
       values: |
         {{- toYaml .Values.ckanHelmValues | nindent 8 }}
