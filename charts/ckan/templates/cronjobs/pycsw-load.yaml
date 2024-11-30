@@ -28,3 +28,12 @@ spec:
                 - name: config
                   mountPath: /config
           {{ include "ckan.pycsw-volumes" . | nindent 10 }}
+          {{- if eq "arm64" .Values.pycsw.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.pycsw.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.pycsw.arch }}
+          {{- end }}

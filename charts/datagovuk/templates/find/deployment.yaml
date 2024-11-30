@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-find
+        app.kubernetes.io/arch: {{ .Values.find.arch }}
     spec:
       containers:
         - name: find
@@ -38,3 +39,12 @@ spec:
       volumes:
         - name: app-tmp
           emptyDir: {}
+      {{- if eq "arm64" .Values.find.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.find.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.find.arch }}
+      {{- end }}

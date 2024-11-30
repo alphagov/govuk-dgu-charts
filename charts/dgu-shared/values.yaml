@@ -3,6 +3,7 @@ environment: test
 redis:
   replicaCount: 1
   enabled: true
+  arch: arm64
   image: redis:6.2.5-alpine3.14
   persistence:
     enabled: true
