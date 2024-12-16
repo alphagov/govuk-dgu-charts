@@ -2,11 +2,21 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ .Release.Name }}-reindex-organisations
+  labels:
+    app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "0 8 * * *"
   jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}-reindex-organisations
+      labels:
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       template:
+        metadata:
+          name: {{ .Release.Name }}-reindex-organisations
+          labels:
+            app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
         spec:
           containers:
             - name: ckan
@@ -24,3 +34,12 @@ spec:
             - name: production-ini
               configMap:
                 name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+          {{- if eq "arm64" .Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.arch }}
+          {{- end }}

@@ -1,5 +1,6 @@
 ckanHelmValues:
   environment: staging
+  arch: arm64
   ckan:
     replicaCount: 1
     ingress:
@@ -73,6 +74,7 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: staging
+  arch: arm64
   publish:
     replicaCount: 1
     args: [ "bundle exec rake db:migrate db:seed && bundle exec sidekiq" ]
@@ -118,5 +120,6 @@ datagovukHelmValues:
     enabled: true
 
 dguSharedHelmValues:
+  arch: arm64
   redis:
     replicaCount: 1

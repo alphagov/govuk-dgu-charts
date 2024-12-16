@@ -2,16 +2,26 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ .Release.Name }}-pycsw-load
+  labels:
+    app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "47 1 * * *"
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2
   jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}-pycsw-load
+      labels:
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       backoffLimit: 0
       activeDeadlineSeconds: 171000  # 171000 s = 47.5 hours.
       template:
+        metadata:
+          name: {{ .Release.Name }}-pycsw-load
+          labels:
+            app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
         spec:
           {{- include "ckan.pycsw-init" . | nindent 10 }}
           restartPolicy: Never
@@ -28,3 +38,12 @@ spec:
                 - name: config
                   mountPath: /config
           {{ include "ckan.pycsw-volumes" . | nindent 10 }}
+          {{- if eq "arm64" .Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.arch }}
+          {{- end }}

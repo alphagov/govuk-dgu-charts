@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-fetch
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       containers:
         - name: harvest-fetch
@@ -31,3 +32,12 @@ spec:
         - name: production-ini
           configMap:
             name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}

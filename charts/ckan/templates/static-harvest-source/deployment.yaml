@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-static-harvest-source
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       securityContext:
         runAsUser: 0
@@ -27,4 +28,13 @@ spec:
           ports:
             - name: http
               containerPort: 11088
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
 {{- end }}
