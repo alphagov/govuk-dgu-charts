@@ -2,13 +2,23 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ .Release.Name }}-solr-index-rebuild
+  labels:
+    app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "0 6-22 * * *"
   suspend: false
   concurrencyPolicy: Forbid
   jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}-solr-index-rebuild
+      labels:
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       template:
+        metadata:
+          name: {{ .Release.Name }}-solr-index-rebuild
+          labels:
+            app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
         spec:
           containers:
             - name: ckan
@@ -26,3 +36,12 @@ spec:
             - name: production-ini
               configMap:
                 name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+          {{- if eq "arm64" .Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.arch }}
+          {{- end }}
