@@ -74,7 +74,6 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: staging
-  arch: arm64
   publish:
     replicaCount: 1
     args: [ "bundle exec rake db:migrate db:seed && bundle exec sidekiq" ]
