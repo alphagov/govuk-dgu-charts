@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/datagovuk
-    targetRevision: test-solr-changes
+    targetRevision: scale-up-solr
     helm:
       values: |
         {{- toYaml .Values.datagovukHelmValues | nindent 8 }}
