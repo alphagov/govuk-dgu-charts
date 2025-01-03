@@ -1,7 +1,12 @@
+{{- $fullName := print .Release.Name "-pycsw" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-pycsw
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -9,11 +14,12 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-pycsw
+      app: {{ $fullName }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-pycsw
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       securityContext:

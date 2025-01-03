@@ -2,7 +2,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-ckan
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -10,11 +14,12 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-ckan
+      app: {{ $fullName }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-ckan
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       securityContext:

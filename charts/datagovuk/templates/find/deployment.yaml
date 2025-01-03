@@ -1,7 +1,12 @@
+{{- $fullName := print .Release.Name "-find" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-find
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -13,7 +18,8 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-find
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       containers:

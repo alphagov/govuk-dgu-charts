@@ -1,17 +1,22 @@
 {{- if .Values.solr.enabled }}
+{{- $fullName := print .Release.Name "-solr" -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}-solr
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
 spec:
   serviceName: "solr"
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-solr
+      app: {{ $fullName }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-solr
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       securityContext:
