@@ -2,6 +2,10 @@
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
 - name: CKAN_DOMAIN
   value: {{ .Values.find.config.ckanDomain }}
+- name: ES_HOST
+  value: http://{{ $.Release.Name }}-opensearch-sts
+- name: ES_INDEX
+  value: datasets-{{ $environment }}
 - name: GOVUK_APP_DOMAIN
   value: "www.gov.uk"
 - name: GOVUK_ENVIRONMENT_NAME
