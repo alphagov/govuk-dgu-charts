@@ -77,15 +77,6 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: production
-  publish:
-    replicaCount: 1
-    args: [ "bundle exec rake db:migrate db:seed && bundle exec sidekiq" ]
-    config:
-      ckanReleaseName: "ckan"
-      redis:
-        host: "dgu-shared-redis"
-      org:
-        schedule: "*/10 * * * *"
   find:
     replicaCount: 2
     args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
@@ -109,11 +100,6 @@ datagovukHelmValues:
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.data.gov.uk"
           ]}}]
-  opensearch:
-    replicaCount: 1
-    persistence:
-      enabled: true
-      persistentVolumeClaimName: opensearch-sts
   externalSecret:
     enabled: true
 

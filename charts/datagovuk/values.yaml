@@ -5,32 +5,6 @@ environment: test
 # running mixed-arch clusters.
 arch: amd64
 
-opensearch:
-  replicaCount: 1
-  image: opensearchproject/opensearch
-  persistence:
-    enabled: false
-    persistentVolumeClaimName: "opensearch"
-
-publish:
-  replicaCount: 1
-  config:
-    ckanReleaseName: "ckan-dev"
-    dbSetup: "no"
-    sqlalchemyUrlSecretKeyRef:
-      name: datagovuk
-      key: publish_sqlalchemy_url
-    publishSentryDsnSecretKeyRef:
-      name: datagovuk
-      key: publish_sentry_dsn
-    govukAppDomainSecretKeyRef:
-      name: datagovuk
-      key: govuk_app_domain
-    redis:
-      host: "dgu-shared-dev-redis"
-      port: "6379"
-      dbNumber: "1"
-
 find:
   replicaCount: 1
   args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
