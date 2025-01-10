@@ -72,21 +72,6 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: integration
-  publish:
-    replicaCount: 1
-    args: ["bundle exec rake db:migrate db:seed && bundle exec sidekiq"]
-    config:
-      ckanReleaseName: "ckan"
-      sqlalchemyUrlSecretKeyRef:
-        name: datagovuk
-        key: publish_sqlalchemy_url
-      dbHost: ""
-      redis:
-        host: "dgu-shared-redis"
-        port: "6379"
-        dbNumber: "1"
-      org:
-        schedule: "*/10 * * * *"
   find:
     replicaCount: 1
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
@@ -113,11 +98,6 @@ datagovukHelmValues:
               "www.integration.data.gov.uk",
               "integration.data.gov.uk"
           ]}}]
-  opensearch:
-    replicaCount: 1
-    persistence:
-      enabled: true
-      persistentVolumeClaimName: opensearch-sts
   externalSecret:
     enabled: true
 
