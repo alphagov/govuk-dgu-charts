@@ -97,6 +97,8 @@ datagovukHelmValues:
           ]}}]
     config:
       ckanDomain: "ckan.staging.publishing.service.gov.uk"
+  externalSecret:
+    enabled: true
 
 dguSharedHelmValues:
   arch: arm64
