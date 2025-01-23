@@ -73,6 +73,7 @@ ckanHelmValues:
     enabled: true
 
 datagovukHelmValues:
+  arch: arm64
   environment: staging
   find:
     replicaCount: 1
