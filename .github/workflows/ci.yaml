@@ -28,13 +28,12 @@ jobs:
       - name: Helm template
         run: |
           mkdir helm-dist
-          for c in $(ls charts)
-          do
-            helm template "${c}" "charts/${c}" --output-dir helm-dist
+          for _chart in charts/*; do
+            helm template "$(basename "$_chart")" "$_chart" --output-dir helm-dist
           done
 
       - name: Read Kubernetes version from /kubernetes_version
-        run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
+        run: grep KUBERNETES_VERSION kubernetes_version >> "$GITHUB_ENV"
 
       - name: kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:latest-alpine
