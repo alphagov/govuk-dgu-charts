@@ -1,5 +1,6 @@
 ckanHelmValues:
   environment: integration
+  arch: arm64
   ckan:
     args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
     ingress:
@@ -72,6 +73,7 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: integration
+  arch: arm64
   find:
     replicaCount: 1
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
@@ -102,5 +104,6 @@ datagovukHelmValues:
     enabled: true
 
 dguSharedHelmValues:
+  arch: arm64
   redis:
     replicaCount: 1
