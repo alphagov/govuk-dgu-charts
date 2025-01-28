@@ -1,0 +1,49 @@
+{{- if (eq .Values.environment "staging") }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-solr-index-clear
+  labels:
+    app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+spec:
+  schedule: "0 5 * * 0"
+  suspend: false
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}-solr-index-clear
+      labels:
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      template:
+        metadata:
+          name: {{ .Release.Name }}-solr-index-clear
+          labels:
+            app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+        spec:
+          containers:
+            - name: ckan
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+              imagePullPolicy: Always
+              command: [ ckan, search-index, rebuild, -c ]
+              env:
+                {{- include "ckan.environment-variables" . | nindent 16 }}
+              volumeMounts:
+                - name: production-ini
+                  mountPath: /config
+                  readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+            - name: production-ini
+              configMap:
+                name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+          {{- if eq "arm64" .Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.arch }}
+          {{- end }}
+{{- end }}
