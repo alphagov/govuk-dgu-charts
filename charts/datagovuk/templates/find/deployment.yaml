@@ -33,6 +33,11 @@ spec:
               containerPort: {{ .Values.monitoring.metricsPort }}
           env:
             {{ include "find.environment-variables" . | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
           livenessProbe:
             httpGet:
               path: /
@@ -42,10 +47,21 @@ spec:
           volumeMounts:
             - name: app-tmp
               mountPath: /srv/app/datagovuk_find/tmp
+            - name: tmp
+              mountPath: /tmp
       volumes:
         - name: app-tmp
           emptyDir: {}
+        - name: tmp
+          emptyDir: {}
       {{- if eq "arm64" .Values.arch }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
       tolerations:
         - key: arch
           operator: Equal
