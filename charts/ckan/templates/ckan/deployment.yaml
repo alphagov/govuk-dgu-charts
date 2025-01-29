@@ -23,10 +23,15 @@ spec:
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 900
         runAsGroup: 900
         fsGroup: 900
-      {{ if .Values.ckan.serviceAccount.enabled }}serviceAccountName: {{ .Values.ckan.serviceAccount.name | default (print "ckan-" .Release.Name) }}{{- end }}
+        seccompProfile:
+          type: RuntimeDefault
+      {{ if .Values.ckan.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.ckan.serviceAccount.name | default (print "ckan-" .Release.Name) }}
+      {{- end }}
       initContainers:
         - name: config-set
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
@@ -46,6 +51,8 @@ spec:
                   name: {{ .Values.ckan.config.s3.credentials.awsSecretAccessKeySecretKeyRef.name }}
                   key: {{ .Values.ckan.config.s3.credentials.awsSecretAccessKeySecretKeyRef.key }}
             {{- end }}
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
           volumeMounts:
             - name: production-ini
               mountPath: /map
@@ -115,8 +122,7 @@ spec:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+            {{- toYaml $.Values.securityContext | nindent 12 }}
           volumeMounts:
             - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
