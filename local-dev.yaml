@@ -18,12 +18,10 @@ metadata:
   name: datagovuk
 type: Opaque
 stringData:
-  publish_sqlalchemy_url: "postgresql://ckan:ckan@ckan-dev-postgres/publish"
   secret_key_base: "dummy"
   zendesk_api_key: "dummy"
   zendesk_username: "dummy"
   find_sentry_dsn: "dummy"
-  publish_sentry_dsn: "dummy"
   govuk_app_domain: "www.gov.uk"
 ---
 apiVersion: v1
