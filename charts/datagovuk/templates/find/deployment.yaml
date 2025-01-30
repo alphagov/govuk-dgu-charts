@@ -54,7 +54,6 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-      {{- if eq "arm64" .Values.arch }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -62,6 +61,7 @@ spec:
         fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
+      {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
           operator: Equal
