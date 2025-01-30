@@ -74,10 +74,10 @@ we have to tag our image as follows:
 ```sh
 docker build -t localhost:53492/ckan:2.10.4 -f docker/ckan/2.10.4.Dockerfile .
 ```
-**Note:** for Publish and Find build the `dev.Dockerfile version`
+**Note:** for Find build the `dev.Dockerfile version`
 
 ```sh
-docker build -t localhost:53492/datagovuk_publish:dev -f docker/dev.Dockerfile .
+docker build -t localhost:53492/datagovuk_find:dev -f docker/dev.Dockerfile .
 ```
 
 5. Push the image to our local registry

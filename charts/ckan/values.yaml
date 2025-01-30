@@ -98,22 +98,18 @@ ckan:
       # Used for: finding members
       - "/2/util/user/autocomplete"
 
-      # Used by: datagovuk_publish
       # Used for: ckan_v26_ckan_org_sync
       - "/action/organization_list"
       - "/action/organization_show"
 
-      # Used by: datagovuk_publish
       # Used for: ckan_v26_package_sync job
       # Used by: pycsw data load in ckanext-spatial
       # Used for: syncing csw with ckan database
       - "/search/dataset"
 
-      # Used by: datagovuk_publish
       # Used for: ckan_v26_package_sync job
       - "/action/package_show"
 
-      # Used by: datagovuk_publish
       # Used for: determining filetype
       - "/2/util/resource/format_autocomplete"
 
