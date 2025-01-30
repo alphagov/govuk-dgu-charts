@@ -27,7 +27,8 @@ spec:
       initContainers:
         - name: fix-volume-permissions
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "solr" "files" $.Files) }}'
-          command: [ bash, -c, "chown -R solr:solr /var/solr/data"]
+          # command: [ bash, -c, "chown -R solr:solr /var/solr/data"]
+          command: ["sleep 30000"]
           securityContext:
             runAsUser: 0
             runAsGroup: 0
