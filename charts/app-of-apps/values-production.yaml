@@ -1,5 +1,6 @@
 ckanHelmValues:
   environment: production
+  arch: arm64
   ckan:
     replicaCount: 2
     ingress:
@@ -77,6 +78,7 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: production
+  arch: arm64
   find:
     replicaCount: 2
     args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
@@ -104,5 +106,6 @@ datagovukHelmValues:
     enabled: true
 
 dguSharedHelmValues:
+  arch: arm64
   redis:
     replicaCount: 1
