@@ -27,10 +27,6 @@ spec:
               value: ckan
             - name: POSTGRES_PASSWORD
               value: ckan
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
           {{- if .Values.postgres.persistence.enabled }}
           volumeMounts:
             - name: data
@@ -42,13 +38,6 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.postgres.persistence.persistentVolumeClaimName }}
       {{- end }}
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 70
-        runAsGroup: 70
-        fsGroup: 70
-        seccompProfile:
-          type: RuntimeDefault
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
