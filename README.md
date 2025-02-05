@@ -123,6 +123,7 @@ This sets up some initial configuration in the cluster.
 ```sh
 helm install ckan-dev ./charts/ckan/
 helm install datagovuk-dev ./charts/datagovuk/
+helm install dgu-shared-dev ./charts/dgu-shared/
 ```
 
 Now your local CKAN deployment will use the `localhost:54392/ckan.2.10.4` image.
