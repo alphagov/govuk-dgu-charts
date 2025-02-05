@@ -37,7 +37,18 @@ spec:
               volumeMounts:
                 - name: config
                   mountPath: /config
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
           {{ include "ckan.pycsw-volumes" . | nindent 10 }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 900
+            runAsGroup: 900
+            fsGroup: 900
+            seccompProfile:
+              type: RuntimeDefault
           {{- if eq "arm64" .Values.arch }}
           tolerations:
             - key: arch
