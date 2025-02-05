@@ -17,6 +17,10 @@ initContainers:
         mountPath: /config
       - name: pycsw-init
         mountPath: /init
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: [ "ALL" ]
 {{- end }}
 
 {{- define "ckan.pycsw-volumes" -}}
