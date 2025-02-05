@@ -20,7 +20,7 @@ initContainers:
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
-        drop: [ "ALL" ]
+        drop: ["ALL"]
 {{- end }}
 
 {{- define "ckan.pycsw-volumes" -}}
