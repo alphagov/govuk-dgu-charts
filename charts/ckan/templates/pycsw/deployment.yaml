@@ -23,9 +23,12 @@ spec:
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 900
         runAsGroup: 900
         fsGroup: 900
+        seccompProfile:
+          type: RuntimeDefault
       {{- include "ckan.pycsw-init" . | nindent 6 }}
       containers:
         - name: pycsw
@@ -43,6 +46,10 @@ spec:
             - name: PYCSW_CONFIG
               value: /config/pycsw.cfg
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ "ALL" ]
           {{- if .Values.pycsw.probes.enabled }}
           livenessProbe:
             httpGet:
