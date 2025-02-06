@@ -28,10 +28,21 @@ spec:
           args: ["ckan harvester fetch-consumer"]
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
       volumes:
         - name: production-ini
           configMap:
             name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
+        seccompProfile:
+          type: RuntimeDefault
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
