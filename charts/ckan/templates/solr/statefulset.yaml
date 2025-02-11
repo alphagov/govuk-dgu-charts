@@ -26,20 +26,6 @@ spec:
         fsGroup: 8983
         seccompProfile:
           type: RuntimeDefault
-      {{- if .Values.solr.persistence.enabled }}
-      initContainers:
-        - name: fix-volume-permissions
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "solr" "files" $.Files) }}'
-          command: [ bash, -c, "chown -R solr:solr /var/solr/data"]
-          securityContext:
-            runAsNonRoot: false
-            runAsUser: 0
-            runAsGroup: 0
-            allowPrivilegeEscalation: false
-          volumeMounts:
-            - name: data
-              mountPath: /var/solr/data
-      {{- end }}
       containers:
         - name: solr
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "solr" "files" $.Files) }}'
