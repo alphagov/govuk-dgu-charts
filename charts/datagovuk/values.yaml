@@ -15,6 +15,7 @@ find:
     annotations:
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
+    solrUrl: "http://ckan-dev-solr/solr/ckan"
     gaTrackingId: ""
     googleTagManagerId: ""
     googleTagManagerAuth: ""
