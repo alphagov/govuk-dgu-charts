@@ -78,6 +78,9 @@ datagovukHelmValues:
   find:
     replicaCount: 1
     args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
+    config:
+      ckanDomain: "ckan.staging.publishing.service.gov.uk"
+      solrUrl: "http://ckan-solr/solr/ckan"
     ingress:
       host: find.eks.staging.govuk.digital
       ingressClassName: aws-alb
@@ -96,8 +99,6 @@ datagovukHelmValues:
               "www.staging.data.gov.uk",
               "staging.data.gov.uk"
           ]}}]
-    config:
-      ckanDomain: "ckan.staging.publishing.service.gov.uk"
   externalSecret:
     enabled: true
 

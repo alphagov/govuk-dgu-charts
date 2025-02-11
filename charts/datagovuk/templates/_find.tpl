@@ -50,7 +50,7 @@
       name: {{ .findSentryDsnSecretKeyRef.name }}
       key: {{ .findSentryDsnSecretKeyRef.key }}
 - name: SOLR_URL
-  value: "http://ckan-solr/solr/ckan"
+  value: {{ .solrUrl }}
 - name: ZENDESK_API_KEY
   valueFrom:
     secretKeyRef:
