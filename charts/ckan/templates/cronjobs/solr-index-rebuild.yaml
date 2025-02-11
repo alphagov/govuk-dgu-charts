@@ -31,7 +31,18 @@ spec:
                 - name: production-ini
                   mountPath: /config
                   readOnly: true
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ "ALL" ]
           restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 900
+            runAsGroup: 900
+            fsGroup: 900
+            seccompProfile:
+              type: RuntimeDefault
           volumes:
             - name: production-ini
               configMap:
