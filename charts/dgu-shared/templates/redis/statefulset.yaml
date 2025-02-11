@@ -13,18 +13,6 @@ spec:
         app: {{ .Release.Name }}-redis
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
-      {{- if .Values.redis.persistence.enabled }}
-      initContainers:
-        - name: fix-volume-permissions
-          image: {{ .Values.redis.image }}
-          command: [ sh, -c, "chown -R redis:redis /data"]
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-          volumeMounts:
-            - name: data
-              mountPath: /data
-      {{- end }}
       containers:
         - name: redis
           image: {{ .Values.redis.image }}
@@ -36,12 +24,23 @@ spec:
             - name: data
               mountPath: /data
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
       {{- if .Values.redis.persistence.enabled }}
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.redis.persistence.persistentVolumeClaimName }}
       {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
