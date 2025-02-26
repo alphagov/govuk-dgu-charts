@@ -118,19 +118,30 @@ kubectl apply -f local-dev.yaml
 
 This sets up some initial configuration in the cluster.
 
-8. Install the application Helm charts
+8. Switch to the `datagovuk` namespace
 
 ```sh
-helm install ckan-dev ./charts/ckan/
-helm install datagovuk-dev ./charts/datagovuk/
-helm install dgu-shared-dev ./charts/dgu-shared/
+kubectl config set-context --current --namespace=datagovuk
+```
+
+9. Install the application Helm charts
+
+```sh
+helm install ckan-dev ./charts/ckan/ -n datagovuk
+helm install datagovuk-dev ./charts/datagovuk/ -n datagovuk
+helm install dgu-shared-dev ./charts/dgu-shared/ -n datagovuk
 ```
 
 Now your local CKAN deployment will use the `localhost:54392/ckan.2.10.4` image.
 
-#### Use a nicer URL
+10. Update the `/etc/hosts` file as follows
 
-Update `/etc/hosts` and add `ckan.dev.govuk.digital` and `find.data.gov.uk` after `kubernetes.docker.internal` on the sameline in the `/etc/hosts` file
+```sh
+127.0.0.1	localhost find.data.gov.uk ckan.dev.govuk.digital
+```
+
+`datagovuk-find` can be accessed at `find.data.gov.uk:8081`
+`ckan` can be accessed at `ckan.dev.govuk.digital:8081`
 
 #### Test Helm chart in EKS
 
