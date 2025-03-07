@@ -39,7 +39,7 @@ ckanHelmValues:
         host: "dgu-shared-redis"
       smtp:
         server: "email-smtp.eu-west-1.amazonaws.com:587"
-        user: "AKIATB5RC4XX4VZIWMF7"
+        user: "AKIATB5RC4XX5NEGAUGR"
         mailFrom: "team@data.gov.uk"
         starttls: "True"
       s3:
