@@ -10,7 +10,11 @@ spec:
     helm:
       valueFiles:
         - values.yaml
+        {{ if hasPrefix "eph-" "{{ $.Values.environment }}" }}
+        - values-ephemeral.yaml
+        {{- else }}
         - values-{{ .Values.environment }}.yaml
+        {{- end }}
   destination:
     server: https://kubernetes.default.svc
     namespace: default

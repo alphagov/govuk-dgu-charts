@@ -11,7 +11,7 @@ metadata:
 spec:
   {{ if not (empty .ingressClassName) }}ingressClassName: {{ .ingressClassName }}{{ end }}
   rules:
-    - host: {{ .host }}
+    - host: find.eks.{{ $.Values.environment }}.govuk.digital
       http:
         paths:
           - path: /

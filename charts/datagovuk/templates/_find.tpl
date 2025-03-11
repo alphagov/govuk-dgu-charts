@@ -1,7 +1,11 @@
 {{- define "find.environment-variables" -}}
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
 - name: CKAN_DOMAIN
-  value: {{ .Values.find.config.ckanDomain }}
+  {{- if eq "production" .Values.environment }}
+  value: "ckan.publishing.service.gov.uk"
+  {{- else }}
+  value: "ckan.{{ .Values.environment }}.publishing.service.gov.uk"
+  {{- end }}
 - name: ES_HOST
   value: http://{{ $.Release.Name }}-opensearch-sts
 - name: ES_INDEX

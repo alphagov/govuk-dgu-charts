@@ -11,7 +11,7 @@ spec:
   ingressClassName: {{ . }}
   {{- end }}
   rules:
-    - host: {{ .host }}
+    - host: ckan.eks.{{ $.Values.environment }}.govuk.digital
       http:
         paths:
           - path: /
@@ -31,7 +31,7 @@ spec:
   {{- if .tls.enabled }}
   tls:
     - hosts:
-      - {{ .host }}
+      - ckan.eks.{{ $.Values.environment }}.govuk.digital
   {{- end }}
 {{- end }}
 {{- end }}

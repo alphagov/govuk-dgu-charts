@@ -24,7 +24,11 @@
 - name: CKAN_SITE_ID
   value: {{ .site.id }}
 - name: CKAN_SITE_URL
-  value: {{ .site.url }}
+  {{- if eq "production" $.Values.environment }}
+  value: "https://ckan.publishing.service.gov.uk"
+  {{- else }}
+  value: "https://ckan.{{ $.Values.environment }}.publishing.service.gov.uk"
+  {{- end }}
 - name: CKAN_SMTP_SERVER
   value: {{ .smtp.server }}
 - name: CKAN_SMTP_STARTTLS
