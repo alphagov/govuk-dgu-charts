@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-postgres
-        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+        app.kubernetes.io/arch: amd64
     spec:
       containers:
         - name: postgres
@@ -53,9 +53,9 @@ spec:
       tolerations:
         - key: arch
           operator: Equal
-          value: {{ .Values.arch }}
+          value: amd64
           effect: NoSchedule
       nodeSelector:
-        kubernetes.io/arch: {{ .Values.arch }}
+        kubernetes.io/arch: amd64
       {{- end }}
 {{- end }}
