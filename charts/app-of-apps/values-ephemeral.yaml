@@ -61,7 +61,7 @@ ckanHelmValues:
       enabled: true
       persistentVolumeClaimName: solr
   postgres:
-    enabled: false
+    enabled: true
   dev:
     enabled: false
   gather:
