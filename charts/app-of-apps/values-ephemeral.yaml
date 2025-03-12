@@ -70,6 +70,8 @@ ckanHelmValues:
     replicaCount: 1
   externalSecret:
     enabled: true
+  monitoring:
+    enabled: false
 
 datagovukHelmValues:
   environment: ephemeral
@@ -103,6 +105,8 @@ datagovukHelmValues:
           ]}}]
   externalSecret:
     enabled: true
+  monitoring:
+    enabled: false
 
 dguSharedHelmValues:
   arch: arm64
