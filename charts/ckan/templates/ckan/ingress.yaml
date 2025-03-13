@@ -1,4 +1,6 @@
 {{- if .Values.ckan.ingress.enabled }}
+{{- $ephemeralPath := print .Values.environment ".ephemeral" }}
+{{- $environmentPath := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary "$.Values.environment" $ephemeralPath -}}
 {{- with .Values.ckan.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -11,7 +13,7 @@ spec:
   ingressClassName: {{ . }}
   {{- end }}
   rules:
-    - host: ckan.eks.{{ $.Values.environment }}.govuk.digital
+    - host: ckan.eks.{{ $environmentPath }}.govuk.digital
       http:
         paths:
           - path: /

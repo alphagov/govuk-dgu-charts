@@ -1,3 +1,4 @@
+{{- $environment := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary $.Values.environment "ephemeral" -}}
 {{- $fullName := print .Release.Name "-find" -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -24,7 +25,7 @@ spec:
     spec:
       containers:
         - name: find
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
+          image: '{{ include "docker-uri" (dict "environment" $environment "app" "find" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
             - name: http

@@ -1,4 +1,6 @@
 {{- if .Values.find.ingress.enabled }}
+{{- $ephemeralPath := print .Values.environment ".ephemeral" }}
+{{- $environmentPath := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary "$.Values.environment" $ephemeralPath -}}
 {{- with .Values.find.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -11,7 +13,7 @@ metadata:
 spec:
   {{ if not (empty .ingressClassName) }}ingressClassName: {{ .ingressClassName }}{{ end }}
   rules:
-    - host: find.eks.{{ $.Values.environment }}.govuk.digital
+    - host: find.eks.{{ $environmentPath }}.govuk.digital
       http:
         paths:
           - path: /

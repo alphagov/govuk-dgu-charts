@@ -1,3 +1,6 @@
+{{- $ephemeralPath := print .Values.environment "-ephemeral" }}
+{{- $environmentPath := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary "$.Values.environment" $ephemeralPath -}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -242,8 +245,8 @@ data:
     ## S3 Settngs
     ckan.datagovuk.s3_aws_access_key_id =
     ckan.datagovuk.s3_aws_secret_access_key =
-    ckan.datagovuk.s3_bucket_name = "datagovuk-{{ .Values.environment }}-ckan-organogram"
-    ckan.datagovuk.s3_url_prefix = "https://s3-eu-west-1.amazonaws.com/datagovuk-{{ .Values.environment }}-ckan-organogram/"
+    ckan.datagovuk.s3_bucket_name = "datagovuk-{{ $environmentPath }}-ckan-organogram"
+    ckan.datagovuk.s3_url_prefix = "https://s3-eu-west-1.amazonaws.com/datagovuk-{{ $environmentPath }}-ckan-organogram/"
     ckan.datagovuk.s3_aws_region_name = {{ .Values.ckan.config.s3.regionName }}
 
     ## Webassets Settings ##########################################################
