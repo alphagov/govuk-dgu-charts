@@ -33,7 +33,7 @@ spec:
   {{- if .tls.enabled }}
   tls:
     - hosts:
-      - ckan.eks.{{ $.Values.environment }}.govuk.digital
+      - ckan.eks.{{ $environmentPath }}.govuk.digital
   {{- end }}
 {{- end }}
 {{- end }}
