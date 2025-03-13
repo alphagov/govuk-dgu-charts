@@ -62,6 +62,7 @@ ckanHelmValues:
       persistentVolumeClaimName: solr
   postgres:
     enabled: true
+    image: arm64v8/postgres:16.8-bookworm
     persistence:
       enabled: false
 
