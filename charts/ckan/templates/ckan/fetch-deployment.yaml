@@ -1,3 +1,4 @@
+{{- $environment := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary $.Values.environment "ephemeral" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +19,7 @@ spec:
     spec:
       containers:
         - name: harvest-fetch
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+          image: '{{ include "docker-uri" (dict "environment" $environment "app" "ckan" "files" $.Files) }}'
           imagePullPolicy: Always
           volumeMounts:
             - name: production-ini

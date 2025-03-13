@@ -1,3 +1,4 @@
+{{- $environment := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary $.Values.environment "ephemeral" -}}
 {{- $fullName := print .Release.Name "-ckan" -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -34,7 +35,7 @@ spec:
       {{- end }}
       initContainers:
         - name: config-set
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+          image: '{{ include "docker-uri" (dict "environment" $environment "app" "ckan" "files" $.Files) }}'
           command: [ "/bin/sh", "-c", '. /init/init.sh']
           imagePullPolicy: Always
           env:
@@ -65,7 +66,7 @@ spec:
               mountPath: /init
       containers:
         - name: ckan
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+          image: '{{ include "docker-uri" (dict "environment" $environment "app" "ckan" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
             - name: http

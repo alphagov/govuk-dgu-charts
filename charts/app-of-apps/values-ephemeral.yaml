@@ -1,5 +1,8 @@
+{{- $ephemeralPath := print .Values.environment ".ephemeral" }}
+{{- $environmentPath := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary "$.Values.environment" $ephemeralPath -}}
+
 ckanHelmValues:
-  environment: ephemeral
+  is_ephemeral: true
   arch: arm64
   ckan:
     args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
@@ -14,15 +17,15 @@ ckanHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/load-balancer-attributes: >
           access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-{{ .Values.environment }}-aws-logging,
+          access_logs.s3.bucket=govuk-{{ $environmentPath | replace "." "-" }}-aws-logging,
           access_logs.s3.prefix=elb/ckan-datagovuk
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.{{ .Values.environment }}.publishing.service.gov.uk"
+              "ckan.{{ $environmentPath }}.publishing.service.gov.uk"
           ]}}]
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.{{ .Values.environment }}.publishing.service.gov.uk"
+              "ckan.{{ $environmentPath }}.publishing.service.gov.uk"
           ]}}]
       tls:
         enabled: true
@@ -32,9 +35,7 @@ ckanHelmValues:
     config:
       dbInit: false
       site:
-        # url: "https://ckan.integration.publishing.service.gov.uk"
         title: "data.gov.uk"
-      # dbHost: "ckan-postgres.integration.govuk-internal.digital"
       redis:
         host: "dgu-shared-redis"
       smtp:
@@ -44,9 +45,7 @@ ckanHelmValues:
         starttls: "True"
       s3:
         useIamServiceAccount: true
-        # bucketName: "datagovuk-integration-ckan-organogram"
         regionName: "eu-west-1"
-        # urlPrefix: "https://s3-eu-west-1.amazonaws.com/datagovuk-integration-ckan-organogram/"
     serviceAccount:
       enabled: true
       name: ckan
@@ -78,7 +77,7 @@ ckanHelmValues:
     enabled: false
 
 datagovukHelmValues:
-  environment: ephemeral
+  is_ephemeral: true
   arch: arm64
   find:
     replicaCount: 1
@@ -100,12 +99,12 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/load-balancer-attributes: >
           access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-{{ .Values.environment }}-aws-logging,
+          access_logs.s3.bucket=govuk-{{ $environmentPath | replace "." "-" }}-aws-logging,
           access_logs.s3.prefix=elb/www-datagovuk
         alb.ingress.kubernetes.io/conditions.datagovuk-find: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "www.{{ .Values.environment }}.data.gov.uk",
-              "{{ .Values.environment }}.data.gov.uk"
+              "www.{{ $environmentPath }}.data.gov.uk",
+              "{{ $environmentPath }}.data.gov.uk"
           ]}}]
   externalSecret:
     enabled: true

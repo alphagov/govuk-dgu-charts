@@ -1,4 +1,5 @@
 {{- if .Values.solr.enabled }}
+{{- $environment := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary $.Values.environment "ephemeral" -}}
 {{- $fullName := print .Release.Name "-solr" -}}
 apiVersion: apps/v1
 kind: StatefulSet
@@ -28,7 +29,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: solr
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "solr" "files" $.Files) }}'
+          image: '{{ include "docker-uri" (dict "environment" $environment "app" "solr" "files" $.Files) }}'
           env:
             {{- with .Values.solr.extraEnv }}
               {{ . | toYaml | nindent 12 }}

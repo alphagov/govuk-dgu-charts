@@ -1,3 +1,4 @@
+{{- $environment := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary $.Values.environment "ephemeral" -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -27,7 +28,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: pycsw
-              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "pycsw" "files" $.Files) }}'
+              image: '{{ include "docker-uri" (dict "environment" $environment "app" "pycsw" "files" $.Files) }}'
               imagePullPolicy: Always
               command: [ "/bin/sh", "-c", "ckan ckan-pycsw load -p $CKAN_CONFIG/pycsw.cfg -u http://{{ .Release.Name }}-ckan:{{ .Values.ckan.service.port }}" ]
               env:
