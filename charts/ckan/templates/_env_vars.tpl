@@ -1,6 +1,6 @@
 {{- define "ckan.environment-variables" -}}
-{{- $ephemeralPath := print .Values.environment ".ephemeral" }}
-{{- $environmentPath := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary "$.Values.environment" $ephemeralPath -}}
+{{- $ephemeralPath := print $.Values.environment ".ephemeral" }}
+{{- $environmentPath := hasPrefix "eph-" $.Values.environment | ternary $ephemeralPath $.Values.environment -}}
 {{- with .Values.ckan.config }}
 - name: CKAN_SQLALCHEMY_URL
   valueFrom:

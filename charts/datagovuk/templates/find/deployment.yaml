@@ -1,4 +1,4 @@
-{{- $environment := hasPrefix "eph-" "{{ $.Values.environment }}" | ternary $.Values.environment "ephemeral" -}}
+{{- $environment := hasPrefix "eph-" $.Values.environment | ternary "ephemeral" $.Values.environment -}}
 {{- $fullName := print .Release.Name "-find" -}}
 apiVersion: apps/v1
 kind: Deployment
