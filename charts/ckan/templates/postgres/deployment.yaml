@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-postgres
-        app.kubernetes.io/arch: amd64
+        app.kubernetes.io/arch: arm64
     spec:
       containers:
         - name: postgres
