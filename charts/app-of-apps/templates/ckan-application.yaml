@@ -11,6 +11,7 @@ spec:
     targetRevision: add-ephemeral-env
     helm:
       values: |
+        environment_arg: {{ $.Values.environment }}
         {{- toYaml .Values.ckanHelmValues | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
