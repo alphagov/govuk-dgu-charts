@@ -1,6 +1,7 @@
 {{- $ephemeralPath := print $.Values.environment ".ephemeral" }}
 {{- $environmentPath := hasPrefix "eph-" $.Values.environment | ternary $ephemeralPath $.Values.environment -}}
 ckanHelmValues:
+  is_ephemeral: true
   arch: arm64
   ckan:
     args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
@@ -75,6 +76,7 @@ ckanHelmValues:
     enabled: false
 
 datagovukHelmValues:
+  is_ephemeral: true
   arch: arm64
   find:
     replicaCount: 1
