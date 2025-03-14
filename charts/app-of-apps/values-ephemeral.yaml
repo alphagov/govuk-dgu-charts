@@ -68,7 +68,7 @@ ckanHelmValues:
   externalSecret:
     enabled: true
   monitoring:
-    enabled: false
+    enabled: true
 
 datagovukHelmValues:
   is_ephemeral: true
@@ -97,7 +97,7 @@ datagovukHelmValues:
   externalSecret:
     enabled: true
   monitoring:
-    enabled: false
+    enabled: true
 
 dguSharedHelmValues:
   arch: arm64
