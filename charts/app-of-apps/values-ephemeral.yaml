@@ -1,4 +1,5 @@
 ckanHelmValues:
+  environment: {{ $.Values.environment }}
   is_ephemeral: true
   arch: arm64
   ckan:
@@ -58,7 +59,7 @@ ckanHelmValues:
     enabled: true
     image: arm64v8/postgres:16.8-bookworm
     persistence:
-      enabled: false
+      enabled: true
 
   dev:
     enabled: false
