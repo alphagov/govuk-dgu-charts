@@ -1,5 +1,5 @@
 ckanHelmValues:
-  environment: ephemeral
+  environment: {{ .Values.environment }}
   is_ephemeral: true
   arch: arm64
   ckan:
@@ -17,11 +17,11 @@ ckanHelmValues:
           access_logs.s3.prefix=elb/ckan-datagovuk
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.publishing.service.gov.uk"
+              "ckan.{{ hasPrefix "eph-" .Values.environment | ternary (print .Values.environment ".ephemeral") .Values.environment }}.publishing.service.gov.uk"
           ]}}]
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.publishing.service.gov.uk"
+              "ckan.{{ hasPrefix "eph-" .Values.environment | ternary (print .Values.environment ".ephemeral") .Values.environment }}.publishing.service.gov.uk"
           ]}}]
       tls:
         enabled: true
@@ -96,8 +96,8 @@ datagovukHelmValues:
           access_logs.s3.prefix=elb/ckan-datagovuk
         alb.ingress.kubernetes.io/conditions.datagovuk-find: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "www.{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.data.gov.uk",
-              "{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.data.gov.uk"
+              "www.{{ hasPrefix "eph-" .Values.environment | ternary (print .Values.environment ".ephemeral") .Values.environment }}.data.gov.uk",
+              "{{ hasPrefix "eph-" .Values.environment | ternary (print .Values.environment ".ephemeral") .Values.environment }}.data.gov.uk"
           ]}}]
   externalSecret:
     enabled: true
