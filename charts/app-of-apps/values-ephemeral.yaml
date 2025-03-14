@@ -1,5 +1,3 @@
-{{- $ephemeralPath := print $.Values.environment ".ephemeral" }}
-{{- $environmentPath := hasPrefix "eph-" $.Values.environment | ternary $ephemeralPath $.Values.environment -}}
 ckanHelmValues:
   is_ephemeral: true
   arch: arm64
@@ -15,11 +13,11 @@ ckanHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.{{ $environmentPath }}.publishing.service.gov.uk"
+              "ckan.{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.publishing.service.gov.uk"
           ]}}]
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.{{ $environmentPath }}.publishing.service.gov.uk"
+              "ckan.{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.publishing.service.gov.uk"
           ]}}]
       tls:
         enabled: true
@@ -91,8 +89,8 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/conditions.datagovuk-find: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "www.{{ $environmentPath }}.data.gov.uk",
-              "{{ $environmentPath }}.data.gov.uk"
+              "www.{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.data.gov.uk",
+              "{{ hasPrefix "eph-" $.Values.environment | ternary (print $.Values.environment ".ephemeral") $.Values.environment }}.data.gov.uk"
           ]}}]
   externalSecret:
     enabled: true
