@@ -1,4 +1,4 @@
-{{- $environment := hasPrefix "eph-" $.Values.environment | ternary "ephemeral" $.Values.environment -}}
+{{- $environment := hasPrefix "eph-" (print $.Values.environment) | ternary "ephemeral" (print $.Values.environment) -}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
