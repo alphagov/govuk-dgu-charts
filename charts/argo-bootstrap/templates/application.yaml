@@ -11,6 +11,8 @@ spec:
       parameters:
       - name: "environment"
         value: $.Values.environment
+      values: |
+        environment: {{ $.Values.environment }}
       valueFiles:
         - values.yaml
         - values-{{ hasPrefix "eph-" (print $.Values.environment) | ternary "ephemeral" (print $.Values.environment) }}.yaml
