@@ -67,6 +67,8 @@ ckanHelmValues:
     replicaCount: 1
   externalSecret:
     enabled: true
+  monitoring:
+    enabled: true
 
 datagovukHelmValues:
   is_ephemeral: true
@@ -93,6 +95,8 @@ datagovukHelmValues:
               "{{ $environmentPath }}.data.gov.uk"
           ]}}]
   externalSecret:
+    enabled: true
+  monitoring:
     enabled: true
 
 dguSharedHelmValues:
