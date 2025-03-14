@@ -34,29 +34,3 @@ stringData:
   zendesk_username: "dummy"
   find_sentry_dsn: "dummy"
   govuk_app_domain: "www.gov.uk"
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: solr
-  namespace: datagovuk
-spec:
-  resources:
-    requests:
-      storage: 300Mi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres
-  namespace: datagovuk
-spec:
-  resources:
-    requests:
-      storage: 200Mi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
