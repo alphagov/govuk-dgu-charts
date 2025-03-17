@@ -5,10 +5,6 @@ metadata:
 spec:
   resources:
     requests:
-{{- if not $.Values.dev.enabled }}
-      storage: 10Gi
-{{- else }}
-      storage: 1Gi
-{{- end }}
+      storage: {{ .Values.solr.persistence.size }}
   accessModes:
     - ReadWriteOnce
