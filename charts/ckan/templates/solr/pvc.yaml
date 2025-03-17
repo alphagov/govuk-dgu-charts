@@ -1,4 +1,3 @@
-{{- if not $.Values.dev.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,7 +5,10 @@ metadata:
 spec:
   resources:
     requests:
+{{- if not $.Values.dev.enabled }}
       storage: 10Gi
+{{- else }}
+      storage: 1Gi
+{{- end }}
   accessModes:
     - ReadWriteOnce
-{{- end }}
