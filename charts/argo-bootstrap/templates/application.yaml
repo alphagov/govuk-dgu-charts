@@ -10,7 +10,7 @@ spec:
     helm:
       parameters:
       - name: "environment"
-        value: {{ .Values.environment }}
+        value: {{ print .Values.environment }}
       valueFiles:
         - values.yaml
         - values-{{ hasPrefix "eph-" (print .Values.environment) | ternary "ephemeral" (print .Values.environment) }}.yaml
