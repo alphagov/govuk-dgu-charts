@@ -1,5 +1,4 @@
 ckanHelmValues:
-  environment: eph-aaa113
   is_ephemeral: true
   arch: arm64
   ckan:
