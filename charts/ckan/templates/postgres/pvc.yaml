@@ -1,0 +1,15 @@
+{{- if not $.Values.dev.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres
+  namespace: datagovuk
+spec:
+  resources:
+    requests:
+      storage: 400Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+{{- end }}
+
