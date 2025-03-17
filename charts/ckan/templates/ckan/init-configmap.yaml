@@ -11,8 +11,10 @@ data:
     ckan config-tool $CKAN_INI "beaker.session.secret=$CKAN_BEAKER_SESSION_SECRET"
     ckan config-tool $CKAN_INI "beaker.session.validate_key=$CKAN_BEAKER_SESSION_VALIDATE_KEY"
 
-    {{- if $.Values.dev.enabled }}
+    {{- if .Values.dev.enabled }}
     ckan config-tool $CKAN_INI "ckan.mock_harvest_source = http://{{ $.Release.Name }}-static-harvest-source:11088/"
+    {{- end }}
+    {{- if not .Values.ckan.config.s3.useIamServiceAccount }}
     ckan config-tool $CKAN_INI "ckan.datagovuk.s3_aws_access_key_id = $CKAN_AWS_ACCESS_KEY_ID"
     ckan config-tool $CKAN_INI "ckan.datagovuk.s3_aws_secret_access_key = $CKAN_AWS_ACCESS_KEY_SECRET"
     {{- end }}
