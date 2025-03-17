@@ -10,12 +10,10 @@ spec:
     helm:
       parameters:
       - name: "environment"
-        value: $.Values.environment
-      values: |
-        environment: {{ $.Values.environment }}
+        value: {{ .Values.environment }}
       valueFiles:
         - values.yaml
-        - values-{{ hasPrefix "eph-" (print $.Values.environment) | ternary "ephemeral" (print $.Values.environment) }}.yaml
+        - values-{{ hasPrefix "eph-" (print .Values.environment) | ternary "ephemeral" (print .Values.environment) }}.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: default
