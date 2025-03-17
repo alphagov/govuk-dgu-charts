@@ -40,13 +40,12 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.postgres.persistence.persistentVolumeClaimName }}
+            claimName: {{ .Release.Name }}-"postgres"
       {{- end }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
         runAsGroup: 999
-        fsGroup: 999
         seccompProfile:
           type: RuntimeDefault
       {{- if eq "arm64" .Values.arch }}

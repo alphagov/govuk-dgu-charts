@@ -1,8 +1,8 @@
-{{- if not $.Values.dev.enabled }}
+{{- if not $.Values.postgres.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres
+  name: {{ .Release.Name }}-postgres
   namespace: datagovuk
 spec:
   resources:
