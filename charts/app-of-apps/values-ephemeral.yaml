@@ -59,7 +59,7 @@ ckanHelmValues:
       enabled: false
 
   dev:
-    enabled: false
+    enabled: true
   gather:
     replicaCount: 1
   fetch:
