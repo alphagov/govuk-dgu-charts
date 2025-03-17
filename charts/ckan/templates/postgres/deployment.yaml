@@ -27,6 +27,10 @@ spec:
               value: ckan
             - name: POSTGRES_PASSWORD
               value: ckan
+            {{- if .Values.postgres.persistence.enabled }}
+            - name: PG_DATA
+              value: /var/lib/postgresql/data/ckan
+            {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -34,18 +38,19 @@ spec:
           {{- if .Values.postgres.persistence.enabled }}
           volumeMounts:
             - name: data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql/data/ckan
           {{- end }}
       {{- if .Values.postgres.persistence.enabled }}
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-"postgres"
+            claimName: {{ .Release.Name }}-postgres
       {{- end }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
         runAsGroup: 999
+        fsGroup: 999
         seccompProfile:
           type: RuntimeDefault
       {{- if eq "arm64" .Values.arch }}
