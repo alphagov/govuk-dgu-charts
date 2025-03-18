@@ -1,8 +1,8 @@
 {{- define "find.environment-variables" -}}
-{{- $eks_envs := hasPrefix "eph-" $.Values.environment | ternary "ephemeral" $.Values.environment -}}
+{{- $eks_envs := $.Values.is_ephemeral | ternary "ephemeral" $.Values.environment -}}
 {{- $environment := eq $.Values.environment "test" | ternary "development" $eks_envs -}}
-{{- $ephemeralPath := print $.Values.environment ".ephemeral" }}
-{{- $environmentPath := hasPrefix "eph-" $.Values.environment | ternary $environment $ephemeralPath -}}
+{{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" }}
+{{- $environmentPath := $.Values.is_ephemeral | ternary $environment $ephemeralPath -}}
 - name: CKAN_DOMAIN
   {{- if eq "production" $environment }}
   value: "ckan.publishing.service.gov.uk"

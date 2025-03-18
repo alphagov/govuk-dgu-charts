@@ -1,4 +1,4 @@
-{{- $environment := hasPrefix "eph-" $.Values.environment | ternary "ephemeral" $.Values.environment -}}
+{{- $environment := $.Values.is_ephemeral | ternary "ephemeral" $.Values.environment -}}
 {{- $fullName := print .Release.Name "-ckan" -}}
 apiVersion: apps/v1
 kind: Deployment

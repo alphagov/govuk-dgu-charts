@@ -1,5 +1,5 @@
 {{- define "ckan.pycsw-init" -}}
-{{- $environment := hasPrefix "eph-" $.Values.environment | ternary "ephemeral" $.Values.environment -}}
+{{- $environment := $.Values.is_ephemeral | ternary "ephemeral" $.Values.environment -}}
 initContainers:
   - name: config-set
     image: '{{ include "docker-uri" (dict "environment" $environment "app" "pycsw" "files" $.Files) }}'

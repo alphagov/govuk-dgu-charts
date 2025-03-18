@@ -1,5 +1,5 @@
-{{- $ephemeralPath := print $.Values.environment "-ephemeral" }}
-{{- $environmentPath := hasPrefix "eph-" $.Values.environment | ternary $ephemeralPath $.Values.environment -}}
+{{- $ephemeralPath := print $.Values.argo_environment "-ephemeral" }}
+{{- $environmentPath := $.Values.is_ephemeral | ternary $ephemeralPath $.Values.environment -}}
 
 apiVersion: v1
 kind: ConfigMap

@@ -12,7 +12,7 @@ spec:
         - values.yaml
         - values-{{ hasPrefix "eph-" (print .Values.environment) | ternary "ephemeral" (print .Values.environment) }}.yaml
       values: |
-        environment: {{ .Values.environment }}
+        argo_environment: {{ .Values.environment }}
   destination:
     server: https://kubernetes.default.svc
     namespace: default

@@ -1,7 +1,7 @@
 {{- if .Values.find.ingress.enabled }}
-{{- $ephemeralPath := print $.Values.environment ".ephemeral" -}}
+{{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
 {{- $eksPath := print "eks." $.Values.environment -}}
-{{- $environmentPath := hasPrefix "eph-" $.Values.environment | ternary $ephemeralPath $eksPath -}}
+{{- $environmentPath := $.Values.is_ephemeral | ternary $ephemeralPath $eksPath -}}
 {{- with .Values.find.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -9,7 +9,7 @@ metadata:
   name: find
   {{- if not (empty .annotations) }}
   annotations:
-    {{- toYaml .annotations | trim | nindent 4 }}
+    {{- tpl (toYaml .annotations) $ | trim | nindent 4 }}
   {{- end }}
 spec:
   {{ if not (empty .ingressClassName) }}ingressClassName: {{ .ingressClassName }}{{ end }}
