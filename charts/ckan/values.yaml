@@ -130,6 +130,8 @@ solr:
   extraEnv:
     - name: SOLR_LOG_LEVEL
       value: WARN
+    - name: SOLR_OPTS
+      value: -XX:-UseLargePages
 
 # This postgres instance is for development purposes only
 postgres:
