@@ -1,4 +1,5 @@
 {{- if $.Values.dev.enabled }}
+{{- $environment := $.Values.is_ephemeral | ternary "ephemeral" $.Values.environment -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: static-harvest-source
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "static-harvest-source" "files" $.Files) }}'
+          image: '{{ include "docker-uri" (dict "environment" $environment "app" "static-harvest-source" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
             - name: http
