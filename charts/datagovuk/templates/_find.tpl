@@ -2,8 +2,8 @@
 {{- $eks_envs := $.Values.is_ephemeral | ternary "ephemeral" $.Values.environment -}}
 {{- $environment := eq $.Values.environment "test" | ternary "development" $eks_envs -}}
 {{- $ephemeralPath := print $.Values.argo_environment ".ephemeral.govuk.digital" }}
-{{- $eksPath := eq "production" $environment | ternary "publishing.service.gov.uk" (print $environment ".publishing.service.gov.uk")}}
-{{- $environmentPath := $.Values.is_ephemeral | ternary $ephemeralPath $eksPath -}}
+{{- $stablePath := eq "production" $environment | ternary "publishing.service.gov.uk" (print $environment ".publishing.service.gov.uk")}}
+{{- $environmentPath := $.Values.is_ephemeral | ternary $ephemeralPath $stablePath -}}
 - name: CKAN_DOMAIN
   value: "ckan.{{ $environmentPath }}"
 - name: ES_HOST

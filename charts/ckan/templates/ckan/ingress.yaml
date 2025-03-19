@@ -1,7 +1,7 @@
 {{- if .Values.ckan.ingress.enabled }}
 {{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
-{{- $eksPath := print "eks." $.Values.environment -}}
-{{- $environmentPath := $.Values.is_ephemeral | ternary $ephemeralPath $eksPath -}}
+{{- $stablePath := print "eks." $.Values.environment -}}
+{{- $environmentPath := $.Values.is_ephemeral | ternary $ephemeralPath $stablePath -}}
 {{- with .Values.ckan.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
