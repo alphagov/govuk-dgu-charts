@@ -1,14 +1,11 @@
 {{- define "find.environment-variables" -}}
 {{- $eks_envs := $.Values.is_ephemeral | ternary "ephemeral" $.Values.environment -}}
 {{- $environment := eq $.Values.environment "test" | ternary "development" $eks_envs -}}
-{{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" }}
-{{- $environmentPath := $.Values.is_ephemeral | ternary $environment $ephemeralPath -}}
+{{- $ephemeralPath := print $.Values.argo_environment ".ephemeral.govuk.digital" }}
+{{- $eksPath := eq "production" $environment | ternary "publishing.service.gov.uk" (print $environment ".publishing.service.gov.uk")}}
+{{- $environmentPath := $.Values.is_ephemeral | ternary $ephemeralPath $eksPath -}}
 - name: CKAN_DOMAIN
-  {{- if eq "production" $environment }}
-  value: "ckan.publishing.service.gov.uk"
-  {{- else }}
-  value: "ckan.{{ $environmentPath }}.publishing.service.gov.uk"
-  {{- end }}
+  value: "ckan.{{ $environmentPath }}"
 - name: ES_HOST
   value: http://{{ $.Release.Name }}-opensearch-sts
 - name: ES_INDEX
