@@ -39,7 +39,7 @@ spec:
           imagePullPolicy: Always
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
-            {{- if .Values.dev.enabled }}
+            {{- if not .Values.ckan.config.s3.useIamServiceAccount }}
             - name: CKAN_AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
