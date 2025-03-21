@@ -38,19 +38,6 @@ stringData:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: solr
-  namespace: datagovuk
-spec:
-  resources:
-    requests:
-      storage: 300Mi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: postgres
   namespace: datagovuk
 spec:

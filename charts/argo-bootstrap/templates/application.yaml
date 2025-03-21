@@ -10,7 +10,9 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-        - values-{{ .Values.environment }}.yaml
+        - values-{{ hasPrefix "eph-" (print .Values.environment) | ternary "ephemeral" (print .Values.environment) }}.yaml
+      values: |
+        argo_environment: {{ .Values.environment }}
   destination:
     server: https://kubernetes.default.svc
     namespace: default

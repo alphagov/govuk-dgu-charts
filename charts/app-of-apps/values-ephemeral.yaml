@@ -1,0 +1,104 @@
+ckanHelmValues:
+  environment: ephemeral
+  arch: arm64
+  ckan:
+    args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    ingress:
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/shield-advanced-protection: "true"
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "ckan.{{ hasPrefix "eph-" $.Values.argo_environment | ternary (print $.Values.argo_environment ".ephemeral") $.Values.environment }}.publishing.service.gov.uk"
+          ]}}]
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "ckan.{{ hasPrefix "eph-" $.Values.argo_environment | ternary (print $.Values.argo_environment ".ephemeral") $.Values.environment }}.publishing.service.gov.uk"
+          ]}}]
+      tls:
+        enabled: true
+    probes:
+      enabled: false
+    ckanIniConfigMap: ckan-production-ini-2-10
+    config:
+      dbInit: false
+      site:
+        title: "data.gov.uk"
+      redis:
+        host: "dgu-shared-redis"
+      smtp:
+        server: "email-smtp.eu-west-1.amazonaws.com:587"
+        user: "AKIATB5RC4XX4VZIWMF7"
+        mailFrom: "team@data.gov.uk"
+        starttls: "True"
+      s3:
+        useIamServiceAccount: true
+        regionName: "eu-west-1"
+    serviceAccount:
+      enabled: true
+      name: ckan
+      iamRoleARN: arn:aws:iam::430354129336:role/ckan-eph-aaa113
+  pycsw:
+    args: ["gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120"]
+    probes:
+      enabled: true
+  solr:
+    enabled: true
+    persistence:
+      enabled: true
+      persistentVolumeClaimName: solr
+      size: 1Gi
+  postgres:
+    enabled: true
+    image: arm64v8/postgres:16.8-bookworm
+    persistence:
+      enabled: false
+
+  dev:
+    enabled: true
+  gather:
+    replicaCount: 1
+  fetch:
+    replicaCount: 1
+  externalSecret:
+    enabled: true
+  monitoring:
+    enabled: true
+
+datagovukHelmValues:
+  environment: ephemeral
+  arch: arm64
+  find:
+    replicaCount: 1
+    args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
+    config:
+      googleTagManagerId: GTM-M875Q8TH
+      googleTagManagerAuth: 5FunvYw9Lsi6YtwO0jllcQ
+      googleTagManagerPreview: env-38
+      solrUrl: "http://ckan-solr/solr/ckan"
+    ingress:
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/shield-advanced-protection: "true"
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/conditions.datagovuk-find: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "www.{{- hasPrefix "eph-" $.Values.argo_environment | ternary (print $.Values.argo_environment ".ephemeral") $.Values.environment -}}.data.gov.uk",
+              "{{- hasPrefix "eph-" $.Values.argo_environment | ternary (print $.Values.argo_environment ".ephemeral") $.Values.environment -}}.data.gov.uk"
+          ]}}]
+  externalSecret:
+    enabled: true
+  monitoring:
+    enabled: true
+
+dguSharedHelmValues:
+  arch: arm64
+  redis:
+    replicaCount: 1

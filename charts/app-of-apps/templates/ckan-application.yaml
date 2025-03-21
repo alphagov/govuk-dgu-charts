@@ -11,6 +11,7 @@ spec:
     targetRevision: HEAD
     helm:
       values: |
+        argo_environment: {{ .Values.argo_environment }}
         {{- toYaml .Values.ckanHelmValues | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
