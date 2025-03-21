@@ -1,4 +1,7 @@
 {{- if .Values.ckan.ingress.enabled }}
+{{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
+{{- $stablePath := print "eks." $.Values.environment -}}
+{{- $environmentPath := eq "ephemeral" $.Values.environment | ternary $ephemeralPath $stablePath -}}
 {{- with .Values.ckan.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -11,7 +14,7 @@ spec:
   ingressClassName: {{ . }}
   {{- end }}
   rules:
-    - host: {{ .host }}
+    - host: ckan.{{ $environmentPath }}.govuk.digital
       http:
         paths:
           - path: /
@@ -31,7 +34,7 @@ spec:
   {{- if .tls.enabled }}
   tls:
     - hosts:
-      - {{ .host }}
+      - ckan.{{ $environmentPath }}.govuk.digital
   {{- end }}
 {{- end }}
 {{- end }}
