@@ -67,7 +67,7 @@ spec:
             periodSeconds: 3
           resources:
             requests:
-              memory: 1024M
+              memory: 1500Mi
       {{- if .Values.solr.persistence.enabled }}
       volumes:
         - name: data
