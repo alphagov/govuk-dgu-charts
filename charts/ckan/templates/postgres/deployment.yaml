@@ -31,17 +31,22 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-          {{- if .Values.postgres.persistence.enabled }}
           volumeMounts:
+          {{- if .Values.postgres.persistence.enabled }}
             - name: data
               mountPath: /var/lib/postgresql/data
           {{- end }}
-      {{- if .Values.postgres.persistence.enabled }}
+            - name: postgis-init
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
+      {{- if .Values.postgres.persistence.enabled }}
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.postgres.persistence.persistentVolumeClaimName }}
       {{- end }}
+        - name: postgis-init
+          configMap:
+            name: {{ .Release.Name }}-postgis-init
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
