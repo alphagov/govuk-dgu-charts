@@ -1,5 +1,7 @@
 # data.gov.uk Helm Charts
 
+Please note that the DGU applications do not run on a automated CI/CD pipeline, so please read [this](https://docs.publishing.service.gov.uk/manual/data-gov-uk-deployment.html) to ensure that your deployment is successful.
+
 ## Getting started
 
 See [Helm's documentation](https://helm.sh/docs) to get started with Helm.
