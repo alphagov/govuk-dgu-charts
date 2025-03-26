@@ -136,7 +136,7 @@ solr:
 # This postgres instance is for development purposes only
 postgres:
   enabled: true
-  image: ghcr.io/alphagov/postgis:13-3.1-a
+  image: ghcr.io/alphagov/postgis-base:13-bullseye-a
   persistence:
     enabled: false
     persistentVolumeClaimName: "postgres"
