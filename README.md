@@ -166,7 +166,7 @@ eval $(gds-cli aws govuk-test-admin -e --art 8h)
 
 and follow these [steps](https://docs.publishing.service.gov.uk/kubernetes/get-started/access-eks-cluster/#access-a-cluster-for-the-first-time) to switch to the test environment.
 
-If there is an existing ephemeral datagovuk cluster running you can delete the datagovuk cluster by deleting `dgu-app-of-apps` in the ephemeral argo website and recreate the cluster by running this command on the terminal under the `charts` directory (the environment variable passed in should match your ephemeral cluster name):
+To recreate the cluster from scratch if there is an existing ephemeral datagovuk cluster running, destroy the datagovuk cluster by deleting `dgu-app-of-apps` in the ephemeral Argo CD website and recreate the cluster by running the following command on the terminal under the `charts` directory (the environment variable passed in should match your ephemeral cluster name):
 
 ```sh 
 helm upgrade -n cluster-services datagovuk-argo-bootstrap argo-bootstrap --set environment=eph-aaa113
@@ -176,7 +176,7 @@ To test your changes on the ephemeral cluster without merging them into the `mai
 
 - update the `targetRevision` in the `ckan-application.yaml` and/or `datagovuk-application.yaml` and push this change up to your branch onto Github
 - if you have deleted the `dgu-app-of-apps` module then run the `helm upgrade` command as above
-- update the `targetRevision` in `dgu-app-of-apps` on the ephemeral argo website. 
+- update the `targetRevision` in `dgu-app-of-apps` on the ephemeral Argo CD website. 
 - after you have finished testing please remove the commit which changes the `targetRevision` before merging your changes into the `main` branch
 
 ## Schemas
