@@ -71,6 +71,8 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: ephemeral
+  dev:
+    enabled: true
   arch: arm64
   find:
     replicaCount: 1
