@@ -45,28 +45,44 @@
   value: {{ . }}
 {{- end }}
 - name: SECRET_KEY_BASE
+{{- if $.Values.dev.enabled }}
+  value: dummy
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .secretKeyBaseSecretKeyRef.name }}
       key: {{ .secretKeyBaseSecretKeyRef.key }}
+{{ end }}
 - name: SENTRY_DSN
+{{- if $.Values.dev.enabled }}
+  value: dummy
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .findSentryDsnSecretKeyRef.name }}
       key: {{ .findSentryDsnSecretKeyRef.key }}
+{{ end }}
 - name: SOLR_URL
   value: {{ .solrUrl }}
 - name: ZENDESK_API_KEY
+{{- if $.Values.dev.enabled }}
+  value: dummy
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .zendeskApiKeySecretKeyRef.name }}
       key: {{ .zendeskApiKeySecretKeyRef.key }}
+{{ end }}
 - name: ZENDESK_END_POINT
   value: "https://govuk.zendesk.com/api/v2"
 - name: ZENDESK_USERNAME
+{{- if $.Values.dev.enabled }}
+  value: dummy
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .zendeskUsernameSecretKeyRef.name }}
       key: {{ .zendeskUsernameSecretKeyRef.key }}
+{{ end }}
 {{- end }}
 {{- end }}
