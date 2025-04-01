@@ -5,20 +5,32 @@
 {{- $environmentPath := eq "ephemeral" $environment | ternary $ephemeralPath $stablePath -}}
 {{- with .Values.ckan.config }}
 - name: CKAN_SQLALCHEMY_URL
+{{- if $.Values.dev.enabled }}
+  value: {{ print "postgresql://ckan:ckan@" $.Release.Name "-postgres/ckan" }}
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .sqlalchemyUrlSecretKeyRef.name }}
       key: {{ .sqlalchemyUrlSecretKeyRef.key }}
+{{ end }}
 - name: CKAN_BEAKER_SESSION_SECRET
+{{- if $.Values.dev.enabled }}
+  value: "9EZiPwkeS+cZpqb0VDWrN+Q0M"
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .beakerSessionSecretKeyRef.name }}
       key: {{ .beakerSessionSecretKeyRef.key }}
+{{ end }}
 - name: CKAN_BEAKER_SESSION_VALIDATE_KEY
+{{- if $.Values.dev.enabled }}
+  value: "UIZYT0m866FiFutxNP2cac2892i"
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .beakerSessionValidateKeyRef.name }}
       key: {{ .beakerSessionValidateKeyRef.key }}
+{{ end }}
 - name: CKAN_DB_INIT
   value: "{{ .dbInit | default "false" }}"
 - name: CKAN_DB_HOST
