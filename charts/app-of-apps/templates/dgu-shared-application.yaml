@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: dgu-shared
   namespace: cluster-services
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: datagovuk
   source:
