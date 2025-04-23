@@ -48,10 +48,14 @@
 - name: CKAN_SMTP_USER
   value: {{ .smtp.user }}
 - name: CKAN_SMTP_PASSWORD
+{{- if $.Values.dev.enabled }}
+  value: ""
+{{ else }}
   valueFrom:
     secretKeyRef:
       name: {{ .smtp.passwordSecretKeyRef.name }}
       key: {{ .smtp.passwordSecretKeyRef.key }}
+{{ end }}
 - name: CKAN_SMTP_MAIL_FROM
   value: {{ .smtp.mailFrom }}
 - name: CKAN_CONFIG
