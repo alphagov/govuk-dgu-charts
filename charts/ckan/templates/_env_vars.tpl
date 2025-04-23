@@ -81,12 +81,12 @@
   value: "1"
   {{- end }}
 {{- if not .s3.useIamServiceAccount }}
-- name: AWS_ACCESS_KEY_ID
+- name: CKAN_AWS_ACCESS_KEY_ID
   valueFrom:
     secretKeyRef:
       name: {{ .s3.credentials.awsAccessKeyIdSecretKeyRef.name }}
       key: {{ .s3.credentials.awsAccessKeyIdSecretKeyRef.key }}
-- name: AWS_SECRET_ACCESS_KEY
+- name: CKAN_AWS_SECRET_ACCESS_KEY
   valueFrom:
     secretKeyRef:
       name: {{ .s3.credentials.awsSecretAccessKeySecretKeyRef.name }}

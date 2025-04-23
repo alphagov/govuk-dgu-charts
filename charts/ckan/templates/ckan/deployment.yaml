@@ -39,18 +39,6 @@ spec:
           imagePullPolicy: Always
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
-            {{- if not .Values.ckan.config.s3.useIamServiceAccount }}
-            - name: CKAN_AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.ckan.config.s3.credentials.awsAccessKeyIdSecretKeyRef.name }}
-                  key: {{ .Values.ckan.config.s3.credentials.awsAccessKeyIdSecretKeyRef.key }}
-            - name: CKAN_AWS_ACCESS_KEY_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.ckan.config.s3.credentials.awsSecretAccessKeySecretKeyRef.name }}
-                  key: {{ .Values.ckan.config.s3.credentials.awsSecretAccessKeySecretKeyRef.key }}
-            {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
