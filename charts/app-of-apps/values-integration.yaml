@@ -101,6 +101,8 @@ datagovukHelmValues:
               "www.integration.data.gov.uk",
               "integration.data.gov.uk"
           ]}}]
+  dev:
+    enabled: false
   externalSecret:
     enabled: true
 
