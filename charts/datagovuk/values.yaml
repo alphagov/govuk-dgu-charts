@@ -1,7 +1,7 @@
 environment: test
 
 dev:
-  enabled: false
+  enabled: true
 
 # arch determines whether the app should schedule on amd64 or arm64 nodes.
 # TODO: remove `arch` once the ARM migration is complete and we're no longer

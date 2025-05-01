@@ -103,6 +103,8 @@ datagovukHelmValues:
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.data.gov.uk"
           ]}}]
+  dev:
+    enabled: false
   externalSecret:
     enabled: true
 
