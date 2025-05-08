@@ -57,3 +57,9 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: release-sa
+{{- if .Values.ckan.serviceAccount.enabled }}
+{{- with .Values.ckan.serviceAccount }}
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .iamRoleARN }}
+{{- end }}
+{{- end }}
