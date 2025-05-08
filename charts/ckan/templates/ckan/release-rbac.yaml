@@ -17,7 +17,7 @@ metadata:
   namespace: datagovuk
 subjects:
 - kind: ServiceAccount
-  name: release-sa
+  name: ckan
   namespace: datagovuk
 roleRef:
   kind: ClusterRole
@@ -31,7 +31,7 @@ metadata:
   namespace: cluster-services
 subjects:
 - kind: ServiceAccount
-  name: release-sa
+  name: ckan
   namespace: datagovuk
 roleRef:
   kind: ClusterRole
@@ -52,14 +52,14 @@ roleRef:
 #   kind: ClusterRole
 #   name: release-clusterrole
 #   apiGroup: rbac.authorization.k8s.io
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: release-sa
-{{- if .Values.ckan.serviceAccount.enabled }}
-{{- with .Values.ckan.serviceAccount }}
-  annotations:
-    eks.amazonaws.com/role-arn: {{ .iamRoleARN }}
-{{- end }}
-{{- end }}
+# ---
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: release-sa
+# {{- if .Values.ckan.serviceAccount.enabled }}
+# {{- with .Values.ckan.serviceAccount }}
+#   annotations:
+#     eks.amazonaws.com/role-arn: {{ .iamRoleARN }}
+# {{- end }}
+# {{- end }}
