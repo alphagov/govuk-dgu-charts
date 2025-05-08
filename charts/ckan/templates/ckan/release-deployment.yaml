@@ -16,6 +16,7 @@ spec:
         app: {{ .Release.Name }}-release
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
+      serviceAccountName: release-sa
       containers:
         - name: release
           # image: 'local-registry:62042/release:0.2.0'
