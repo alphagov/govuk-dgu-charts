@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-mysql
 spec:
-  replicas: {{ .Values.gather.replicaCount }}
+  replicas: 1
   revisionHistoryLimit: 2
   selector:
     matchLabels:
@@ -14,7 +14,6 @@ spec:
         app: {{ .Release.Name }}-mysql
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
-      serviceAccountName: ckan
       containers:
         - name: mysql
           image: mysql
@@ -27,7 +26,6 @@ spec:
             runAsGroup: 900
             seccompProfile:
               type: RuntimeDefault
-            # allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
             # runAsUser: 0
