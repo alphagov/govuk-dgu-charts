@@ -18,3 +18,9 @@ data:
 
     echo "====== apps"
     curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/apps/pods | jq '.items.[0].metadata.name'
+
+    echo "====== default expect 403"
+    curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/default/pods
+
+    echo "====== private expect 403"
+    curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/private/pods
