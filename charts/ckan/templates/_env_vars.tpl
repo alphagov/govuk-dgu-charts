@@ -1,8 +1,10 @@
 {{- define "ckan.environment-variables" -}}
 {{- $environment := eq $.Values.environment "test" | ternary "development" $.Values.environment -}}
+{{- $nonProdPath := eq $.Values.environment "test" | ternary "eks.test.govuk.digital:8081" (print $.Values.environment ".publishing.service.gov.uk") }}
 {{- $ephemeralPath := print $.Values.argo_environment ".ephemeral.govuk.digital" }}
-{{- $stablePath := eq "production" $environment | ternary "publishing.service.gov.uk" (print $environment ".publishing.service.gov.uk")}}
+{{- $stablePath := eq "production" $environment | ternary "publishing.service.gov.uk" $nonProdPath}}
 {{- $environmentPath := eq "ephemeral" $environment | ternary $ephemeralPath $stablePath -}}
+{{- $http := eq $.Values.environment "test" | ternary "http" "https" -}}
 {{- with .Values.ckan.config }}
 - name: CKAN_SQLALCHEMY_URL
 {{- if $.Values.dev.enabled }}
@@ -40,7 +42,7 @@
 - name: CKAN_SITE_ID
   value: {{ .site.id }}
 - name: CKAN_SITE_URL
-  value: https://ckan.{{- $environmentPath }}
+  value: {{ $http }}://ckan.{{- $environmentPath }}
 - name: CKAN_SMTP_SERVER
   value: {{ .smtp.server }}
 - name: CKAN_SMTP_STARTTLS
