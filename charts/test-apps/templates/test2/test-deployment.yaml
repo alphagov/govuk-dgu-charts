@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-test2
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-test2
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-test2
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      serviceAccountName: release2-assumer
+      initContainers:
+        - name: test2-api
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            runAsUser: 0
+            runAsGroup: 0
+          image: 'local-registry:51102/test:1'
+          command: [ "/bin/sh", "-c", '. /test/api.sh']
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: test2-api
+              mountPath: /test
+      containers:
+        - name: test2
+          image: 'local-registry:51102/test:2'
+          imagePullPolicy: Always
+          # command: ["/bin/sh", "-c"]
+          # args: ["sleep 30000"]
+          # command: [ "/bin/sh", "-c", '. /test/api.sh']
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: test2-api
+              mountPath: /test
+              readOnly: true
+      volumes:
+        - name: test2-api
+          configMap:
+            name: {{ .Release.Name }}-test-api

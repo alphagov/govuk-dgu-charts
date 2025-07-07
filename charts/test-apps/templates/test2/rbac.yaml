@@ -1,0 +1,55 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: release2-assumed
+rules:
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [get, watch, list]
+  - apiGroups: [apps]
+    resources: [deployments]
+    verbs: [get, watch, list]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: release2-assumer
+  namespace: apps
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: datagovuk
+  name: datagovuk2-pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: release2-assumed-datagovuk
+  namespace: datagovuk
+roleRef:
+  kind: Role
+  name: datagovuk2-pod-reader
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: release2-assumer
+  namespace: apps
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: release2-assumed-apps
+  namespace: apps
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: release2-assumed
+subjects:
+  - kind: ServiceAccount
+    name: release2-assumer
+    namespace: apps
