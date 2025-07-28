@@ -13,6 +13,8 @@
   value: datasets-{{ $environment }}
 - name: GOVUK_APP_DOMAIN
   value: "www.gov.uk"
+- name: GOVUK_ENVIRONMENT
+  value: {{ $environment }}
 - name: GOVUK_ENVIRONMENT_NAME
   value: {{ $environment }}
 - name: GOVUK_PROMETHEUS_EXPORTER
