@@ -139,11 +139,11 @@ Now your local CKAN deployment will use the `localhost:54392/ckan.2.10.4` image.
 10. Update the `/etc/hosts` file as follows
 
 ```sh
-127.0.0.1	localhost find.data.gov.uk ckan.dev.govuk.digital
+127.0.0.1	localhost find.data.gov.uk ckan.eks.test.govuk.digital
 ```
 
 `datagovuk-find` can be accessed at `find.data.gov.uk:8081`
-`ckan` can be accessed at `ckan.dev.govuk.digital:8081`
+`ckan` can be accessed at `ckan.eks.test.govuk.digital:8081`
 
 #### Test Helm chart in EKS
 
