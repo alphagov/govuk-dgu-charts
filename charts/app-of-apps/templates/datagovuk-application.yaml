@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/datagovuk
-    targetRevision: HEAD
+    targetRevision: try-ckan-2.10.7
     helm:
       values: |
         argo_environment: {{ .Values.argo_environment }}
