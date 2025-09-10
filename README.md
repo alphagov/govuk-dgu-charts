@@ -112,6 +112,9 @@ branch: main
 Note that `local-registry` matches the name of the registry we passed in step 1. 
 If we want to use a different image from a different environment then set `environment` appropriately. 
 
+## using k3d image import
+docker exec k3d-local-ckan-server-0 crictl images
+
 7. Apply the local dev Helm Chart
 
 ```sh
