@@ -9,6 +9,13 @@ redis:
   replicaCount: 1
   enabled: true
   image: redis:6.2.5-alpine3.14
+  resources:
+    limits:
+      cpu: 1
+      memory: 1500Mi
+    requests:
+      cpu: 500m
+      memory: 500Mi
   persistence:
     enabled: true
     persistentVolumeClaimName: "redis"
