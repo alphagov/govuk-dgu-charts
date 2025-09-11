@@ -65,6 +65,11 @@ ckanHelmValues:
     args: ["gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120"]
     probes:
       enabled: true
+    appResources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   solr:
     appResources:
       limits:
