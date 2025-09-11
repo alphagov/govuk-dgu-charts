@@ -2,6 +2,11 @@ ckanHelmValues:
   environment: production
   arch: arm64
   ckan:
+    appResources:
+      limits:
+        memory: 4Gi
+      requests:
+        memory: 3Gi
     replicaCount: 2
     ingress:
       host: ckan.eks.production.govuk.digital

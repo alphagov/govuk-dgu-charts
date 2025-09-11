@@ -70,6 +70,10 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
+          {{- with .Values.ckan.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           {{- if .Values.ckan.probes.enabled }}
           livenessProbe:
             httpGet:

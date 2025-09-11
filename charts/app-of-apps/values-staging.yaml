@@ -2,6 +2,11 @@ ckanHelmValues:
   environment: staging
   arch: arm64
   ckan:
+    appResources:
+      limits:
+        memory: 4Gi
+      requests:
+        memory: 3Gi
     replicaCount: 1
     ingress:
       host: ckan.eks.staging.govuk.digital
