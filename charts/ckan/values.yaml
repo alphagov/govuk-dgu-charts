@@ -121,6 +121,13 @@ ckan:
       - "/action/package_search"
       - "/action/package_list"
       - "/action/harvest_source_list"
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 50m
+        memory: 512Mi
 
 solr:
   enabled: true
