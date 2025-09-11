@@ -28,6 +28,10 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
+          {{- with .Values.redis.resources }}
+          resources:
+            {{  . | toYaml | trim | nindent 12 }}
+          {{- end }}
       {{- if .Values.redis.persistence.enabled }}
       volumes:
         - name: data
