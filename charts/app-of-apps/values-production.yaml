@@ -76,8 +76,18 @@ ckanHelmValues:
     enabled: false
   gather:
     replicaCount: 1
+    appResources:
+      limits:
+        memory: 3Gi
+      requests:
+        memory: 2Gi
   fetch:
     replicaCount: 1
+    appResources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   externalSecret:
     enabled: true
 

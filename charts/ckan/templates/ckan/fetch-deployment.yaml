@@ -28,6 +28,10 @@ spec:
           args: ["ckan harvester fetch-consumer"]
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
+          {{- with .Values.fetch.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
