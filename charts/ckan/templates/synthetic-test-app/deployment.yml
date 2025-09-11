@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-synthetic-test-app
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-synthetic-test-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-synthetic-test-app
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      containers:
+        - name: synthetic-test-app
+          image: 'ghcr.io/alphagov/govuk/govuk-synthetic-test-app:19'
+          # image: '210287912431.dkr.ecr.eu-north-1.amazonaws.com/kentsanggds-synthetic-test-app:96ea1f025c783a2d75fda4d23b9c2b0293235707'
+          imagePullPolicy: Always
+          ports:
+            - name: synthetic-test
+              containerPort: 3000
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]

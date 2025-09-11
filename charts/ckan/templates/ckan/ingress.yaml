@@ -31,6 +31,13 @@ spec:
                 name: {{ $.Release.Name }}-pycsw
                 port:
                   number: 8000
+          - path: /test
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Release.Name }}-synthetic-test-app
+                port:
+                  number: 3000
   {{- if .tls.enabled }}
   tls:
     - hosts:
