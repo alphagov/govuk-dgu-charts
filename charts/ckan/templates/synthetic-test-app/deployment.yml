@@ -23,8 +23,8 @@ spec:
           type: RuntimeDefault
       containers:
         - name: synthetic-test-app
-          image: 'ghcr.io/alphagov/govuk/govuk-synthetic-test-app:19'
-          # image: '210287912431.dkr.ecr.eu-north-1.amazonaws.com/kentsanggds-synthetic-test-app:96ea1f025c783a2d75fda4d23b9c2b0293235707'
+          # image: 'ghcr.io/alphagov/govuk/govuk-synthetic-test-app:19'
+          image: '210287912431.dkr.ecr.eu-north-1.amazonaws.com/kentsanggds-synthetic-test-app:96ea1f025c783a2d75fda4d23b9c2b0293235707'
           imagePullPolicy: Always
           ports:
             - name: synthetic-test
