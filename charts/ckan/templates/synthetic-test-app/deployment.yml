@@ -14,6 +14,13 @@ spec:
         app: {{ .Release.Name }}-synthetic-test-app
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: synthetic-test-app
           image: 'ghcr.io/alphagov/govuk/govuk-synthetic-test-app:19'
