@@ -85,6 +85,11 @@ datagovukHelmValues:
   environment: production
   arch: arm64
   find:
+    appResources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
     replicaCount: 2
     args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
     config:
