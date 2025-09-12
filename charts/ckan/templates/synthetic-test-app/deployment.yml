@@ -24,7 +24,8 @@ spec:
       containers:
         - name: synthetic-test-app
           # image: 'ghcr.io/alphagov/govuk/govuk-synthetic-test-app:19'
-          image: '210287912431.dkr.ecr.eu-north-1.amazonaws.com/kentsanggds-synthetic-test-app:96ea1f025c783a2d75fda4d23b9c2b0293235707'
+          # image: '210287912431.dkr.ecr.eu-north-1.amazonaws.com/kentsanggds-synthetic-test-app:96ea1f025c783a2d75fda4d23b9c2b0293235707'
+          image : 'public.ecr.aws/f7k1s1e5/ken/govuk-synthetic-test-app:7f1fdf848ecbc70f28b76871791824f130003335'
           imagePullPolicy: Always
           ports:
             - name: synthetic-test
