@@ -50,6 +50,10 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: [ "ALL" ]
+          {{- with .Values.pycsw.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           {{- if .Values.pycsw.probes.enabled }}
           livenessProbe:
             httpGet:
