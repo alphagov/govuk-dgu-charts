@@ -65,9 +65,10 @@ spec:
               port: solr
             initialDelaySeconds: 10
             periodSeconds: 3
+          {{- with .Values.ckan.appResources }}
           resources:
-            requests:
-              memory: 1500Mi
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
       {{- if .Values.solr.persistence.enabled }}
       volumes:
         - name: data
