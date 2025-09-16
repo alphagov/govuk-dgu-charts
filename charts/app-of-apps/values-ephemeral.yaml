@@ -1,5 +1,6 @@
 ckanHelmValues:
   environment: ephemeral
+  serverSideApplyEnabled: "true"
   arch: arm64
   ckan:
     appResources:
@@ -96,6 +97,7 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: ephemeral
+  serverSideApplyEnabled: "true"
   dev:
     enabled: true
   arch: arm64
@@ -131,6 +133,7 @@ datagovukHelmValues:
     enabled: true
 
 dguSharedHelmValues:
+  serverSideApplyEnabled: "true"
   arch: arm64
   redis:
     replicaCount: 1
