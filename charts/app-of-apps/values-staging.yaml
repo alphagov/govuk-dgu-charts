@@ -1,5 +1,6 @@
 ckanHelmValues:
   environment: staging
+  serverSideApplyEnabled: "true"
   arch: arm64
   ckan:
     appResources:
@@ -100,6 +101,7 @@ ckanHelmValues:
 datagovukHelmValues:
   arch: arm64
   environment: staging
+  serverSideApplyEnabled: "true"
   find:
     appResources:
       limits:
@@ -135,6 +137,7 @@ datagovukHelmValues:
     enabled: true
 
 dguSharedHelmValues:
+  serverSideApplyEnabled: "true"
   arch: arm64
   redis:
     replicaCount: 1

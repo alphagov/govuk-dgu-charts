@@ -26,3 +26,6 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
+    {{- if .Values.dguSharedHelmValues.serverSideApplyEnabled }}
+    - ServerSideApply=true
+    {{- end }}

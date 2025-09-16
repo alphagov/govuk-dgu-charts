@@ -27,3 +27,6 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
+    {{- if .Values.datagovukHelmValues.serverSideApplyEnabled }}
+    - ServerSideApply=true
+    {{- end }}
