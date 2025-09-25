@@ -1,6 +1,5 @@
 ckanHelmValues:
   environment: integration
-  serverSideApplyEnabled: "true"
   arch: arm64
   ckan:
     appResources:
@@ -99,7 +98,6 @@ ckanHelmValues:
 
 datagovukHelmValues:
   environment: integration
-  serverSideApplyEnabled: "true"
   arch: arm64
   find:
     appResources:
@@ -139,7 +137,6 @@ datagovukHelmValues:
     enabled: true
 
 dguSharedHelmValues:
-  serverSideApplyEnabled: "true"
   arch: arm64
   redis:
     replicaCount: 1

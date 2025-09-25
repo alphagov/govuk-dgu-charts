@@ -27,6 +27,4 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
-    {{- if .Values.ckanHelmValues.serverSideApplyEnabled }}
     - ServerSideApply=true
-    {{- end }}
