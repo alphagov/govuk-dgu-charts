@@ -1,0 +1,36 @@
+{{ range .Values.namespaces }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: release3-assumed-{{ .namespace }}
+  namespace: {{ .namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: release3-assumed
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: release3-assumed
+  - kind: ServiceAccount
+    name: release3-assumer
+    namespace: apps
+---
+{{ end }}
+---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: RoleBinding
+# metadata:
+#   name: release3-assumed-apps
+#   namespace: apps
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: release3-assumed
+# subjects:
+#   - apiGroup: rbac.authorization.k8s.io
+#     kind: Group
+#     name: release3-assumed
+#   - kind: ServiceAccount
+#     name: release3-assumer
+#     namespace: apps
