@@ -19,15 +19,15 @@ ckanHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/certificate-arn: >
           arn:aws:acm:eu-west-1:172025368201:certificate/b315cd63-5ca1-4c7b-8d3b-914eccc024f8
+
         alb.ingress.kubernetes.io/load-balancer-attributes: >
-          access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-production-aws-logging,
-          access_logs.s3.prefix=elb/ckan-datagovuk
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: >
+          access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-production-aws-logging, access_logs.s3.prefix=elb/ckan-datagovuk
+
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "ckan.publishing.service.gov.uk"
           ]}}]
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: >
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "ckan.publishing.service.gov.uk"
           ]}}]
@@ -100,7 +100,6 @@ ckanHelmValues:
         memory: 1Gi
   externalSecret:
     enabled: true
-
 datagovukHelmValues:
   environment: production
   arch: arm64
@@ -111,7 +110,7 @@ datagovukHelmValues:
       requests:
         memory: 1Gi
     replicaCount: 2
-    args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
+    args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
       gaTrackingId: UA-10855508-1
       googleTagManagerId: GTM-M875Q8TH
@@ -126,10 +125,9 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/shield-advanced-protection: "true"
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/load-balancer-attributes: >
-          access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-production-aws-logging,
-          access_logs.s3.prefix=elb/www-datagovuk
-        alb.ingress.kubernetes.io/conditions.datagovuk-find: >
+          access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-production-aws-logging, access_logs.s3.prefix=elb/www-datagovuk
+
+        alb.ingress.kubernetes.io/conditions.datagovuk-find: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.data.gov.uk"
           ]}}]
@@ -137,7 +135,6 @@ datagovukHelmValues:
     enabled: false
   externalSecret:
     enabled: true
-
 dguSharedHelmValues:
   arch: arm64
   redis:
