@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "47 1 * * *"
+  suspend: {{ .Values.suspendCronJobs }}
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2

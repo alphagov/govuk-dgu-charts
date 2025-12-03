@@ -1,3 +1,4 @@
+{{- if .Values.appEnabled }}
 {{- $fullName := print .Release.Name "-find" -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -74,3 +75,4 @@ spec:
       nodeSelector:
         kubernetes.io/arch: {{ .Values.arch }}
       {{- end }}
+{{- end }}
