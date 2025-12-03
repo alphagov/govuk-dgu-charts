@@ -5,6 +5,9 @@ environment: test
 # running mixed-arch clusters.
 arch: amd64
 
+# set to false to disable all app deployments in this chart
+appEnabled: true
+
 ckan:
   replicaCount: 1
   serviceAccount:

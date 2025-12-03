@@ -1,3 +1,4 @@
+{{- if .Values.appEnabled }}
 {{- $fullName := print .Release.Name "-ckan" -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -160,3 +161,4 @@ spec:
       nodeSelector:
         kubernetes.io/arch: {{ .Values.arch }}
       {{- end }}
+{{- end }}
