@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "0 6-22 * * *"
+  suspend: {{ .Values.suspendCronJobs }}
   jobTemplate:
     metadata:
       name: {{ .Release.Name }}-harvester-run
