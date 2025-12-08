@@ -18,14 +18,13 @@ ckanHelmValues:
         alb.ingress.kubernetes.io/shield-advanced-protection: "true"
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/load-balancer-attributes: >
-          access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-integration-aws-logging,
-          access_logs.s3.prefix=elb/ckan-datagovuk
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: >
+          access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-integration-aws-logging, access_logs.s3.prefix=elb/ckan-datagovuk
+
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-ckan: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "ckan.integration.publishing.service.gov.uk"
           ]}}]
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: >
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-pycsw: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "ckan.integration.publishing.service.gov.uk"
           ]}}]
@@ -95,7 +94,6 @@ ckanHelmValues:
     replicaCount: 1
   externalSecret:
     enabled: true
-
 datagovukHelmValues:
   environment: integration
   arch: arm64
@@ -123,10 +121,9 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/shield-advanced-protection: "true"
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/load-balancer-attributes: >
-          access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-integration-aws-logging,
-          access_logs.s3.prefix=elb/www-datagovuk
-        alb.ingress.kubernetes.io/conditions.datagovuk-find: >
+          access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-integration-aws-logging, access_logs.s3.prefix=elb/www-datagovuk
+
+        alb.ingress.kubernetes.io/conditions.datagovuk-find: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.integration.data.gov.uk",
               "integration.data.gov.uk"
@@ -135,7 +132,6 @@ datagovukHelmValues:
     enabled: false
   externalSecret:
     enabled: true
-
 dguSharedHelmValues:
   arch: arm64
   redis:
