@@ -94,6 +94,8 @@ ckanHelmValues:
     replicaCount: 1
   externalSecret:
     enabled: true
+  appEnabled: false
+  suspendCronJobs: true
 datagovukHelmValues:
   environment: integration
   arch: arm64
@@ -132,6 +134,7 @@ datagovukHelmValues:
     enabled: false
   externalSecret:
     enabled: true
+  appEnabled: false
 dguSharedHelmValues:
   arch: arm64
   redis:
