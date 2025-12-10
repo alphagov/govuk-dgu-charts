@@ -123,6 +123,12 @@ data:
           deny all;
           return 403;
         }
+
+        # deny access to .py files
+        location ~\.py$ {
+            deny all;
+            return 403;
+        }
       }
     }
 {{- end }}
