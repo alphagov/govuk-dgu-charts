@@ -100,6 +100,8 @@ ckanHelmValues:
         memory: 1Gi
   externalSecret:
     enabled: true
+  appEnabled: false
+  suspendCronJobs: true
 datagovukHelmValues:
   environment: production
   arch: arm64
@@ -135,6 +137,7 @@ datagovukHelmValues:
     enabled: false
   externalSecret:
     enabled: true
+  appEnabled: false
 dguSharedHelmValues:
   arch: arm64
   redis:
