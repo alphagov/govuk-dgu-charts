@@ -137,7 +137,7 @@ datagovukHelmValues:
     enabled: false
   externalSecret:
     enabled: true
-  appEnabled: false
+  appEnabled: true
 dguSharedHelmValues:
   arch: arm64
   redis:
