@@ -52,6 +52,8 @@ spec:
               mountPath: /config
             - name: ckan-init
               mountPath: /init
+            - name: prom-tmp
+              mountPath: /prom_tmp
       containers:
         - name: ckan
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
@@ -63,6 +65,8 @@ spec:
             - name: config
               mountPath: /config
               readOnly: true
+            - name: prom-tmp
+              mountPath: /prom_tmp
           command: ["/bin/sh", "-c"]
           args: {{ .Values.ckan.args }}
           env:
@@ -131,8 +135,6 @@ spec:
               subPath: nginx.conf
             - name: nginx-tmp
               mountPath: /tmp
-            - name: prom-tmp
-              mountPath: /prom_tmp
             {{- with .Values.ckan.nginx.extraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
