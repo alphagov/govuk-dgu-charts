@@ -7,6 +7,11 @@ data:
     # copy production.ini
     cp /map/production.ini /config
 
+    # copy gunicorn_config.py
+    if [ -f /etc/ckan/gunicorn_config.py ]; then
+      cp /etc/ckan/gunicorn_config.py /config/gunicorn_config.py
+    fi
+
     # update production.ini
     ckan config-tool $CKAN_INI "beaker.session.secret=$CKAN_BEAKER_SESSION_SECRET"
     ckan config-tool $CKAN_INI "beaker.session.validate_key=$CKAN_BEAKER_SESSION_VALIDATE_KEY"
