@@ -13,7 +13,7 @@ spec:
     matchLabels:
       app: {{ .Release.Name }}-ckan
   podMetricsEndpoints:
-  - port: http
+  - port: 9394
     metricRelabelings:
     - action: replace
       sourceLabels: ["__name__"]
