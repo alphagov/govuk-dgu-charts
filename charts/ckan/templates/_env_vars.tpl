@@ -64,6 +64,8 @@
   value: /config/production.ini
 - name: CKAN_REDIS_URL
   value: redis://{{ .redis.host | default (print $.Release.Name "-redis") }}/{{ .redis.dbNumber | default "1" }}
+- name: PROMETHEUS_MULTIPROC_DIR
+  value: '/prom_tmp'
   {{- if $.Values.dev.enabled }}
 - name: CKAN_TEST_SYSADMIN_NAME
   value: ckan_admin_test

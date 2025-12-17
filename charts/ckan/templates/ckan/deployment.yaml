@@ -131,6 +131,8 @@ spec:
               subPath: nginx.conf
             - name: nginx-tmp
               mountPath: /tmp
+            - name: prom-tmp
+              mountPath: /prom_tmp
             {{- with .Values.ckan.nginx.extraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
@@ -151,6 +153,8 @@ spec:
           configMap:
             name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
         - name: nginx-tmp
+          emptyDir: {}
+        - name: prom-tmp
           emptyDir: {}
       {{- if eq "arm64" .Values.arch }}
       tolerations:
