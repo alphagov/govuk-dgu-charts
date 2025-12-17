@@ -61,6 +61,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.ckan.appPort }}
+            - name: metrics
+              containerPort: {{ .Values.monitoring.metricsPort }}
           volumeMounts:
             - name: config
               mountPath: /config

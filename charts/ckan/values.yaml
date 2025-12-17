@@ -179,3 +179,4 @@ externalSecret:
 
 monitoring:
   enabled: false
+  metricsPort: 9394
