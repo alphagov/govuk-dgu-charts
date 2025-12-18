@@ -73,6 +73,10 @@ spec:
           args: {{ .Values.ckan.args }}
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: /prom_tmp
+            - name: PROMETHEUS_METRICS_PORT
+              value: "9394"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
