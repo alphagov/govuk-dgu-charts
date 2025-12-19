@@ -52,6 +52,8 @@ spec:
               mountPath: /config
             - name: ckan-init
               mountPath: /init
+            - name: prom-tmp
+              mountPath: /prom_tmp
       containers:
         - name: ckan
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
@@ -59,14 +61,22 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.ckan.appPort }}
+            - name: metrics
+              containerPort: {{ .Values.monitoring.metricsPort }}
           volumeMounts:
             - name: config
               mountPath: /config
               readOnly: true
+            - name: prom-tmp
+              mountPath: /prom_tmp
           command: ["/bin/sh", "-c"]
           args: {{ .Values.ckan.args }}
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: /prom_tmp
+            - name: PROMETHEUS_METRICS_PORT
+              value: "9394"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -151,6 +161,8 @@ spec:
           configMap:
             name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
         - name: nginx-tmp
+          emptyDir: {}
+        - name: prom-tmp
           emptyDir: {}
       {{- if eq "arm64" .Values.arch }}
       tolerations:
