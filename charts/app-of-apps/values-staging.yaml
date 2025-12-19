@@ -57,7 +57,7 @@ ckanHelmValues:
       iamRoleARN: arn:aws:iam::696911096973:role/ckan-govuk
   pycsw:
     replicaCount: 1
-    args: ["gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120"]
+    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:8000 wsgi:application --timeout 120"]
     probes:
       enabled: true
     appResources:
