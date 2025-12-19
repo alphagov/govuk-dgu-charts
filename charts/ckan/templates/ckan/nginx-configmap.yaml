@@ -118,8 +118,8 @@ data:
         }
         {{- end }}
 
-        # deny access to other api endpoints
-        location ~ ^/(api|api/3) {
+        # deny access to metrics and other api endpoints
+        location ~ ^/(api|api/3|metrics) {
           deny all;
           return 403;
         }
