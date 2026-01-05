@@ -45,10 +45,25 @@ spec:
               drop: ["ALL"]
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
             periodSeconds: 60
+            timeoutSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 5
+            successThreshold: 3
             timeoutSeconds: 30
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 60
           volumeMounts:
             - name: app-tmp
               mountPath: /srv/app/datagovuk_find/tmp
