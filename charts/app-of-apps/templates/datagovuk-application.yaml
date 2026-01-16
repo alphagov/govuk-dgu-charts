@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/datagovuk
-    targetRevision: HEAD
+    targetRevision: 03a6cb80b5d3ef165173a88a8bd16cc93ac74d7d
     helm:
       values: |
         argo_environment: {{ .Values.argo_environment }}
