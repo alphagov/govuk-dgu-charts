@@ -115,6 +115,8 @@ datagovukHelmValues:
     config:
       gaTrackingId: UA-10855508-1
       googleTagManagerId: GTM-M875Q8TH
+      rateLimitCount: "100"
+      rateLimitPeriod: "60"
       solrUrl: "http://ckan-solr/solr/ckan"
     ingress:
       host: find.eks.production.govuk.digital

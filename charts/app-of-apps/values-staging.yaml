@@ -109,6 +109,8 @@ datagovukHelmValues:
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
       ckanDomain: "ckan.staging.publishing.service.gov.uk"
+      rateLimitCount: "100"
+      rateLimitPeriod: "60"
       solrUrl: "http://ckan-solr/solr/ckan"
     ingress:
       host: find.eks.staging.govuk.digital
