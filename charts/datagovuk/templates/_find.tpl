@@ -27,6 +27,10 @@
   value: {{ .Values.find.ingress.host }}
 - name: RAILS_SERVE_STATIC_FILES
   value: "1"
+- name: RATE_LIMIT_COUNT
+  value: "{{ .Values.find.config.rateLimitCount }}"
+- name: RATE_LIMIT_PERIOD
+  value: "{{ .Values.find.config.rateLimitPeriod }}"
 {{- with .Values.find.config }}
 {{- with .gaTrackingId }}
 - name: GA_TRACKING_ID

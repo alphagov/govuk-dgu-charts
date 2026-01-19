@@ -111,6 +111,8 @@ datagovukHelmValues:
       googleTagManagerPreview: env-38
       ckanDomain: "ckan.integration.publishing.service.gov.uk"
       solrUrl: "http://ckan-solr/solr/ckan"
+      rateLimitCount: "60"
+      rateLimitPeriod: "60"
     ingress:
       host: find.eks.integration.govuk.digital
       ingressClassName: aws-alb
