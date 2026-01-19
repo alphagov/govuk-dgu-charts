@@ -38,6 +38,8 @@ find:
     findSentryDsnSecretKeyRef:
       name: datagovuk
       key: find_sentry_dsn
+    rateLimitCount: "100"
+    rateLimitPeriod: "60"
 
 externalSecret:
   enabled: false
