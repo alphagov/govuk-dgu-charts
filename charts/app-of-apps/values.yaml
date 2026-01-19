@@ -13,8 +13,5 @@ datagovukHelmValues:
     enabled: true
 
 dguSharedHelmValues:
-  config:
-    rateLimitCount: "100"
-    rateLimitPeriod: "60"
   redis:
     replicaCount: 1
