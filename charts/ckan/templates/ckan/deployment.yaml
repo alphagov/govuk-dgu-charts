@@ -91,14 +91,14 @@ spec:
               path: /healthcheck
               port: http
             periodSeconds: 60
-            timeoutSeconds: 30
+            timeoutSeconds: 60
           readinessProbe:
             httpGet:
               path: /healthcheck
               port: http
             periodSeconds: 5
             successThreshold: 3
-            timeoutSeconds: 10
+            timeoutSeconds: 30
           startupProbe:
             httpGet:
               path: /healthcheck
