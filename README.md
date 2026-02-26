@@ -129,9 +129,9 @@ kubectl config set-context --current --namespace=datagovuk
 9. Install the application Helm charts
 
 ```sh
+helm install dgu-shared-dev ./charts/dgu-shared/ -n datagovuk
 helm install ckan-dev ./charts/ckan/ -n datagovuk
 helm install datagovuk-dev ./charts/datagovuk/ -n datagovuk
-helm install dgu-shared-dev ./charts/dgu-shared/ -n datagovuk
 ```
 
 Now your local CKAN deployment will use the `localhost:54392/ckan.2.10.4` image.
