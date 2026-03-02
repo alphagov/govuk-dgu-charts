@@ -1,0 +1,96 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-k6
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  # Job starts suspended — unsuspend manually to trigger the test
+  # Avoids ArgoCD sync timeout on long-running (35 min) tests
+  suspend: {{ .Values.suspended }}
+  # Do not retry on failure — a failed run should be investigated, not retried silently
+  backoffLimit: 0
+  # Automatically clean up the job pod after this many seconds
+  # Gives the team time to view logs before the pod is removed
+  ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 12345
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: k6
+          image: {{ .Values.image }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          args:
+            - run
+            - /scripts/script.js
+            - --out
+            - json=/tmp/results.json
+            {{- if .Values.prometheus.remoteWriteUrl }}
+            - --out
+            - experimental-prometheus-rw
+            {{- end }}
+          env:
+            # Target URLs for the load test
+            - name: DATAGOVUK_URL
+              value: {{ .Values.baseUrl | quote }}
+            - name: CKAN_URL
+              value: {{ .Values.apiUrl | quote }}
+            # Load test stage configuration — visible via kubectl describe pod
+            - name: VUS
+              value: {{ .Values.vus | quote }}
+            - name: WARMUP_DURATION
+              value: {{ .Values.warmupDuration | quote }}
+            - name: RAMP_DURATION
+              value: {{ .Values.rampDuration | quote }}
+            - name: SOAK_DURATION
+              value: {{ .Values.soakDuration | quote }}
+            # Search and API query parameters — customizable for different test scenarios
+            - name: SEARCH_QUERY
+              value: {{ .Values.searchQuery | quote }}
+            - name: API_QUERY
+              value: {{ .Values.apiQuery | quote }}
+            - name: API_ROWS
+              value: {{ .Values.apiRows | quote }}
+            # Response time thresholds (milliseconds) — can be overridden via kubectl patch
+            - name: HOMEPAGE_THRESHOLD_MS
+              value: {{ .Values.thresholds.homePageThresholdMs | quote }}
+            - name: SEARCH_THRESHOLD_MS
+              value: {{ .Values.thresholds.searchThresholdMs | quote }}
+            - name: DATASET_THRESHOLD_MS
+              value: {{ .Values.thresholds.datasetThresholdMs | quote }}
+            - name: API_THRESHOLD_MS
+              value: {{ .Values.thresholds.apiThresholdMs | quote }}
+            - name: ERROR_RATE_THRESHOLD
+              value: {{ .Values.thresholds.errorRateThreshold | quote }}
+            {{- if .Values.prometheus.remoteWriteUrl }}
+            - name: K6_PROMETHEUS_RW_SERVER_URL
+              value: {{ .Values.prometheus.remoteWriteUrl | quote }}
+            - name: K6_PROMETHEUS_RW_TREND_STATS
+              value: {{ .Values.prometheus.trendStats | quote }}
+            - name: K6_PROMETHEUS_RW_STALE_MARKERS_ENABLED
+              value: "true"
+            {{- end }}
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: scripts
+          configMap:
+            name: {{ .Release.Name }}-script

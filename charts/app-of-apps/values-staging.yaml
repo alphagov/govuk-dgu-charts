@@ -7,7 +7,7 @@ ckanHelmValues:
         memory: 4Gi
       requests:
         memory: 3Gi
-    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4"]
     replicaCount: 1
     ingress:
       host: ckan.eks.staging.govuk.digital
@@ -102,14 +102,14 @@ datagovukHelmValues:
   find:
     appResources:
       limits:
-        memory: 2Gi
+        memory: 4Gi
       requests:
-        memory: 1Gi
-    replicaCount: 2
+        memory: 2Gi
+    replicaCount: 3
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
       ckanDomain: "ckan.staging.publishing.service.gov.uk"
-      rateLimitCount: "100"
+      rateLimitCount: "10000"
       rateLimitPeriod: "60"
       solrUrl: "http://ckan-solr/solr/ckan"
     ingress:
@@ -137,3 +137,27 @@ dguSharedHelmValues:
   arch: arm64
   redis:
     replicaCount: 1
+
+# Load test chart — staging only, intentionally absent from values-production.yaml
+loadTestTargetRevision: "feature/FP-231-load-testing-staging-charts"
+loadTestHelmValues:
+  targetUrl: "https://www.staging.data.gov.uk"
+  apiUrl: "https://ckan.eks.staging.govuk.digital"
+  image: grafana/k6:0.55.0
+  # Full soak test — 5m/10m/15m/5m = 35 minutes total
+  # Warm up → ramp up → soak at peak → ramp down
+  stages:
+    - duration: "5m"
+      target: 10
+    - duration: "10m"
+      target: 50
+    - duration: "15m"
+      target: 100
+    - duration: "5m"
+      target: 0
+  prometheus:
+    # GOV.UK Prometheus Operator remote write endpoint (staging cluster)
+    # Enables live k6 metrics in Grafana during the test
+    remoteWriteUrl: "http://kube-prometheus-stack-prometheus.monitoring.svc:9090/api/v1/write"
+    trendStats: "avg,p(95),p(99)"
+  ttlSecondsAfterFinished: 3600

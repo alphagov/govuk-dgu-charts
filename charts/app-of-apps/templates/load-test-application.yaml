@@ -1,0 +1,45 @@
+{{- if .Values.loadTestHelmValues }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ndl-load-test
+  namespace: cluster-services
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: datagovuk
+  source:
+    repoURL: https://github.com/alphagov/govuk-dgu-charts
+    path: charts/ndl-load-test
+    targetRevision: {{ .Values.loadTestTargetRevision | default "HEAD" }}
+    helm:
+      values: |
+        {{- toYaml .Values.loadTestHelmValues | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: datagovuk
+  # Ignore fields that are manually patched for ad hoc testing
+  # ArgoCD won't auto-correct these even with selfHeal: true
+  ignoreDifferences:
+    - group: batch
+      kind: Job
+      jsonPointers:
+        - /spec/suspend                                              # Allow manual unsuspend
+        - /spec/template/spec/containers/0/env                      # Allow env var patches
+    - group: v1
+      kind: ConfigMap
+      name: ndl-load-test-script
+      jsonPointers:
+        - /data/config.json                                          # Allow config patches
+        - /data/script.js                                            # Allow script patches
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - ApplyOutOfSyncOnly=true
+    - ServerSideApply=true
+{{- end }}

@@ -1,0 +1,54 @@
+# Target URL for load testing — staging only, never point this at production
+baseUrl: "https://www.staging.data.gov.uk"
+# CKAN API URL — tested separately as the 4th key page
+# Defaults to the staging CKAN EKS ingress
+apiUrl: "https://ckan.eks.staging.govuk.digital"
+
+# Search and API query strings — customizable for different page tests
+searchQuery: "climate"
+apiQuery: "climate"
+apiRows: 5
+
+# k6 container image
+image: grafana/k6:0.55.0
+
+# Test stage configuration — exposed as env vars in the pod manifest
+# Total duration: warmupDuration + rampDuration + soakDuration + warmupDuration
+vus: 100             # Peak virtual users
+warmupDuration: "5m" # Warm-up (1 VU) and ramp-down (0 VU) bookends
+rampDuration: "10m"  # Time to ramp from 1 up to peak VUs
+soakDuration: "15m"  # Hold at peak VUs for this duration
+
+# Pass/fail thresholds for the test (in milliseconds)
+# These get passed to k6 as environment variables
+thresholds:
+  homePageThresholdMs: 2000   # Homepage p(95) < 2s
+  searchThresholdMs: 2000     # Search p(95) < 2s
+  datasetThresholdMs: 2000    # Dataset p(95) < 2s
+  apiThresholdMs: 3000        # API p(95) < 3s
+  errorRateThreshold: 0.01    # Error rate < 1%
+
+# Prometheus remote write — push k6 metrics to existing GOV.UK Prometheus
+# Set remoteWriteUrl to enable live Grafana visibility during the test
+# GOV.UK Prometheus Operator URL: http://prometheus-operated.monitoring:9090/api/v1/write
+prometheus:
+  remoteWriteUrl: ""
+  # Stats exported per trend metric — visible as separate series in Grafana
+  trendStats: "avg,p(95),p(99)"
+
+# Resource limits for the k6 pod in Kubernetes
+resources:
+  limits:
+    cpu: "1"
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+# Job suspension — keeps the job dormant until manually unsuspended
+# Set to false to start the test: kubectl patch job ndl-load-test-k6 -n datagovuk --type=merge -p '{"spec":{"suspend":false}}'
+suspended: true
+
+# How long to keep the completed job before automatic cleanup (seconds)
+# 3600 = 1 hour — gives team time to view logs before pod is removed
+ttlSecondsAfterFinished: 3600

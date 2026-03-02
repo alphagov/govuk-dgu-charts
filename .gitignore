@@ -4,3 +4,25 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile ~/.gitignore_global
 helm-dist
+
+# Local development overrides — never push these to origin
+values-local.yaml
+values-local*.yaml
+
+# Helm dependency tarballs
+charts/*.tgz
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Internal documentation — Claude/development notes (never push)
+LOAD-TEST.md
+MEMORY.md
+*-MEMORY.md
+*.claude.md
