@@ -145,9 +145,9 @@ loadTestHelmValues:
   targetUrl: "https://www.staging.data.gov.uk"
   image: grafana/k6:0.55.0
   stages:
-    - duration: "1m"
+    - duration: "30s"
       target: 5
-    - duration: "1m"
+    - duration: "30s"
       target: 10
     - duration: "30s"
       target: 10
