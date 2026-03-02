@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/ndl-load-test
-    targetRevision: feature/FP-231-load-testing-staging-charts
+    targetRevision: {{ .Values.loadTestTargetRevision | default "HEAD" }}
     helm:
       values: |
         {{- toYaml .Values.loadTestHelmValues | nindent 8 }}

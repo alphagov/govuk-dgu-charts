@@ -139,6 +139,8 @@ dguSharedHelmValues:
     replicaCount: 1
 
 # Load test chart — staging only, intentionally absent from values-production.yaml
+# Set to a feature branch to test load test changes before merging to main
+loadTestTargetRevision: "feature/FP-231-load-testing-staging-charts"
 loadTestHelmValues:
   targetUrl: "https://www.staging.data.gov.uk"
   image: grafana/k6:0.55.0
