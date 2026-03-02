@@ -1,0 +1,37 @@
+# Target URL for load testing — staging only, never point this at production
+targetUrl: "https://www.staging.data.gov.uk"
+
+# k6 container image
+image: grafana/k6:0.55.0
+
+# Test stages: warm up → ramp up → soak → ramp down
+# Each stage defines duration and target number of virtual users (VUs)
+stages:
+  - duration: "5m"
+    target: 10    # warm up — gentle start
+  - duration: "10m"
+    target: 50    # ramp up — increase load
+  - duration: "15m"
+    target: 100   # soak — hold at peak
+  - duration: "5m"
+    target: 0     # ramp down — graceful end
+
+# Pass/fail thresholds for the test
+thresholds:
+  # 95% of requests must complete within 2 seconds
+  http_req_duration_p95: 2000
+  # Less than 1% of requests should fail
+  http_req_failed_rate: 0.01
+
+# Resource limits for the k6 pod in Kubernetes
+resources:
+  limits:
+    cpu: "1"
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+# How long to keep the completed job before automatic cleanup (seconds)
+# 3600 = 1 hour — gives team time to view logs before pod is removed
+ttlSecondsAfterFinished: 3600

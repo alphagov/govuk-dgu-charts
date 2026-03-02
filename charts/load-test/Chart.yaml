@@ -1,0 +1,5 @@
+apiVersion: v2
+name: load-test
+description: k6 load testing chart for data.gov.uk staging
+type: application
+version: 0.1.0

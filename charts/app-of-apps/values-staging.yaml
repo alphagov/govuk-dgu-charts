@@ -137,3 +137,18 @@ dguSharedHelmValues:
   arch: arm64
   redis:
     replicaCount: 1
+
+# Load test chart — staging only, intentionally absent from values-production.yaml
+loadTestHelmValues:
+  targetUrl: "https://www.staging.data.gov.uk"
+  image: grafana/k6:0.55.0
+  stages:
+    - duration: "5m"
+      target: 10
+    - duration: "10m"
+      target: 50
+    - duration: "15m"
+      target: 100
+    - duration: "5m"
+      target: 0
+  ttlSecondsAfterFinished: 3600

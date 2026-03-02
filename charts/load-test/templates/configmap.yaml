@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-script
+  namespace: {{ .Release.Namespace }}
+data:
+  script.js: |
+    import http from 'k6/http';
+    import { check, sleep } from 'k6';
+    import { Rate } from 'k6/metrics';
+
+    const errorRate = new Rate('errors');
+
+    const BASE_URL = __ENV.TARGET_URL || 'https://www.staging.data.gov.uk';
+
+    export const options = {
+      stages: [
+        { duration: '5m',  target: 10  },  // warm up
+        { duration: '10m', target: 50  },  // ramp up
+        { duration: '15m', target: 100 },  // soak at peak
+        { duration: '5m',  target: 0   },  // ramp down
+      ],
+      thresholds: {
+        // 95% of requests must complete below 2 seconds
+        'http_req_duration{type:homepage}': ['p(95)<2000'],
+        'http_req_duration{type:search}':   ['p(95)<2000'],
+        'http_req_duration{type:dataset}':  ['p(95)<2000'],
+        // Overall error rate must stay below 1%
+        'errors': ['rate<0.01'],
+      },
+    };
+
+    export default function () {
+      let res;
+
+      // --- Test 1: Homepage ---
+      res = http.get(`${BASE_URL}/`, {
+        tags: { type: 'homepage' },
+      });
+      check(res, {
+        'homepage: status is 200': (r) => r.status === 200,
+        'homepage: loads in <2s':  (r) => r.timings.duration < 2000,
+      });
+      errorRate.add(res.status !== 200);
+      sleep(1);
+
+      // --- Test 2: Dataset Search ---
+      res = http.get(`${BASE_URL}/search?q=climate`, {
+        tags: { type: 'search' },
+      });
+      check(res, {
+        'search: status is 200': (r) => r.status === 200,
+        'search: loads in <2s':  (r) => r.timings.duration < 2000,
+      });
+      errorRate.add(res.status !== 200);
+      sleep(1);
+
+      // --- Test 3: Dataset listing page ---
+      res = http.get(`${BASE_URL}/dataset`, {
+        tags: { type: 'dataset' },
+      });
+      check(res, {
+        'dataset: status is 200': (r) => r.status === 200,
+        'dataset: loads in <2s':  (r) => r.timings.duration < 2000,
+      });
+      errorRate.add(res.status !== 200);
+      sleep(1);
+    }
