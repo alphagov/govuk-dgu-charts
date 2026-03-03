@@ -40,9 +40,23 @@ spec:
             - /scripts/script.js
             - --out
             - json=/tmp/results.json
+            {{- if .Values.prometheus.remoteWriteUrl }}
+            - --out
+            - experimental-prometheus-rw
+            {{- end }}
           env:
             - name: TARGET_URL
               value: {{ .Values.targetUrl | quote }}
+            - name: API_URL
+              value: {{ .Values.apiUrl | quote }}
+            {{- if .Values.prometheus.remoteWriteUrl }}
+            - name: K6_PROMETHEUS_RW_SERVER_URL
+              value: {{ .Values.prometheus.remoteWriteUrl | quote }}
+            - name: K6_PROMETHEUS_RW_TREND_STATS
+              value: {{ .Values.prometheus.trendStats | quote }}
+            - name: K6_PROMETHEUS_RW_STALE_MARKERS_ENABLED
+              value: "true"
+            {{- end }}
           volumeMounts:
             - name: scripts
               mountPath: /scripts

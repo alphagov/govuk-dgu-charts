@@ -13,6 +13,7 @@ data:
     const errorRate = new Rate('errors');
 
     const BASE_URL = __ENV.TARGET_URL || 'https://www.staging.data.gov.uk';
+    const API_URL  = __ENV.API_URL   || 'https://ckan.eks.staging.govuk.digital';
 
     export const options = {
       stages: [
@@ -25,6 +26,7 @@ data:
         'http_req_duration{type:homepage}': ['p(95)<2000'],
         'http_req_duration{type:search}':   ['p(95)<2000'],
         'http_req_duration{type:dataset}':  ['p(95)<2000'],
+        'http_req_duration{type:api}':      ['p(95)<3000'],
         // Overall error rate must stay below 1%
         'errors': ['rate<0.01'],
       },
@@ -62,6 +64,18 @@ data:
       check(res, {
         'dataset: status is 200': (r) => r.status === 200,
         'dataset: loads in <2s':  (r) => r.timings.duration < 2000,
+      });
+      errorRate.add(res.status !== 200);
+      sleep(1);
+
+      // --- Test 4: CKAN API ---
+      res = http.get(`${API_URL}/api/3/action/package_search?q=climate&rows=5`, {
+        tags: { type: 'api' },
+      });
+      check(res, {
+        'api: status is 200':    (r) => r.status === 200,
+        'api: loads in <3s':     (r) => r.timings.duration < 3000,
+        'api: returns results':  (r) => JSON.parse(r.body).result.count > 0,
       });
       errorRate.add(res.status !== 200);
       sleep(1);

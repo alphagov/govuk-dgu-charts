@@ -1,18 +1,23 @@
 # Target URL for load testing — staging only, never point this at production
 targetUrl: "https://www.staging.data.gov.uk"
 
+# CKAN API URL — tested separately as the 4th key page
+# Defaults to the staging CKAN EKS ingress
+apiUrl: "https://ckan.eks.staging.govuk.digital"
+
 # k6 container image
 image: grafana/k6:0.55.0
 
 # Test stages: warm up → ramp up → soak → ramp down
 # Each stage defines duration and target number of virtual users (VUs)
+# Override in values-staging.yaml for quick tests, use these defaults for full soak
 stages:
   - duration: "5m"
     target: 10    # warm up — gentle start
   - duration: "10m"
     target: 50    # ramp up — increase load
   - duration: "15m"
-    target: 100   # soak — hold at peak
+    target: 100   # soak — hold at peak, find the breaking point
   - duration: "5m"
     target: 0     # ramp down — graceful end
 
@@ -22,6 +27,14 @@ thresholds:
   http_req_duration_p95: 2000
   # Less than 1% of requests should fail
   http_req_failed_rate: 0.01
+
+# Prometheus remote write — push k6 metrics to existing GOV.UK Prometheus
+# Set remoteWriteUrl to enable live Grafana visibility during the test
+# GOV.UK Prometheus Operator URL: http://prometheus-operated.monitoring:9090/api/v1/write
+prometheus:
+  remoteWriteUrl: ""
+  # Stats exported per trend metric — visible as separate series in Grafana
+  trendStats: "avg,p(95),p(99)"
 
 # Resource limits for the k6 pod in Kubernetes
 resources:
