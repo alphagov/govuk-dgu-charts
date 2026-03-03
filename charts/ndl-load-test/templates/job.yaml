@@ -6,11 +6,10 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-  annotations:
-    # Ensures ArgoCD recreates the job on every sync, allowing team to re-run the test
-    argocd.argoproj.io/hook: Sync
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
+  # Job starts suspended — unsuspend manually to trigger the test
+  # Avoids ArgoCD sync timeout on long-running (35 min) tests
+  suspend: {{ .Values.suspended }}
   # Do not retry on failure — a failed run should be investigated, not retried silently
   backoffLimit: 0
   # Automatically clean up the job pod after this many seconds

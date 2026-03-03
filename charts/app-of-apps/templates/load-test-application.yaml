@@ -18,6 +18,13 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: datagovuk
+  # Ignore spec.suspend so ArgoCD does not reset the job back to suspended
+  # while the test is running (selfHeal would otherwise overwrite the patch)
+  ignoreDifferences:
+    - group: batch
+      kind: Job
+      jsonPointers:
+        - /spec/suspend
   syncPolicy:
     automated:
       prune: true
