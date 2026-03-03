@@ -15,10 +15,9 @@ data:
 
     export const options = {
       stages: [
-        { duration: '5m',  target: 10  },  // warm up
-        { duration: '10m', target: 50  },  // ramp up
-        { duration: '15m', target: 100 },  // soak at peak
-        { duration: '5m',  target: 0   },  // ramp down
+        {{- range .Values.stages }}
+        { duration: '{{ .duration }}', target: {{ .target }} },
+        {{- end }}
       ],
       thresholds: {
         // 95% of requests must complete below 2 seconds
