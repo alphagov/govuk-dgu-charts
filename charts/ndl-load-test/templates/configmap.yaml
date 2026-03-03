@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   script.js: |
+    // chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     import http from 'k6/http';
     import { check, sleep } from 'k6';
     import { Rate } from 'k6/metrics';
