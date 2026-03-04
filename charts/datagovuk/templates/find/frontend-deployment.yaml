@@ -1,0 +1,93 @@
+{{- if .Values.appEnabled }}
+{{- $fullName := print .Release.Name "-frontend-find" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: {{ .Values.find.replicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ $fullName }}
+  template:
+    metadata:
+      labels:
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      containers:
+        - name: frontend-find
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+            - name: metrics
+              containerPort: {{ .Values.monitoring.metricsPort }}
+          env:
+            {{ include "find.environment-variables" . | nindent 12 }}
+          {{- with .Values.find.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 60
+            timeoutSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 5
+            successThreshold: 3
+            timeoutSeconds: 30
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 60
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /srv/app/datagovuk_find/tmp
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: app-tmp
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
+{{- end }}

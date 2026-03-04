@@ -12,16 +12,27 @@ metadata:
     {{- tpl (toYaml .annotations) $ | trim | nindent 4 }}
   {{- end }}
 spec:
-  {{ if not (empty .ingressClassName) }}ingressClassName: {{ .ingressClassName }}{{ end }}
+  {{ if not (empty .ingressClassName) }}
+  ingressClassName: {{ .ingressClassName }}
+  {{ end }}
   rules:
     - host: find.{{ $environmentPath }}.govuk.digital
       http:
         paths:
-          - path: /
+        {{- range $path := .directoryPaths }}
+          - path: {{ $path }}
             pathType: Prefix
             backend:
               service:
                 name: {{ $.Release.Name }}-find
+                port:
+                  number: 3000
+        {{- end }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Release.Name }}-frontend-find
                 port:
                   number: 3000
 {{- end }}
