@@ -161,10 +161,11 @@ gds aws govuk-staging-dguengineer -- kubectl delete configmap "${CONFIGMAP_NAME}
 echo "Waiting for resources to be fully deleted..."
 sleep 3
 
-# Recreate helm release with new values
-echo "Applying new configuration via Helm..."
-gds aws govuk-staging-dguengineer -- helm upgrade ndl-load-test /Users/PuttanaA/Documents/AMAR-DSIT-NDL-WS/govuk-dgu-charts/charts/ndl-load-test \
-  --install \
+# Render manifests locally via helm template, then apply with kubectl SSA --force-conflicts.
+# This bypasses the Helm/ArgoCD SSA ownership conflict: helm template needs no cluster access,
+# and kubectl apply --server-side --force-conflicts can override ArgoCD's field management.
+echo "Rendering manifests and applying via kubectl..."
+helm template ndl-load-test /Users/PuttanaA/Documents/AMAR-DSIT-NDL-WS/govuk-dgu-charts/charts/ndl-load-test \
   --namespace "${NAMESPACE}" \
   --set "suspended=false" \
   --set "vus=${VUS}" \
@@ -179,7 +180,12 @@ gds aws govuk-staging-dguengineer -- helm upgrade ndl-load-test /Users/PuttanaA/
   --set "thresholds.searchThresholdMs=${SEARCH_THRESHOLD}" \
   --set "thresholds.datasetThresholdMs=${DATASET_THRESHOLD}" \
   --set "thresholds.apiThresholdMs=${API_THRESHOLD}" \
-  --set "thresholds.errorRateThreshold=${ERROR_RATE_THRESHOLD}"
+  --set "thresholds.errorRateThreshold=${ERROR_RATE_THRESHOLD}" | \
+gds aws govuk-staging-dguengineer -- kubectl apply \
+  --server-side \
+  --force-conflicts \
+  --namespace "${NAMESPACE}" \
+  -f -
 
 echo ""
 echo "✅ Load test started!"

@@ -109,10 +109,14 @@ data:
         'search: loads in <2s':  (r) => r.timings.duration < SEARCH_THRESHOLD,
       });
       errorRate.add(res.status !== 200);
+      if (res.status !== 200) {
+        console.log(`[search FAIL] status=${res.status} body=${res.body.substring(0, 200)}`);
+      }
       sleep(1);
 
       // --- Test 3: Dataset listing ---
-      res = http.get(`${BASE_URL}/dataset`, {
+      // Note: www.staging.data.gov.uk/dataset redirects to CKAN, so test CKAN directly.
+      res = http.get(`${API_URL}/dataset`, {
         tags: { type: 'dataset' },
       });
       check(res, {
