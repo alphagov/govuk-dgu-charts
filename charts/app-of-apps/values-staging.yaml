@@ -102,9 +102,9 @@ datagovukHelmValues:
   find:
     appResources:
       limits:
-        memory: 2Gi
+        memory: 4Gi
       requests:
-        memory: 1Gi
+        memory: 2Gi
     replicaCount: 3
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
