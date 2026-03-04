@@ -32,7 +32,7 @@ data:
         },
         {
           "name": "search",
-          "path": "/search?q={{searchQuery}}",
+          "path": "/search?q={{ .Values.searchQuery | default "climate" }}",
           "thresholdMs": 2000
         },
         {

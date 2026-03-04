@@ -1,5 +1,5 @@
 #!/bin/bash
-# Ad hoc load test runner — updates Job env vars and triggers the test
+# Ad hoc load test runner — deletes old Job and triggers new one with custom config
 # Usage: ./load-test.sh [options]
 # Examples:
 #   ./load-test.sh --vus 25 --soak 10              # 25 VUs, 10 min soak
@@ -21,9 +21,10 @@ HOMEPAGE_THRESHOLD=2000
 SEARCH_THRESHOLD=2000
 DATASET_THRESHOLD=2000
 API_THRESHOLD=3000
-ERROR_RATE_THRESHOLD=0.01
+ERROR_RATE_THRESHOLD="0.01"
 NAMESPACE="datagovuk"
 JOB_NAME="ndl-load-test-k6"
+CONFIGMAP_NAME="ndl-load-test-script"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -160,41 +161,50 @@ echo "  Homepage:       p(95) < ${HOMEPAGE_THRESHOLD}ms"
 echo "  Search:         p(95) < ${SEARCH_THRESHOLD}ms"
 echo "  Dataset:        p(95) < ${DATASET_THRESHOLD}ms"
 echo "  API:            p(95) < ${API_THRESHOLD}ms"
-echo "  Error rate:     < ${ERROR_RATE_THRESHOLD} (< $((ERROR_RATE_THRESHOLD * 100))%)"
+echo "  Error rate:     < ${ERROR_RATE_THRESHOLD}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Parse AWS credentials using gds
-eval "$(gds aws govuk-staging-dguengineer -- sh -c 'echo KUBECONFIG_CMD=\"gds aws govuk-staging-dguengineer -- \"')"
-
-# Unsuspend the job
 echo ""
-echo "Unsuspending Job..."
-gds aws govuk-staging-dguengineer -- kubectl patch job "${JOB_NAME}" -n "${NAMESPACE}" \
-  --type=merge -p '{"spec":{"suspend":false}}' 2>/dev/null || echo "⚠ Job already running or not found"
+echo "Deleting old Job and ConfigMap to allow clean Helm install..."
+gds aws govuk-staging-dguengineer -- kubectl delete job "${JOB_NAME}" -n "${NAMESPACE}" --ignore-not-found 2>/dev/null || true
+gds aws govuk-staging-dguengineer -- kubectl delete configmap "${CONFIGMAP_NAME}" -n "${NAMESPACE}" --ignore-not-found 2>/dev/null || true
 
-# Update environment variables
-echo "Setting environment variables..."
-gds aws govuk-staging-dguengineer -- kubectl set env job/"${JOB_NAME}" \
-  -n "${NAMESPACE}" \
-  BASE_URL="${BASE_URL}" \
-  API_URL="${API_URL}" \
-  SEARCH_QUERY="${SEARCH_QUERY}" \
-  API_QUERY="${API_QUERY}" \
-  API_ROWS="${API_ROWS}" \
-  HOMEPAGE_THRESHOLD_MS="${HOMEPAGE_THRESHOLD}" \
-  SEARCH_THRESHOLD_MS="${SEARCH_THRESHOLD}" \
-  DATASET_THRESHOLD_MS="${DATASET_THRESHOLD}" \
-  API_THRESHOLD_MS="${API_THRESHOLD}" \
-  ERROR_RATE_THRESHOLD="${ERROR_RATE_THRESHOLD}" \
-  --overwrite=true
+echo "Waiting for resources to be fully deleted..."
+sleep 3
+
+# Recreate helm release with new values
+echo "Applying new configuration via Helm..."
+gds aws govuk-staging-dguengineer -- helm upgrade ndl-load-test /Users/PuttanaA/Documents/AMAR-DSIT-NDL-WS/govuk-dgu-charts/charts/ndl-load-test \
+  --install \
+  --namespace "${NAMESPACE}" \
+  --set "suspended=false" \
+  --set "stages[0].duration=5m" \
+  --set "stages[0].target=1" \
+  --set "stages[1].duration=${RAMP_DURATION}m" \
+  --set "stages[1].target=${VUS}" \
+  --set "stages[2].duration=${SOAK_DURATION}m" \
+  --set "stages[2].target=${VUS}" \
+  --set "stages[3].duration=5m" \
+  --set "stages[3].target=0" \
+  --set "baseUrl=${BASE_URL}" \
+  --set "apiUrl=${API_URL}" \
+  --set "searchQuery=${SEARCH_QUERY}" \
+  --set "apiQuery=${API_QUERY}" \
+  --set "apiRows=${API_ROWS}" \
+  --set "thresholds.homePageThresholdMs=${HOMEPAGE_THRESHOLD}" \
+  --set "thresholds.searchThresholdMs=${SEARCH_THRESHOLD}" \
+  --set "thresholds.datasetThresholdMs=${DATASET_THRESHOLD}" \
+  --set "thresholds.apiThresholdMs=${API_THRESHOLD}" \
+  --set "thresholds.errorRateThreshold=${ERROR_RATE_THRESHOLD}"
 
 echo ""
 echo "✅ Load test started!"
 echo ""
-echo "Tailing logs in 3 seconds (Ctrl+C to stop)..."
+echo "Tailing logs in 5 seconds (Ctrl+C to stop)..."
 echo "To view logs later: gds aws govuk-staging-dguengineer -- kubectl logs -n ${NAMESPACE} -l app=ndl-load-test -f"
 echo ""
-sleep 3
+sleep 5
 
 # Tail logs
-gds aws govuk-staging-dguengineer -- kubectl logs -n "${NAMESPACE}" -l app=ndl-load-test -f --max-log-requests=5
+gds aws govuk-staging-dguengineer -- kubectl logs -n "${NAMESPACE}" -l app=ndl-load-test -f --max-log-requests=5 || true
+
