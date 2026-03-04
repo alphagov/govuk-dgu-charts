@@ -28,6 +28,13 @@ spec:
                 port:
                   number: 3000
         {{- end }}
+          - path: /collections
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Release.Name }}-frontend-find
+                port:
+                  number: 3000
           - path: /collections/business-and-economy
             pathType: Prefix
             backend:
