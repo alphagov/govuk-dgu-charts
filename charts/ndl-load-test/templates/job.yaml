@@ -44,11 +44,20 @@ spec:
             - experimental-prometheus-rw
             {{- end }}
           env:
-            # Base URLs — can be patched via kubectl for ad hoc testing on different environments
-            - name: BASE_URL
+            # Target URLs for the load test
+            - name: DATAGOVUK_URL
               value: {{ .Values.baseUrl | quote }}
-            - name: API_URL
+            - name: CKAN_URL
               value: {{ .Values.apiUrl | quote }}
+            # Load test stage configuration — visible via kubectl describe pod
+            - name: VUS
+              value: {{ .Values.vus | quote }}
+            - name: WARMUP_DURATION
+              value: {{ .Values.warmupDuration | quote }}
+            - name: RAMP_DURATION
+              value: {{ .Values.rampDuration | quote }}
+            - name: SOAK_DURATION
+              value: {{ .Values.soakDuration | quote }}
             # Search and API query parameters — customizable for different test scenarios
             - name: SEARCH_QUERY
               value: {{ .Values.searchQuery | quote }}

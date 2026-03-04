@@ -129,17 +129,6 @@ EOF
   esac
 done
 
-# Build stages JSON
-STAGES=$(cat <<EOF
-[
-  {"duration":"5m","target":1},
-  {"duration":"${RAMP_DURATION}m","target":${VUS}},
-  {"duration":"${SOAK_DURATION}m","target":${VUS}},
-  {"duration":"5m","target":0}
-]
-EOF
-)
-
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Load Test Configuration"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -149,8 +138,8 @@ echo "Soak:             ${SOAK_DURATION} min"
 echo "Total duration:   ~$((5 + RAMP_DURATION + SOAK_DURATION + 5)) min"
 echo ""
 echo "URLs:"
-echo "  Base:           ${BASE_URL}"
-echo "  API:            ${API_URL}"
+echo "  Data.gov.uk:    ${BASE_URL}"
+echo "  CKAN API:       ${API_URL}"
 echo ""
 echo "Queries:"
 echo "  Search:         ${SEARCH_QUERY}"
@@ -178,14 +167,9 @@ gds aws govuk-staging-dguengineer -- helm upgrade ndl-load-test /Users/PuttanaA/
   --install \
   --namespace "${NAMESPACE}" \
   --set "suspended=false" \
-  --set "stages[0].duration=5m" \
-  --set "stages[0].target=1" \
-  --set "stages[1].duration=${RAMP_DURATION}m" \
-  --set "stages[1].target=${VUS}" \
-  --set "stages[2].duration=${SOAK_DURATION}m" \
-  --set "stages[2].target=${VUS}" \
-  --set "stages[3].duration=5m" \
-  --set "stages[3].target=0" \
+  --set "vus=${VUS}" \
+  --set "rampDuration=${RAMP_DURATION}m" \
+  --set "soakDuration=${SOAK_DURATION}m" \
   --set "baseUrl=${BASE_URL}" \
   --set "apiUrl=${API_URL}" \
   --set "searchQuery=${SEARCH_QUERY}" \

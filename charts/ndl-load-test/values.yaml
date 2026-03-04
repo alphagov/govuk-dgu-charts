@@ -1,7 +1,5 @@
 # Target URL for load testing — staging only, never point this at production
 baseUrl: "https://www.staging.data.gov.uk"
-targetUrl: "https://www.staging.data.gov.uk"  # Deprecated — use baseUrl
-
 # CKAN API URL — tested separately as the 4th key page
 # Defaults to the staging CKAN EKS ingress
 apiUrl: "https://ckan.eks.staging.govuk.digital"
@@ -14,18 +12,12 @@ apiRows: 5
 # k6 container image
 image: grafana/k6:0.55.0
 
-# Test stages: warm up → ramp up → soak → ramp down
-# Each stage defines duration and target number of virtual users (VUs)
-# Override in values-staging.yaml for quick tests, use these defaults for full soak
-stages:
-  - duration: "5m"
-    target: 10    # warm up — gentle start
-  - duration: "10m"
-    target: 50    # ramp up — increase load
-  - duration: "15m"
-    target: 100   # soak — hold at peak, find the breaking point
-  - duration: "5m"
-    target: 0     # ramp down — graceful end
+# Test stage configuration — exposed as env vars in the pod manifest
+# Total duration: warmupDuration + rampDuration + soakDuration + warmupDuration
+vus: 100             # Peak virtual users
+warmupDuration: "5m" # Warm-up (1 VU) and ramp-down (0 VU) bookends
+rampDuration: "10m"  # Time to ramp from 1 up to peak VUs
+soakDuration: "15m"  # Hold at peak VUs for this duration
 
 # Pass/fail thresholds for the test (in milliseconds)
 # These get passed to k6 as environment variables

@@ -7,13 +7,12 @@ data:
   # Load test configuration — dynamically editable via kubectl patch
   config.json: |
     {
-      "stages": [
-        {{- range .Values.stages }}
-        { "duration": "{{ .duration }}", "target": {{ .target }} },
-        {{- end }}
-      ],
-      "baseUrl": "{{ .Values.baseUrl | default "https://www.staging.data.gov.uk" }}",
-      "apiUrl": "{{ .Values.apiUrl | default "https://ckan.eks.staging.govuk.digital" }}",
+      "vus": {{ .Values.vus }},
+      "warmupDuration": "{{ .Values.warmupDuration }}",
+      "rampDuration": "{{ .Values.rampDuration }}",
+      "soakDuration": "{{ .Values.soakDuration }}",
+      "datagovukUrl": "{{ .Values.baseUrl | default "https://www.staging.data.gov.uk" }}",
+      "ckanUrl": "{{ .Values.apiUrl | default "https://ckan.eks.staging.govuk.digital" }}",
       "thresholds": {
         "http_req_duration{type:homepage}": "p(95)<2000",
         "http_req_duration{type:search}": "p(95)<2000",
@@ -51,15 +50,20 @@ data:
 
     const errorRate = new Rate('errors');
 
-    // Configuration from environment variables (set by Job via kubectl patch)
-    // Defaults read from config.json in ConfigMap
-    const BASE_URL = __ENV.BASE_URL || 'https://www.staging.data.gov.uk';
-    const API_URL = __ENV.API_URL || 'https://ckan.eks.staging.govuk.digital';
+    // All configuration from pod environment variables — visible via kubectl describe pod
+    const BASE_URL = __ENV.DATAGOVUK_URL || 'https://www.staging.data.gov.uk';
+    const API_URL = __ENV.CKAN_URL || 'https://ckan.eks.staging.govuk.digital';
     const SEARCH_QUERY = __ENV.SEARCH_QUERY || 'climate';
     const API_QUERY = __ENV.API_QUERY || 'climate';
     const API_ROWS = parseInt(__ENV.API_ROWS) || 5;
 
-    // Thresholds can be overridden via environment variables
+    // Load test stage configuration
+    const VUS = parseInt(__ENV.VUS) || 100;
+    const WARMUP_DURATION = __ENV.WARMUP_DURATION || '5m';
+    const RAMP_DURATION = __ENV.RAMP_DURATION || '10m';
+    const SOAK_DURATION = __ENV.SOAK_DURATION || '15m';
+
+    // Response time thresholds
     const HOMEPAGE_THRESHOLD = parseInt(__ENV.HOMEPAGE_THRESHOLD_MS) || 2000;
     const SEARCH_THRESHOLD = parseInt(__ENV.SEARCH_THRESHOLD_MS) || 2000;
     const DATASET_THRESHOLD = parseInt(__ENV.DATASET_THRESHOLD_MS) || 2000;
@@ -68,9 +72,10 @@ data:
 
     export const options = {
       stages: [
-        {{- range .Values.stages }}
-        { duration: '{{ .duration }}', target: {{ .target }} },
-        {{- end }}
+        { duration: WARMUP_DURATION, target: 1 },
+        { duration: RAMP_DURATION,   target: VUS },
+        { duration: SOAK_DURATION,   target: VUS },
+        { duration: WARMUP_DURATION, target: 0 },
       ],
       thresholds: {
         'http_req_duration{type:homepage}': [`p(95)<${HOMEPAGE_THRESHOLD}`],
