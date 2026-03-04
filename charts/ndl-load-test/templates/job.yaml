@@ -44,10 +44,29 @@ spec:
             - experimental-prometheus-rw
             {{- end }}
           env:
-            - name: TARGET_URL
-              value: {{ .Values.targetUrl | quote }}
+            # Base URLs — can be patched via kubectl for ad hoc testing on different environments
+            - name: BASE_URL
+              value: {{ .Values.baseUrl | quote }}
             - name: API_URL
               value: {{ .Values.apiUrl | quote }}
+            # Search and API query parameters — customizable for different test scenarios
+            - name: SEARCH_QUERY
+              value: {{ .Values.searchQuery | quote }}
+            - name: API_QUERY
+              value: {{ .Values.apiQuery | quote }}
+            - name: API_ROWS
+              value: {{ .Values.apiRows | quote }}
+            # Response time thresholds (milliseconds) — can be overridden via kubectl patch
+            - name: HOMEPAGE_THRESHOLD_MS
+              value: {{ .Values.thresholds.homePageThresholdMs | quote }}
+            - name: SEARCH_THRESHOLD_MS
+              value: {{ .Values.thresholds.searchThresholdMs | quote }}
+            - name: DATASET_THRESHOLD_MS
+              value: {{ .Values.thresholds.datasetThresholdMs | quote }}
+            - name: API_THRESHOLD_MS
+              value: {{ .Values.thresholds.apiThresholdMs | quote }}
+            - name: ERROR_RATE_THRESHOLD
+              value: {{ .Values.thresholds.errorRateThreshold | quote }}
             {{- if .Values.prometheus.remoteWriteUrl }}
             - name: K6_PROMETHEUS_RW_SERVER_URL
               value: {{ .Values.prometheus.remoteWriteUrl | quote }}

@@ -18,13 +18,20 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: datagovuk
-  # Ignore spec.suspend so ArgoCD does not reset the job back to suspended
-  # while the test is running (selfHeal would otherwise overwrite the patch)
+  # Ignore fields that are manually patched for ad hoc testing
+  # ArgoCD won't auto-correct these even with selfHeal: true
   ignoreDifferences:
     - group: batch
       kind: Job
       jsonPointers:
-        - /spec/suspend
+        - /spec/suspend                                              # Allow manual unsuspend
+        - /spec/template/spec/containers/0/env                      # Allow env var patches
+    - group: v1
+      kind: ConfigMap
+      name: ndl-load-test-script
+      jsonPointers:
+        - /data/config.json                                          # Allow config patches
+        - /data/script.js                                            # Allow script patches
   syncPolicy:
     automated:
       prune: true

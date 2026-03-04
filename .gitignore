@@ -20,3 +20,9 @@ charts/*.tgz
 .idea/
 *.swp
 *.swo
+
+# Internal documentation — Claude/development notes (never push)
+LOAD-TEST.md
+MEMORY.md
+*-MEMORY.md
+*.claude.md

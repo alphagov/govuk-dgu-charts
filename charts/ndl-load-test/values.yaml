@@ -1,9 +1,15 @@
 # Target URL for load testing — staging only, never point this at production
-targetUrl: "https://www.staging.data.gov.uk"
+baseUrl: "https://www.staging.data.gov.uk"
+targetUrl: "https://www.staging.data.gov.uk"  # Deprecated — use baseUrl
 
 # CKAN API URL — tested separately as the 4th key page
 # Defaults to the staging CKAN EKS ingress
 apiUrl: "https://ckan.eks.staging.govuk.digital"
+
+# Search and API query strings — customizable for different page tests
+searchQuery: "climate"
+apiQuery: "climate"
+apiRows: 5
 
 # k6 container image
 image: grafana/k6:0.55.0
@@ -21,12 +27,14 @@ stages:
   - duration: "5m"
     target: 0     # ramp down — graceful end
 
-# Pass/fail thresholds for the test
+# Pass/fail thresholds for the test (in milliseconds)
+# These get passed to k6 as environment variables
 thresholds:
-  # 95% of requests must complete within 2 seconds
-  http_req_duration_p95: 2000
-  # Less than 1% of requests should fail
-  http_req_failed_rate: 0.01
+  homePageThresholdMs: 2000   # Homepage p(95) < 2s
+  searchThresholdMs: 2000     # Search p(95) < 2s
+  datasetThresholdMs: 2000    # Dataset p(95) < 2s
+  apiThresholdMs: 3000        # API p(95) < 3s
+  errorRateThreshold: 0.01    # Error rate < 1%
 
 # Prometheus remote write — push k6 metrics to existing GOV.UK Prometheus
 # Set remoteWriteUrl to enable live Grafana visibility during the test
