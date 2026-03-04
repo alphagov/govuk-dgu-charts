@@ -19,15 +19,15 @@ spec:
     - host: find.{{ $environmentPath }}.govuk.digital
       http:
         paths:
-        # {{- range $path := .directoryPaths }}
-        #   - path: {{ $path }}
-        #     pathType: Prefix
-        #     backend:
-        #       service:
-        #         name: {{ $.Release.Name }}-find
-        #         port:
-        #           number: 3000
-        # {{- end }}
+        {{- range $path := .directoryPaths }}
+          - path: {{ $path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Release.Name }}-find
+                port:
+                  number: 3000
+        {{- end }}
           # - path: /collections
           #   pathType: Prefix
           #   backend:
