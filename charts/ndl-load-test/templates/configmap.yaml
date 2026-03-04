@@ -110,7 +110,7 @@ data:
       });
       errorRate.add(res.status !== 200);
       if (res.status !== 200) {
-        console.log(`[search FAIL] status=${res.status} body=${res.body.substring(0, 200)}`);
+        console.log(`[search FAIL] status=${res.status} body=${(res.body || '').substring(0, 200)}`);
       }
       sleep(1);
 
