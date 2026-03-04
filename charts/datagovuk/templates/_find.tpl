@@ -27,6 +27,8 @@
   value: {{ .Values.find.ingress.host }}
 - name: RAILS_SERVE_STATIC_FILES
   value: "1"
+- name: RAILS_MAX_THREADS
+  value: "{{ .Values.find.config.railsMaxThreads | default "5" }}"
 - name: RATE_LIMIT_COUNT
   value: "{{ .Values.find.config.rateLimitCount }}"
 - name: RATE_LIMIT_PERIOD
