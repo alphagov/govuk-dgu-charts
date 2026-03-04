@@ -28,7 +28,7 @@ spec:
                 port:
                   number: 3000
         {{- end }}
-          - path: /collections
+          - path: /collections/business-and-economy
             pathType: Prefix
             backend:
               service:
