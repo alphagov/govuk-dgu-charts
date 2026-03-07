@@ -1,5 +1,5 @@
 {{- if .Values.appEnabled }}
-{{- $fullName := print .Release.Name "-find" -}}
+{{- $fullName := print .Release.Name "-frontend-find" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,7 +24,7 @@ spec:
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       containers:
-        - name: find
+        - name: frontend-find
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "find" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
