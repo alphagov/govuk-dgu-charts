@@ -1,32 +1,32 @@
 # Target URL for load testing — staging only, never point this at production
-baseUrl: "https://www.staging.data.gov.uk"
+base_url: "https://www.staging.data.gov.uk"
 # CKAN API URL — tested separately as the 4th key page
 # Defaults to the staging CKAN EKS ingress
-apiUrl: "https://ckan.eks.staging.govuk.digital"
+api_url: "https://ckan.eks.staging.govuk.digital"
 
 # Search and API query strings — customizable for different page tests
-searchQuery: "climate"
-apiQuery: "climate"
-apiRows: 5
+search_query: "climate"
+api_query: "climate"
+api_rows: 5
 
 # k6 container image
 image: grafana/k6:0.55.0
 
 # Test stage configuration — exposed as env vars in the pod manifest
-# Total duration: warmupDuration + rampDuration + soakDuration + warmupDuration
+# Total duration: warmup_duration + ramp_duration + soak_duration + warmup_duration
 vus: 100             # Peak virtual users
-warmupDuration: "5m" # Warm-up (1 VU) and ramp-down (0 VU) bookends
-rampDuration: "10m"  # Time to ramp from 1 up to peak VUs
-soakDuration: "15m"  # Hold at peak VUs for this duration
+warmup_duration: "5m"  # Warm-up (1 VU) and ramp-down (0 VU) bookends
+ramp_duration: "10m"   # Time to ramp from 1 up to peak VUs
+soak_duration: "15m"   # Hold at peak VUs for this duration
 
 # Pass/fail thresholds for the test (in milliseconds)
 # These get passed to k6 as environment variables
 thresholds:
-  homePageThresholdMs: 2000   # Homepage p(95) < 2s
-  searchThresholdMs: 2000     # Search p(95) < 2s
-  datasetThresholdMs: 2000    # Dataset p(95) < 2s
-  apiThresholdMs: 3000        # API p(95) < 3s
-  errorRateThreshold: 0.01    # Error rate < 1%
+  home_page_threshold_ms: 2000   # Homepage p(95) < 2s
+  search_threshold_ms: 2000     # Search p(95) < 2s
+  dataset_threshold_ms: 2000    # Dataset p(95) < 2s
+  api_threshold_ms: 3000        # API p(95) < 3s
+  error_rate_threshold: 0.01    # Error rate < 1%
 
 # Prometheus remote write — push k6 metrics to existing GOV.UK Prometheus
 # Set remoteWriteUrl to enable live Grafana visibility during the test

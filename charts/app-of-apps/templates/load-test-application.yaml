@@ -18,20 +18,18 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: datagovuk
-  # Ignore fields that are manually patched for ad hoc testing
-  # ArgoCD won't auto-correct these even with selfHeal: true
   ignoreDifferences:
     - group: batch
       kind: Job
       jsonPointers:
-        - /spec/suspend                                              # Allow manual unsuspend
-        - /spec/template/spec/containers/0/env                      # Allow env var patches
+        - /spec/suspend                                              
+        - /spec/template/spec/containers/0/env                      
     - group: v1
       kind: ConfigMap
       name: ndl-load-test-script
       jsonPointers:
-        - /data/config.json                                          # Allow config patches
-        - /data/script.js                                            # Allow script patches
+        - /data/config.json                                          
+        - /data/script.js                                            
   syncPolicy:
     automated:
       prune: true

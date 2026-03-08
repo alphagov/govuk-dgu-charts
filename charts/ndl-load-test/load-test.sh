@@ -1,10 +1,9 @@
 #!/bin/bash
 # Ad hoc load test runner — deletes old Job and triggers new one with custom config
 # Usage: ./load-test.sh [options]
-# Examples:
-#   ./load-test.sh --vus 25 --soak 10              # 25 VUs, 10 min soak
-#   ./load-test.sh --vus 50 --query "housing"      # 50 VUs, search "housing"
-#   ./load-test.sh --url "https://example.com"     # Test custom URL
+#   ./load-test.sh --vus 25 --soak 10                          # 25 VUs, 10 min soak
+#   ./load-test.sh --vus 50 --query "housing"                  # 50 VUs, search "housing"
+#   ./load-test.sh --url "https://www.staging.data.gov.uk"     # Test custom URL
 
 set -euo pipefail
 
@@ -169,18 +168,18 @@ helm template ndl-load-test /Users/PuttanaA/Documents/AMAR-DSIT-NDL-WS/govuk-dgu
   --namespace "${NAMESPACE}" \
   --set "suspended=false" \
   --set "vus=${VUS}" \
-  --set "rampDuration=${RAMP_DURATION}m" \
-  --set "soakDuration=${SOAK_DURATION}m" \
-  --set "baseUrl=${BASE_URL}" \
-  --set "apiUrl=${API_URL}" \
-  --set "searchQuery=${SEARCH_QUERY}" \
-  --set "apiQuery=${API_QUERY}" \
-  --set "apiRows=${API_ROWS}" \
-  --set "thresholds.homePageThresholdMs=${HOMEPAGE_THRESHOLD}" \
-  --set "thresholds.searchThresholdMs=${SEARCH_THRESHOLD}" \
-  --set "thresholds.datasetThresholdMs=${DATASET_THRESHOLD}" \
-  --set "thresholds.apiThresholdMs=${API_THRESHOLD}" \
-  --set "thresholds.errorRateThreshold=${ERROR_RATE_THRESHOLD}" | \
+  --set "ramp_duration=${RAMP_DURATION}m" \
+  --set "soak_duration=${SOAK_DURATION}m" \
+  --set "base_url=${BASE_URL}" \
+  --set "api_url=${API_URL}" \
+  --set "search_query=${SEARCH_QUERY}" \
+  --set "api_query=${API_QUERY}" \
+  --set "api_rows=${API_ROWS}" \
+  --set "thresholds.home_page_threshold_ms=${HOMEPAGE_THRESHOLD}" \
+  --set "thresholds.search_threshold_ms=${SEARCH_THRESHOLD}" \
+  --set "thresholds.dataset_threshold_ms=${DATASET_THRESHOLD}" \
+  --set "thresholds.api_threshold_ms=${API_THRESHOLD}" \
+  --set "thresholds.error_rate_threshold=${ERROR_RATE_THRESHOLD}" | \
 gds aws govuk-staging-dguengineer -- kubectl apply \
   --server-side \
   --force-conflicts \

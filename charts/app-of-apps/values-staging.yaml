@@ -142,20 +142,15 @@ dguSharedHelmValues:
 # Load test chart — staging only, intentionally absent from values-production.yaml
 loadTestTargetRevision: "feature/FP-231-load-testing-staging-charts"
 loadTestHelmValues:
-  targetUrl: "https://www.staging.data.gov.uk"
-  apiUrl: "https://ckan.eks.staging.govuk.digital"
+  base_url: "https://www.staging.data.gov.uk"
+  api_url: "https://ckan.eks.staging.govuk.digital"
   image: grafana/k6:0.55.0
   # Full soak test — 5m/10m/15m/5m = 35 minutes total
   # Warm up → ramp up → soak at peak → ramp down
-  stages:
-    - duration: "5m"
-      target: 10
-    - duration: "10m"
-      target: 50
-    - duration: "15m"
-      target: 100
-    - duration: "5m"
-      target: 0
+  vus: 100
+  warmup_duration: "5m"
+  ramp_duration: "10m"
+  soak_duration: "15m"
   prometheus:
     # GOV.UK Prometheus Operator remote write endpoint (staging cluster)
     # Enables live k6 metrics in Grafana during the test

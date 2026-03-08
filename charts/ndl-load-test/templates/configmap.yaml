@@ -4,46 +4,10 @@ metadata:
   name: {{ .Release.Name }}-script
   namespace: {{ .Release.Namespace }}
 data:
-  # Load test configuration — dynamically editable via kubectl patch
-  config.json: |
-    {
-      "vus": {{ .Values.vus }},
-      "warmupDuration": "{{ .Values.warmupDuration }}",
-      "rampDuration": "{{ .Values.rampDuration }}",
-      "soakDuration": "{{ .Values.soakDuration }}",
-      "datagovukUrl": "{{ .Values.baseUrl | default "https://www.staging.data.gov.uk" }}",
-      "ckanUrl": "{{ .Values.apiUrl | default "https://ckan.eks.staging.govuk.digital" }}",
-      "thresholds": {
-        "http_req_duration{type:homepage}": "p(95)<2000",
-        "http_req_duration{type:search}": "p(95)<2000",
-        "http_req_duration{type:dataset}": "p(95)<2000",
-        "http_req_duration{type:api}": "p(95)<3000",
-        "errors": "rate<0.01"
-      },
-      "searchQuery": "{{ .Values.searchQuery | default "climate" }}",
-      "apiQuery": "{{ .Values.apiQuery | default "climate" }}",
-      "apiRows": {{ .Values.apiRows | default 5 }},
-      "endpoints": [
-        {
-          "name": "homepage",
-          "path": "/",
-          "thresholdMs": 2000
-        },
-        {
-          "name": "search",
-          "path": "/search?q={{ .Values.searchQuery | default "climate" }}",
-          "thresholdMs": 2000
-        },
-        {
-          "name": "dataset",
-          "path": "/dataset",
-          "thresholdMs": 2000
-        }
-      ]
-    }
-
   script.js: |
     // chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    // Configuration flow: values.yaml (snake_case) → job.yaml (converts to ENV vars with _MS suffix) → script.js
+    // Naming: job.yaml sets DATAGOVUK_URL, CKAN_URL, HOMEPAGE_THRESHOLD_MS, SEARCH_THRESHOLD_MS, etc.
     import http from 'k6/http';
     import { check, sleep } from 'k6';
     import { Rate } from 'k6/metrics';
