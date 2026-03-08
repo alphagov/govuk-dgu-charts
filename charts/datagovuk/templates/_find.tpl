@@ -27,11 +27,23 @@
   value: {{ .Values.find.ingress.host }}
 - name: RAILS_SERVE_STATIC_FILES
   value: "1"
-- name: RATE_LIMIT_COUNT
-  value: "{{ .Values.find.config.rateLimitCount }}"
-- name: RATE_LIMIT_PERIOD
-  value: "{{ .Values.find.config.rateLimitPeriod }}"
 {{- with .Values.find.config }}
+{{ if and (ne $environment "development") (ne $environment "production") }}
+- name: BASIC_AUTH_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ .basicAuthNameSecretKeyRef.name }}
+      key: {{ .basicAuthNameSecretKeyRef.key }}
+- name: BASIC_AUTH_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .basicAuthPasswordSecretKeyRef.name }}
+      key: {{ .basicAuthPasswordSecretKeyRef.key }}
+{{- end }}
+- name: RATE_LIMIT_COUNT
+  value: "{{ .rateLimitCount }}"
+- name: RATE_LIMIT_PERIOD
+  value: "{{ .rateLimitPeriod }}"
 {{- with .gaTrackingId }}
 - name: GA_TRACKING_ID
   value: {{ . }}

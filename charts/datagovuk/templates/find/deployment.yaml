@@ -51,14 +51,14 @@ spec:
             timeoutSeconds: 60
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
             periodSeconds: 5
             successThreshold: 3
             timeoutSeconds: 30
           startupProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
             initialDelaySeconds: 60
             failureThreshold: 60
