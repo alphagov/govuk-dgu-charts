@@ -6,8 +6,8 @@ metadata:
 data:
   script.js: |
     // chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    // Configuration flow: values.yaml (snake_case) → job.yaml (converts to ENV vars with _MS suffix) → script.js
-    // Naming: job.yaml sets DATAGOVUK_URL, CKAN_URL, HOMEPAGE_THRESHOLD_MS, SEARCH_THRESHOLD_MS, etc.
+    // Configuration flow: values.yaml (snake_case) → job.yaml (converts to ENV vars) → script.js
+    // Naming: job.yaml sets DATAGOVUK_URL, CKAN_URL, HOMEPAGE_THRESHOLD_MS, etc.
     import http from 'k6/http';
     import { check, sleep } from 'k6';
     import { Rate } from 'k6/metrics';
@@ -15,23 +15,24 @@ data:
     const errorRate = new Rate('errors');
 
     // All configuration from pod environment variables — visible via kubectl describe pod
-    const BASE_URL = __ENV.DATAGOVUK_URL || 'https://www.staging.data.gov.uk';
-    const API_URL = __ENV.CKAN_URL || 'https://ckan.eks.staging.govuk.digital';
+    // URLs are explicit and transparent for full control
+    const DATAGOVUK_URL = __ENV.DATAGOVUK_URL;
+    const CKAN_URL = __ENV.CKAN_URL;
     const SEARCH_QUERY = __ENV.SEARCH_QUERY || 'climate';
-    const API_QUERY = __ENV.API_QUERY || 'climate';
-    const API_ROWS = parseInt(__ENV.API_ROWS) || 5;
+    const CKAN_QUERY = __ENV.CKAN_QUERY || 'climate';
+    const CKAN_ROWS = parseInt(__ENV.CKAN_ROWS) || 5;
 
-    // Load test stage configuration
+    // Load test stage configuration — all configurable at runtime
     const VUS = parseInt(__ENV.VUS) || 100;
     const WARMUP_DURATION = __ENV.WARMUP_DURATION || '5m';
     const RAMP_DURATION = __ENV.RAMP_DURATION || '10m';
     const SOAK_DURATION = __ENV.SOAK_DURATION || '15m';
 
-    // Response time thresholds
+    // Response time thresholds (milliseconds) — configurable at runtime
     const HOMEPAGE_THRESHOLD = parseInt(__ENV.HOMEPAGE_THRESHOLD_MS) || 2000;
     const SEARCH_THRESHOLD = parseInt(__ENV.SEARCH_THRESHOLD_MS) || 2000;
     const DATASET_THRESHOLD = parseInt(__ENV.DATASET_THRESHOLD_MS) || 2000;
-    const API_THRESHOLD = parseInt(__ENV.API_THRESHOLD_MS) || 3000;
+    const CKAN_API_THRESHOLD = parseInt(__ENV.CKAN_API_THRESHOLD_MS) || 3000;
     const ERROR_RATE_THRESHOLD = parseFloat(__ENV.ERROR_RATE_THRESHOLD) || 0.01;
 
     export const options = {
@@ -45,7 +46,7 @@ data:
         'http_req_duration{type:homepage}': [`p(95)<${HOMEPAGE_THRESHOLD}`],
         'http_req_duration{type:search}':   [`p(95)<${SEARCH_THRESHOLD}`],
         'http_req_duration{type:dataset}':  [`p(95)<${DATASET_THRESHOLD}`],
-        'http_req_duration{type:api}':      [`p(95)<${API_THRESHOLD}`],
+        'http_req_duration{type:ckan_api}': [`p(95)<${CKAN_API_THRESHOLD}`],
         'errors': [`rate<${ERROR_RATE_THRESHOLD}`],
       },
     };
@@ -53,8 +54,8 @@ data:
     export default function () {
       let res;
 
-      // --- Test 1: Homepage ---
-      res = http.get(`${BASE_URL}/`, {
+      // --- Test 1: Data.gov.uk Homepage ---
+      res = http.get(`${DATAGOVUK_URL}/`, {
         tags: { type: 'homepage' },
       });
       check(res, {
@@ -64,8 +65,8 @@ data:
       errorRate.add(res.status !== 200);
       sleep(1);
 
-      // --- Test 2: Search ---
-      res = http.get(`${BASE_URL}/search?q=${SEARCH_QUERY}`, {
+      // --- Test 2: Data.gov.uk Search ---
+      res = http.get(`${DATAGOVUK_URL}/search?q=${SEARCH_QUERY}`, {
         tags: { type: 'search' },
       });
       check(res, {
@@ -78,9 +79,9 @@ data:
       }
       sleep(1);
 
-      // --- Test 3: Dataset listing ---
-      // Note: www.staging.data.gov.uk/dataset redirects to CKAN, so test CKAN directly.
-      res = http.get(`${API_URL}/dataset`, {
+      // --- Test 3: Data.gov.uk Dataset listing ---
+      // Note: Data.gov.uk dataset pages depend on CKAN API calls
+      res = http.get(`${CKAN_URL}/dataset`, {
         tags: { type: 'dataset' },
       });
       check(res, {
@@ -90,13 +91,13 @@ data:
       errorRate.add(res.status !== 200);
       sleep(1);
 
-      // --- Test 4: CKAN API ---
-      res = http.get(`${API_URL}/api/3/action/package_search?q=${API_QUERY}&rows=${API_ROWS}`, {
-        tags: { type: 'api' },
+      // --- Test 4: CKAN API direct call ---
+      res = http.get(`${CKAN_URL}/api/3/action/package_search?q=${CKAN_QUERY}&rows=${CKAN_ROWS}`, {
+        tags: { type: 'ckan_api' },
       });
       check(res, {
-        'api: status is 200':    (r) => r.status === 200,
-        'api: loads in <3s':     (r) => r.timings.duration < API_THRESHOLD,
+        'ckan_api: status is 200': (r) => r.status === 200,
+        'ckan_api: loads in <3s':  (r) => r.timings.duration < CKAN_API_THRESHOLD,
         'api: returns results':  (r) => {
           try {
             return JSON.parse(r.body).result.count > 0;

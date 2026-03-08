@@ -12,14 +12,14 @@ VUS=10
 RAMP_DURATION=10
 SOAK_DURATION=10
 SEARCH_QUERY="climate"
-API_QUERY="climate"
-API_ROWS=5
-BASE_URL="https://www.staging.data.gov.uk"
-API_URL="https://ckan.eks.staging.govuk.digital"
+CKAN_QUERY="climate"
+CKAN_ROWS=5
+DATAGOVUK_URL="https://www.staging.data.gov.uk"
+CKAN_URL="https://ckan.eks.staging.govuk.digital"
 HOMEPAGE_THRESHOLD=2000
 SEARCH_THRESHOLD=2000
 DATASET_THRESHOLD=2000
-API_THRESHOLD=3000
+CKAN_API_THRESHOLD=3000
 ERROR_RATE_THRESHOLD="0.01"
 NAMESPACE="datagovuk"
 JOB_NAME="ndl-load-test-k6"
@@ -42,31 +42,27 @@ while [[ $# -gt 0 ]]; do
       ;;
     --query)
       SEARCH_QUERY="$2"
-      API_QUERY="$2"
+      CKAN_QUERY="$2"
       shift 2
       ;;
     --search-query)
       SEARCH_QUERY="$2"
       shift 2
       ;;
-    --api-query)
-      API_QUERY="$2"
+    --ckan-query)
+      CKAN_QUERY="$2"
       shift 2
       ;;
-    --api-rows)
-      API_ROWS="$2"
+    --ckan-rows)
+      CKAN_ROWS="$2"
       shift 2
       ;;
-    --url)
-      BASE_URL="$2"
+    --datagovuk-url)
+      DATAGOVUK_URL="$2"
       shift 2
       ;;
-    --base-url)
-      BASE_URL="$2"
-      shift 2
-      ;;
-    --api-url)
-      API_URL="$2"
+    --ckan-url)
+      CKAN_URL="$2"
       shift 2
       ;;
     --search-threshold)
@@ -77,8 +73,8 @@ while [[ $# -gt 0 ]]; do
       DATASET_THRESHOLD="$2"
       shift 2
       ;;
-    --api-threshold)
-      API_THRESHOLD="$2"
+    --ckan-api-threshold)
+      CKAN_API_THRESHOLD="$2"
       shift 2
       ;;
     --error-threshold)
@@ -93,15 +89,15 @@ Options:
   --vus NUM                 Virtual users (default: 10)
   --ramp MINUTES            Ramp-up duration (default: 10)
   --soak MINUTES            Soak duration (default: 10)
-  --query STRING            Search and API query (default: climate)
+  --query STRING            Search and CKAN query (default: climate)
   --search-query STRING     Custom search query only
-  --api-query STRING        Custom API query only
-  --api-rows NUM            API result rows (default: 5)
-  --url URL                 Base URL to test (default: staging)
-  --api-url URL             API URL (default: staging CKAN)
+  --ckan-query STRING       Custom CKAN query only
+  --ckan-rows NUM           CKAN result rows (default: 5)
+  --datagovuk-url URL       Data.gov.uk URL to test (default: staging)
+  --ckan-url URL            CKAN URL to test (default: staging CKAN)
   --search-threshold MS     Search p(95) threshold in ms (default: 2000)
   --dataset-threshold MS    Dataset p(95) threshold in ms (default: 2000)
-  --api-threshold MS        API p(95) threshold in ms (default: 3000)
+  --ckan-api-threshold MS   CKAN API p(95) threshold in ms (default: 3000)
   --error-threshold RATE    Error rate threshold (default: 0.01)
   --help                    Show this help message
 
@@ -110,13 +106,16 @@ Examples:
   ./load-test.sh --vus 25 --soak 10
 
   # Test different domain, relax thresholds
-  ./load-test.sh --url "https://example.com" --search-threshold 3000
+  ./load-test.sh --datagovuk-url "https://example.com" --search-threshold 3000
 
   # Test different search query
   ./load-test.sh --query "housing" --vus 50
 
   # Stress test: 5s thresholds, high error tolerance
   ./load-test.sh --vus 100 --search-threshold 5000 --error-threshold 0.05
+
+  # Test internal services
+  ./load-test.sh --datagovuk-url "http://datagovuk-find.datagovuk.svc.cluster.local:3000" --ckan-url "http://ckan-ckan.datagovuk.svc.cluster.local"
 
 EOF
       exit 0
@@ -137,18 +136,18 @@ echo "Soak:             ${SOAK_DURATION} min"
 echo "Total duration:   ~$((5 + RAMP_DURATION + SOAK_DURATION + 5)) min"
 echo ""
 echo "URLs:"
-echo "  Data.gov.uk:    ${BASE_URL}"
-echo "  CKAN API:       ${API_URL}"
+echo "  Data.gov.uk:    ${DATAGOVUK_URL}"
+echo "  CKAN:           ${CKAN_URL}"
 echo ""
 echo "Queries:"
 echo "  Search:         ${SEARCH_QUERY}"
-echo "  API:            ${API_QUERY} (${API_ROWS} rows)"
+echo "  CKAN:           ${CKAN_QUERY} (${CKAN_ROWS} rows)"
 echo ""
 echo "Thresholds:"
 echo "  Homepage:       p(95) < ${HOMEPAGE_THRESHOLD}ms"
 echo "  Search:         p(95) < ${SEARCH_THRESHOLD}ms"
 echo "  Dataset:        p(95) < ${DATASET_THRESHOLD}ms"
-echo "  API:            p(95) < ${API_THRESHOLD}ms"
+echo "  CKAN API:       p(95) < ${CKAN_API_THRESHOLD}ms"
 echo "  Error rate:     < ${ERROR_RATE_THRESHOLD}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
@@ -170,15 +169,15 @@ helm template ndl-load-test /Users/PuttanaA/Documents/AMAR-DSIT-NDL-WS/govuk-dgu
   --set "vus=${VUS}" \
   --set "ramp_duration=${RAMP_DURATION}m" \
   --set "soak_duration=${SOAK_DURATION}m" \
-  --set "base_url=${BASE_URL}" \
-  --set "api_url=${API_URL}" \
+  --set "datagovuk_url=${DATAGOVUK_URL}" \
+  --set "ckan_url=${CKAN_URL}" \
   --set "search_query=${SEARCH_QUERY}" \
-  --set "api_query=${API_QUERY}" \
-  --set "api_rows=${API_ROWS}" \
+  --set "ckan_query=${CKAN_QUERY}" \
+  --set "ckan_rows=${CKAN_ROWS}" \
   --set "thresholds.home_page_threshold_ms=${HOMEPAGE_THRESHOLD}" \
   --set "thresholds.search_threshold_ms=${SEARCH_THRESHOLD}" \
   --set "thresholds.dataset_threshold_ms=${DATASET_THRESHOLD}" \
-  --set "thresholds.api_threshold_ms=${API_THRESHOLD}" \
+  --set "thresholds.ckan_api_threshold_ms=${CKAN_API_THRESHOLD}" \
   --set "thresholds.error_rate_threshold=${ERROR_RATE_THRESHOLD}" | \
 gds aws govuk-staging-dguengineer -- kubectl apply \
   --server-side \

@@ -1,31 +1,28 @@
-# Target URL for load testing — staging only, never point this at production
-base_url: "https://www.staging.data.gov.uk"
-# CKAN API URL — tested separately as the 4th key page
-# Defaults to the staging CKAN EKS ingress
-api_url: "https://ckan.eks.staging.govuk.digital"
+# Target URLs for load testing — staging only, never point this at production
+# These are set as environment variables in the pod manifest for runtime tweaking
+datagovuk_url: "https://www.staging.data.gov.uk"
+ckan_url: "https://ckan.eks.staging.govuk.digital"
 
-# Search and API query strings — customizable for different page tests
+# Search and API query strings — set as environment variables for runtime tweaking
 search_query: "climate"
-api_query: "climate"
-api_rows: 5
+ckan_query: "climate"
+ckan_rows: 5
 
 # k6 container image
 image: grafana/k6:0.55.0
 
-# Test stage configuration — exposed as env vars in the pod manifest
-# Total duration: warmup_duration + ramp_duration + soak_duration + warmup_duration
+# Test stage configuration — set as environment variables for runtime tweaking
 vus: 100             # Peak virtual users
 warmup_duration: "5m"  # Warm-up (1 VU) and ramp-down (0 VU) bookends
 ramp_duration: "10m"   # Time to ramp from 1 up to peak VUs
 soak_duration: "15m"   # Hold at peak VUs for this duration
 
-# Pass/fail thresholds for the test (in milliseconds)
-# These get passed to k6 as environment variables
+# Pass/fail thresholds for the test (milliseconds) — set as environment variables for runtime tweaking
 thresholds:
   home_page_threshold_ms: 2000   # Homepage p(95) < 2s
   search_threshold_ms: 2000     # Search p(95) < 2s
   dataset_threshold_ms: 2000    # Dataset p(95) < 2s
-  api_threshold_ms: 3000        # API p(95) < 3s
+  ckan_api_threshold_ms: 3000   # CKAN API p(95) < 3s
   error_rate_threshold: 0.01    # Error rate < 1%
 
 # Prometheus remote write — push k6 metrics to existing GOV.UK Prometheus
