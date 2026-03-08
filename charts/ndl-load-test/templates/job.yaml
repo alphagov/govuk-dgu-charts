@@ -39,6 +39,10 @@ spec:
             - /scripts/script.js
             - --out
             - json=/tmp/results.json
+            {{- if .Values.storage.enabled }}
+            - --out
+            - csv=/logs/k6-results.csv
+            {{- end }}
             {{- if .Values.prometheus.remoteWriteUrl }}
             - --out
             - experimental-prometheus-rw
@@ -88,9 +92,18 @@ spec:
             - name: scripts
               mountPath: /scripts
               readOnly: true
+            {{- if .Values.storage.enabled }}
+            - name: logs
+              mountPath: /logs
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: scripts
           configMap:
             name: {{ .Release.Name }}-script
+        {{- if .Values.storage.enabled }}
+        - name: logs
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-logs
+        {{- end }}

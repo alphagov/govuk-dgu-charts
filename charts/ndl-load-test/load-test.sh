@@ -189,11 +189,22 @@ gds aws govuk-staging-dguengineer -- kubectl apply \
 echo ""
 echo "✅ Load test started!"
 echo ""
-echo "Tailing logs in 5 seconds (Ctrl+C to stop)..."
-echo "To view logs later: gds aws govuk-staging-dguengineer -- kubectl logs -n ${NAMESPACE} -l app=ndl-load-test -f"
+echo "📊 Logs are being stored in persistent volume for audit purposes."
 echo ""
-sleep 5
-
-# Tail logs
-gds aws govuk-staging-dguengineer -- kubectl logs -n "${NAMESPACE}" -l app=ndl-load-test -f --max-log-requests=5 || true
+echo "🔍 To access logs after test completion:"
+echo "   # Check job status:"
+echo "   gds aws govuk-staging-dguengineer -- kubectl get jobs -n ${NAMESPACE}"
+echo ""
+echo "   # View k6 summary logs:"
+echo "   gds aws govuk-staging-dguengineer -- kubectl logs -n ${NAMESPACE} -l app=ndl-load-test"
+echo ""
+echo "   # Access detailed CSV results (after job completes):"
+echo "   gds aws govuk-staging-dguengineer -- kubectl exec -n ${NAMESPACE} -it \$(kubectl get pods -n ${NAMESPACE} -l app=ndl-load-test -o jsonpath='{.items[0].metadata.name}') -- ls -la /logs/"
+echo "   gds aws govuk-staging-dguengineer -- kubectl cp \$(kubectl get pods -n ${NAMESPACE} -l app=ndl-load-test -o jsonpath='{.items[0].metadata.name}'):/logs/k6-results.csv ./k6-results.csv"
+echo ""
+echo "   # View PVC details:"
+echo "   gds aws govuk-staging-dguengineer -- kubectl get pvc -n ${NAMESPACE} -l app=ndl-load-test"
+echo ""
+echo "⏱️  Test will run for approximately $((5 + RAMP_DURATION + SOAK_DURATION + 5)) minutes."
+echo "   Check job status periodically with: kubectl get jobs -n ${NAMESPACE}"
 
