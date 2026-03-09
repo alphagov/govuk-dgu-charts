@@ -140,6 +140,7 @@ dguSharedHelmValues:
     replicaCount: 1
 
 # Load test chart — staging only, intentionally absent from values-production.yaml
+datagovukTargetRevision: "main-mvp"
 loadTestTargetRevision: "feature/FP-231-load-testing-staging-charts"
 loadTestHelmValues:
   base_url: "https://www.staging.data.gov.uk"
