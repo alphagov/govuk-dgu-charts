@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/datagovuk
-    targetRevision: main-mvp
+    targetRevision: {{ .Values.datagovukTargetRevision | default "main-mvp" }}
     helm:
       values: |
         argo_environment: {{ .Values.argo_environment }}
