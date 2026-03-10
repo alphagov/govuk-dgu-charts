@@ -138,3 +138,5 @@ dguSharedHelmValues:
   arch: arm64
   redis:
     replicaCount: 1
+
+datagovukTargetRevision: "main-ur"
