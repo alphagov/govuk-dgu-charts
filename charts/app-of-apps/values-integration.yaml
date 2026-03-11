@@ -139,4 +139,4 @@ dguSharedHelmValues:
   redis:
     replicaCount: 1
 
-datagovukTargetRevision: "main-ur"
+datagovukTargetRevision: "main-mvp"
