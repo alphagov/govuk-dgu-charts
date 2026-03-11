@@ -1,8 +1,8 @@
 # CT test values for ndl-load-test chart
 # Used by Chart Testing (ct) to lint and validate chart rendering
 
-base_url: "https://www.staging.data.gov.uk"
-api_url: "https://ckan.eks.staging.govuk.digital"
+datagovuk_url: "https://www.staging.data.gov.uk"
+ckan_url: "https://ckan.eks.staging.govuk.digital"
 
 search_query: "climate"
 api_query: "climate"

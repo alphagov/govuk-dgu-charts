@@ -1,4 +1,4 @@
-{{- if .Values.loadTestHelmValues }}
+{{- if .Values.loadTestConfig }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -14,7 +14,7 @@ spec:
     targetRevision: {{ .Values.loadTestTargetRevision | default "HEAD" }}
     helm:
       values: |
-        {{- toYaml .Values.loadTestHelmValues | nindent 8 }}
+        {{- toYaml .Values.loadTestConfig | nindent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: datagovuk
