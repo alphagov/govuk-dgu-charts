@@ -7,7 +7,7 @@ ckanHelmValues:
         memory: 4Gi
       requests:
         memory: 3Gi
-    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4"]
     replicaCount: 2
     ingress:
       host: ckan.eks.production.govuk.digital
@@ -107,10 +107,10 @@ datagovukHelmValues:
   find:
     appResources:
       limits:
-        memory: 2Gi
+        memory: 4Gi
       requests:
-        memory: 1Gi
-    replicaCount: 2
+        memory: 2Gi
+    replicaCount: 3
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
       gaTrackingId: UA-10855508-1
