@@ -1,0 +1,38 @@
+# CT test values for ndl-load-test chart
+# Used by Chart Testing (ct) to lint and validate chart rendering
+
+datagovuk_url: "https://www.staging.data.gov.uk"
+ckan_url: "https://ckan.eks.staging.govuk.digital"
+
+search_query: "climate"
+api_query: "climate"
+api_rows: 5
+
+image: grafana/k6:0.55.0
+
+vus: 10
+warmup_duration: "1m"
+ramp_duration: "2m"
+soak_duration: "5m"
+
+thresholds:
+  home_page_threshold_ms: 2000
+  search_threshold_ms: 2000
+  dataset_threshold_ms: 2000
+  api_threshold_ms: 3000
+  error_rate_threshold: 0.01
+
+prometheus:
+  remoteWriteUrl: ""
+  trendStats: "avg,p(95),p(99)"
+
+resources:
+  limits:
+    cpu: "1"
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+suspended: true
+ttlSecondsAfterFinished: 3600

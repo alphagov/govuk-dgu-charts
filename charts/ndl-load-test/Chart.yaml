@@ -1,0 +1,12 @@
+apiVersion: v2
+name: ndl-load-test
+description: k6 load testing chart for data.gov.uk staging
+type: application
+version: 0.1.2
+icon: https://grafana.com/img/logos/grafana.png
+home: https://github.com/alphagov/govuk-dgu-charts
+sources:
+  - https://github.com/alphagov/govuk-dgu-charts
+maintainers:
+  - name: GDS Operators
+    email: datagovuk-tech@dsit.gov.uk

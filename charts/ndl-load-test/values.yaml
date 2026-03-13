@@ -1,0 +1,57 @@
+# Target URLs for load testing — staging only, never point this at production
+# These are set as environment variables in the pod manifest for runtime tweaking
+datagovuk_url: "https://www.staging.data.gov.uk"
+ckan_url: "https://ckan.eks.staging.govuk.digital"
+
+# Search and API query strings — set as environment variables for runtime tweaking
+search_query: "climate"
+ckan_query: "climate"
+ckan_rows: 5
+
+# k6 container image
+image: grafana/k6:0.55.0
+
+# Test stage configuration — set as environment variables for runtime tweaking
+vus: 100             # Peak virtual users
+warmup_duration: "5m"  # Warm-up (1 VU) and ramp-down (0 VU) bookends
+ramp_duration: "10m"   # Time to ramp from 1 up to peak VUs
+soak_duration: "15m"   # Hold at peak VUs for this duration
+
+# Pass/fail thresholds for the test (milliseconds) — set as environment variables for runtime tweaking
+thresholds:
+  home_page_threshold_ms: 2000   # Homepage p(95) < 2s
+  search_threshold_ms: 2000     # Search p(95) < 2s
+  dataset_threshold_ms: 2000    # Dataset p(95) < 2s
+  ckan_api_threshold_ms: 3000   # CKAN API p(95) < 3s
+  error_rate_threshold: 0.01    # Error rate < 1%
+
+# Prometheus remote write — push k6 metrics to existing GOV.UK Prometheus
+# Set remoteWriteUrl to enable live Grafana visibility during the test
+# GOV.UK Prometheus Operator URL: http://prometheus-operated.monitoring:9090/api/v1/write
+prometheus:
+  remoteWriteUrl: ""
+  # Stats exported per trend metric — visible as separate series in Grafana
+  trendStats: "avg,p(95),p(99)"
+
+# Resource limits for the k6 pod in Kubernetes
+resources:
+  limits:
+    cpu: "1"
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+# Job suspension — keeps the job dormant until manually unsuspended
+# Set to false to start the test: kubectl patch job ndl-load-test-k6 -n datagovuk --type=merge -p '{"spec":{"suspend":false}}'
+suspended: true
+
+# How long to keep the completed job before automatic cleanup (seconds)
+# 3600 = 1 hour — gives team time to view logs before pod is removed
+ttlSecondsAfterFinished: 3600
+
+# Persistent volume configuration for log storage
+storage:
+  enabled: true
+  size: 1Gi
+  storageClassName: gp2  # AWS EBS storage class

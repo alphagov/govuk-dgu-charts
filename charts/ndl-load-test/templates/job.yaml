@@ -1,0 +1,113 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-k6
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  # Job starts suspended — unsuspend manually to trigger the test
+  # Avoids ArgoCD sync timeout on long-running (35 min) tests
+  suspend: {{ .Values.suspended }}
+  # Do not retry on failure — a failed run should be investigated, not retried silently
+  backoffLimit: 0
+  # Automatically clean up the job pod after this many seconds
+  # Gives the team time to view logs before the pod is removed
+  ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 12345
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: k6
+          image: {{ .Values.image }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          args:
+            - run
+            - /scripts/script.js
+            - --out
+            - json=/tmp/results.json
+            {{- if .Values.storage.enabled }}
+            - --out
+            - csv=/logs/k6-results.csv
+            {{- end }}
+            {{- if .Values.prometheus.remoteWriteUrl }}
+            - --out
+            - experimental-prometheus-rw
+            {{- end }}
+          env:
+            # Target URLs for the load test — explicit and transparent
+            - name: DATAGOVUK_URL
+              value: {{ .Values.datagovuk_url | quote }}
+            - name: CKAN_URL
+              value: {{ .Values.ckan_url | quote }}
+
+            # Load test stage configuration — all configurable at runtime
+            - name: VUS
+              value: {{ .Values.vus | quote }}
+            - name: WARMUP_DURATION
+              value: {{ .Values.warmup_duration | quote }}
+            - name: RAMP_DURATION
+              value: {{ .Values.ramp_duration | quote }}
+            - name: SOAK_DURATION
+              value: {{ .Values.soak_duration | quote }}
+
+            # Search and CKAN query parameters — configurable at runtime
+            - name: SEARCH_QUERY
+              value: {{ .Values.search_query | quote }}
+            - name: CKAN_QUERY
+              value: {{ .Values.ckan_query | quote }}
+            - name: CKAN_ROWS
+              value: {{ .Values.ckan_rows | quote }}
+
+            # Response time thresholds (milliseconds) — configurable at runtime
+            - name: HOMEPAGE_THRESHOLD_MS
+              value: {{ .Values.thresholds.home_page_threshold_ms | quote }}
+            - name: SEARCH_THRESHOLD_MS
+              value: {{ .Values.thresholds.search_threshold_ms | quote }}
+            - name: DATASET_THRESHOLD_MS
+              value: {{ .Values.thresholds.dataset_threshold_ms | quote }}
+            - name: CKAN_API_THRESHOLD_MS
+              value: {{ .Values.thresholds.ckan_api_threshold_ms | quote }}
+            - name: ERROR_RATE_THRESHOLD
+              value: {{ .Values.thresholds.error_rate_threshold | quote }}
+
+            {{- if .Values.prometheus.remoteWriteUrl }}
+            - name: K6_PROMETHEUS_RW_SERVER_URL
+              value: {{ .Values.prometheus.remoteWriteUrl | quote }}
+            - name: K6_PROMETHEUS_RW_TREND_STATS
+              value: {{ .Values.prometheus.trendStats | quote }}
+            - name: K6_PROMETHEUS_RW_STALE_MARKERS_ENABLED
+              value: "true"
+            {{- end }}
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+            {{- if .Values.storage.enabled }}
+            - name: logs
+              mountPath: /logs
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: scripts
+          configMap:
+            name: {{ .Release.Name }}-script
+        {{- if .Values.storage.enabled }}
+        - name: logs
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-logs
+        {{- end }}
