@@ -16,9 +16,24 @@ find:
   args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
   ingress:
     enabled: true
-    host: find.data.gov.uk
+    host: find.eks.test.govuk.digital
     ingressClassName: ""
     annotations:
+    directoryPaths:
+      - /search
+      - /dataset
+      - /data/search
+      - /about
+      - /accessibility
+      - /cookies
+      - /privacy
+      - /terms
+      - /contact
+      - /site-changes
+      - /publishers
+      - /support
+      - /support/new
+      - /ckan_maintenance
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
     solrUrl: "http://ckan-dev-solr/solr/ckan"
