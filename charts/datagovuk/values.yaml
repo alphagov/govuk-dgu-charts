@@ -38,6 +38,12 @@ find:
     findSentryDsnSecretKeyRef:
       name: datagovuk
       key: find_sentry_dsn
+    basicAuthNameSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_name
+    basicAuthPasswordSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_password
     rateLimitCount: "100"
     rateLimitPeriod: "60"
 
