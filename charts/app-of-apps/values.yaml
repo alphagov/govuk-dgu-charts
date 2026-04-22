@@ -6,6 +6,7 @@ ckanHelmValues:
     enabled: true
 
 datagovukHelmValues:
+  frontendApp: find
   find:
     replicaCount: 1
 

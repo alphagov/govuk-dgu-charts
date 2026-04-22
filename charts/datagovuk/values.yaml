@@ -11,6 +11,29 @@ dev:
 # running mixed-arch clusters.
 arch: amd64
 
+frontendApp: datagovuk
+
+datagovuk:
+  replicaCount: 1
+  command: ["/bin/sh", "-c", "/start"]
+  ingress:
+    enabled: true
+    host: find.eks.test.govuk.digital
+    ingressClassName: ""
+    annotations:
+  config:
+    basicAuthNameSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_name
+    basicAuthPasswordSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_password
+    basicAuthBypassSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_bypass
+    rateLimitCount: "100"
+    rateLimitPeriod: "60"
+
 find:
   replicaCount: 1
   args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
