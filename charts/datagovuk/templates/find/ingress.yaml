@@ -2,6 +2,7 @@
 {{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
 {{- $stablePath := print "eks." $.Values.environment -}}
 {{- $environmentPath := eq "ephemeral" $.Values.environment | ternary $ephemeralPath $stablePath -}}
+{{- $frontendApp := default "find" .Values.frontendApp -}}
 {{- with .Values.find.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -32,8 +33,14 @@ spec:
             pathType: Prefix
             backend:
               service:
+              {{- if eq "find" $frontendApp }}
                 name: {{ $.Release.Name }}-frontend-find
                 port:
                   number: 3000
+              {{- else }}
+                name: {{ $.Release.Name }}-datagovuk
+                port:
+                  number: 8000
+              {{- end }}
 {{- end }}
 {{- end }}
