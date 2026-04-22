@@ -1,0 +1,93 @@
+{{- if eq "test" .Values.environment }}
+{{- $fullName := print .Release.Name "-datagovuk" -}}
+{{- $environment := eq "production" $.Values.environment | ternary "" (print "." $.Values.environment) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: {{ .Values.find.replicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ $fullName }}
+  template:
+    metadata:
+      labels:
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      containers:
+        - name: datagovuk
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "datagovuk" "files" $.Files) }}'
+          command: {{ .Values.datagovuk.command | toJson }}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+            # - name: metrics
+            #   containerPort: {{ .Values.monitoring.metricsPort }}
+          env:
+            - name: USE_DOCKER
+              value: "true"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "find.eks.{{ .Values.environment }}.govuk.digital, www{{ $environment }}.data.gov.uk"
+          {{- with .Values.find.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+              httpHeaders:
+                - name: host
+                  value: {{ .Values.datagovuk.ingress.host }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+              httpHeaders:
+                - name: host
+                  value: {{ .Values.datagovuk.ingress.host }}
+            periodSeconds: 5
+            successThreshold: 3
+            timeoutSeconds: 10
+          volumeMounts:
+            - name: cache
+              mountPath: /app/staticfiles/CACHE
+      volumes:
+        - name: cache
+          emptyDir: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
+{{- end }}
