@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/alphagov/govuk-dgu-charts
     path: charts/dgu-shared
-    targetRevision: HEAD
+    targetRevision: {{ .Values.targetRevision | default "HEAD" }}
     helm:
       values: |
         {{- toYaml .Values.dguSharedHelmValues | nindent 8 }}

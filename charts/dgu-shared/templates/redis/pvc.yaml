@@ -5,6 +5,6 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 10Gi
+      storage: {{ .Values.redis.persistence.size | default "10Gi" }}
   accessModes:
     - ReadWriteOnce
