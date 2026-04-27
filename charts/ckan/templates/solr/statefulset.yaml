@@ -65,7 +65,7 @@ spec:
               port: solr
             initialDelaySeconds: 10
             periodSeconds: 3
-          {{- with .Values.ckan.appResources }}
+          {{- with .Values.solr.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}

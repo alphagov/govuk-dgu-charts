@@ -4,9 +4,9 @@ ckanHelmValues:
   ckan:
     appResources:
       limits:
-        memory: 4Gi
+        memory: 2Gi
       requests:
-        memory: 3Gi
+        memory: 1Gi
     args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4"]
     replicaCount: 1
     ingress:
@@ -69,13 +69,14 @@ ckanHelmValues:
   solr:
     appResources:
       limits:
-        memory: 3Gi
-      requests:
         memory: 2Gi
+      requests:
+        memory: 1Gi
     enabled: true
     persistence:
       enabled: true
       persistentVolumeClaimName: solr
+      size: 2Gi
   postgres:
     enabled: false
   dev:
@@ -86,18 +87,18 @@ ckanHelmValues:
       enabled: true
     appResources:
       limits:
-        memory: 4Gi
-        cpu: 2
+        memory: 1Gi
+        cpu: 1
       requests:
-        memory: 2Gi
-        cpu: 500m
+        memory: 512Mi
+        cpu: 250m
   fetch:
     replicaCount: 1
     appResources:
       limits:
-        memory: 2Gi
-      requests:
         memory: 1Gi
+      requests:
+        memory: 512Mi
   externalSecret:
     enabled: true
   externalReadonlySecret:
@@ -108,10 +109,10 @@ datagovukHelmValues:
   find:
     appResources:
       limits:
-        memory: 4Gi
-      requests:
         memory: 2Gi
-    replicaCount: 3
+      requests:
+        memory: 1Gi
+    replicaCount: 2
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
       ckanDomain: "ckan.staging.publishing.service.gov.uk"
@@ -149,15 +150,25 @@ dguSharedHelmValues:
   arch: arm64
   redis:
     replicaCount: 1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    persistence:
+      size: 1Gi
 
 # Load test chart — staging only, intentionally absent from values-production.yaml
 loadTestConfig:
   datagovuk_url: "https://www.staging.data.gov.uk"
   ckan_url: "https://ckan.eks.staging.govuk.digital"
   image: grafana/k6:0.55.0
-  # Full soak test — 5m/10m/15m/5m = 35 minutes total
+  # Rightsized soak test — 5m/10m/15m/5m = 35 minutes total
+  # Targeting ~25 req/s (45 VUs based on 100 VUs = 55.8 req/s baseline)
   # Warm up → ramp up → soak at peak → ramp down
-  vus: 100
+  vus: 45
   warmup_duration: "5m"
   ramp_duration: "10m"
   soak_duration: "15m"

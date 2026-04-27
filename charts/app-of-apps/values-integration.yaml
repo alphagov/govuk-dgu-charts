@@ -67,13 +67,14 @@ ckanHelmValues:
   solr:
     appResources:
       limits:
-        memory: 3Gi
-      requests:
         memory: 2Gi
+      requests:
+        memory: 1Gi
     enabled: true
     persistence:
       enabled: true
       persistentVolumeClaimName: solr
+      size: 2Gi
   postgres:
     enabled: false
   dev:
@@ -84,11 +85,11 @@ ckanHelmValues:
       enabled: true
     appResources:
       limits:
-        memory: 4Gi
-        cpu: 2
+        memory: 1Gi
+        cpu: 1
       requests:
-        memory: 2Gi
-        cpu: 500m
+        memory: 512Mi
+        cpu: 250m
   fetch:
     appResources:
       limits:

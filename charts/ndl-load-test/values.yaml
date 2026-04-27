@@ -12,7 +12,7 @@ ckan_rows: 5
 image: grafana/k6:0.55.0
 
 # Test stage configuration — set as environment variables for runtime tweaking
-vus: 100             # Peak virtual users
+vus: 45              # Peak virtual users — ~25 req/s (rightsized from 100 VUs / 55.8 req/s baseline)
 warmup_duration: "5m"  # Warm-up (1 VU) and ramp-down (0 VU) bookends
 ramp_duration: "10m"   # Time to ramp from 1 up to peak VUs
 soak_duration: "15m"   # Hold at peak VUs for this duration
