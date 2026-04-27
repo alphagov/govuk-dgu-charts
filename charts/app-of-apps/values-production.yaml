@@ -4,9 +4,9 @@ ckanHelmValues:
   ckan:
     appResources:
       limits:
-        memory: 4Gi
+        memory: 2Gi
       requests:
-        memory: 3Gi
+        memory: 1Gi
     args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4"]
     replicaCount: 2
     ingress:
@@ -74,31 +74,36 @@ ckanHelmValues:
   solr:
     appResources:
       limits:
-        memory: 3Gi
-      requests:
         memory: 2Gi
+      requests:
+        memory: 1Gi
     enabled: true
     persistence:
       enabled: true
       persistentVolumeClaimName: solr
+      size: 2Gi
   postgres:
     enabled: false
   dev:
     enabled: false
   gather:
-    replicaCount: 1
+    replicaCount: 2
+    probes:
+      enabled: true
     appResources:
       limits:
-        memory: 3Gi
+        memory: 1Gi
+        cpu: 1
       requests:
-        memory: 2Gi
+        memory: 512Mi
+        cpu: 250m
   fetch:
     replicaCount: 1
     appResources:
       limits:
-        memory: 2Gi
-      requests:
         memory: 1Gi
+      requests:
+        memory: 512Mi
   externalSecret:
     enabled: true
   externalReadonlySecret:
@@ -109,10 +114,10 @@ datagovukHelmValues:
   find:
     appResources:
       limits:
-        memory: 4Gi
-      requests:
         memory: 2Gi
-    replicaCount: 3
+      requests:
+        memory: 1Gi
+    replicaCount: 2
     args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
       gaTrackingId: UA-10855508-1
@@ -148,3 +153,12 @@ dguSharedHelmValues:
   arch: arm64
   redis:
     replicaCount: 1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    persistence:
+      size: 1Gi
