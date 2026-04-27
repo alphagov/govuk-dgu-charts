@@ -1,7 +1,3 @@
-# TEMPORARY — points all staging ArgoCD apps at this feature branch for pre-merge testing.
-# MUST be removed before this PR is merged so staging reverts to tracking HEAD (main).
-targetRevision: feature/DGUK-60-rightsizing
-
 ckanHelmValues:
   environment: staging
   arch: arm64
