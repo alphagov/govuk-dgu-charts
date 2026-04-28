@@ -1,4 +1,3 @@
-{{- if eq "test" .Values.environment }}
 {{- $fullName := print .Release.Name "-datagovuk" -}}
 {{- $environment := eq "production" $.Values.environment | ternary "" (print "." $.Values.environment) -}}
 apiVersion: apps/v1
@@ -36,16 +35,22 @@ spec:
             #   containerPort: {{ .Values.monitoring.metricsPort }}
           env:
             - name: USE_DOCKER
-              value: "true"
+              value: "True"
             - name: DJANGO_ALLOWED_HOSTS
               value: "find.eks.{{ .Values.environment }}.govuk.digital, www{{ $environment }}.data.gov.uk"
+            - name: DJANGO_SECURE_SSL_REDIRECT
+              value: "False"
+            - name: SENTRY_DSN
+              value: "https://public@sentry.example.com/1"
+            - name: DJANGO_SECRET_KEY
+              value: "019dbb14-fbfa-73eb-927f-e86288a2bda9"
           {{- with .Values.find.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
             capabilities:
               drop: ["ALL"]
           livenessProbe:
@@ -69,10 +74,14 @@ spec:
             successThreshold: 3
             timeoutSeconds: 10
           volumeMounts:
-            - name: cache
-              mountPath: /app/staticfiles/CACHE
+            - name: tmp
+              mountPath: /tmp
+            - name: app-tmp
+              mountPath: /app/tmp
       volumes:
-        - name: cache
+        - name: tmp
+          emptyDir: {}
+        - name: app-tmp
           emptyDir: {}
       securityContext:
         runAsNonRoot: true
@@ -90,4 +99,3 @@ spec:
       nodeSelector:
         kubernetes.io/arch: {{ .Values.arch }}
       {{- end }}
-{{- end }}

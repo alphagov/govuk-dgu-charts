@@ -1,2 +1,2 @@
-repository: local-registry:64346/datagovuk_django
-tag: 8
+repository: local-registry:55701/datagovuk-prod
+tag: 0.1.5
