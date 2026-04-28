@@ -1,4 +1,4 @@
-{{- if eq "test" .Values.environment }}
+{{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
 {{- $fullName := print .Release.Name "-datagovuk" -}}
 {{- $environment := eq "production" $.Values.environment | ternary "" (print "." $.Values.environment) -}}
 apiVersion: apps/v1
@@ -12,7 +12,7 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
-  replicas: {{ .Values.find.replicaCount }}
+  replicas: {{ .Values.datagovuk.replicaCount }}
   revisionHistoryLimit: 2
   selector:
     matchLabels:
@@ -38,8 +38,8 @@ spec:
             - name: USE_DOCKER
               value: "true"
             - name: DJANGO_ALLOWED_HOSTS
-              value: "find.eks.{{ .Values.environment }}.govuk.digital, www{{ $environment }}.data.gov.uk"
-          {{- with .Values.find.appResources }}
+              value: "datagovuk.eks.{{ .Values.environment }}.govuk.digital, find.eks.{{ .Values.environment }}.govuk.digital, www{{ $environment }}.data.gov.uk"
+          {{- with .Values.datagovuk.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
