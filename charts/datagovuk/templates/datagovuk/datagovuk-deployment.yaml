@@ -1,3 +1,4 @@
+{{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
 {{- $fullName := print .Release.Name "-datagovuk" -}}
 {{- $environment := eq "production" $.Values.environment | ternary "" (print "." $.Values.environment) -}}
 apiVersion: apps/v1
@@ -11,7 +12,7 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
-  replicas: {{ .Values.find.replicaCount }}
+  replicas: {{ .Values.datagovuk.replicaCount }}
   revisionHistoryLimit: 2
   selector:
     matchLabels:
@@ -34,14 +35,14 @@ spec:
             # - name: metrics
             #   containerPort: {{ .Values.monitoring.metricsPort }}
           env:
-            {{ include "datagovuk.environment-variables" . | nindent 12 }}
-          {{- with .Values.find.appResources }}
+             {{ include "datagovuk.environment-variables" . | nindent 12 }}
+          {{- with .Values.datagovuk.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
           livenessProbe:
@@ -90,3 +91,4 @@ spec:
       nodeSelector:
         kubernetes.io/arch: {{ .Values.arch }}
       {{- end }}
+{{- end }}

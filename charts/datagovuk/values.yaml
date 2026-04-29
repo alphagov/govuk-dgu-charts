@@ -16,7 +16,7 @@ datagovuk:
   command: ["/bin/sh", "-c", "/start"]
   ingress:
     enabled: true
-    host: find.eks.test.govuk.digital
+    host: datagovuk.eks.test.govuk.digital
     ingressClassName: ""
     annotations:
   config:

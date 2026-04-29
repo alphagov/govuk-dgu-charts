@@ -1,13 +1,12 @@
-{{- if .Values.find.ingress.enabled }}
+{{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
 {{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
 {{- $stablePath := print "eks." $.Values.environment -}}
 {{- $environmentPath := eq "ephemeral" $.Values.environment | ternary $ephemeralPath $stablePath -}}
-{{- $frontendApp := default "find" .Values.frontendApp -}}
-{{- with .Values.find.ingress }}
+{{- with .Values.datagovuk.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: find
+  name: datagovuk
   {{- if not (empty .annotations) }}
   annotations:
     {{- tpl (toYaml .annotations) $ | trim | nindent 4 }}
@@ -17,24 +16,15 @@ spec:
   ingressClassName: {{ .ingressClassName }}
   {{ end }}
   rules:
-    - host: find.{{ $environmentPath }}.govuk.digital
+    - host: datagovuk.{{ $environmentPath }}.govuk.digital
       http:
         paths:
-        {{- range $path := .directoryPaths }}
-          - path: {{ $path }}
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $.Release.Name }}-find
-                port:
-                  number: 3000
-        {{- end }}
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Release.Name }}-frontend-find
+                name: {{ $.Release.Name }}-datagovuk
                 port:
-                  number: 3000
-{{- end }}
+                  number: 8000
+{{- end }}. # end with
 {{- end }}
