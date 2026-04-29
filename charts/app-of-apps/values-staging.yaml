@@ -157,8 +157,6 @@ dguSharedHelmValues:
       requests:
         cpu: 100m
         memory: 128Mi
-    persistence:
-      size: 1Gi
 
 # Load test chart — staging only, intentionally absent from values-production.yaml
 loadTestConfig:
