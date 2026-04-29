@@ -19,4 +19,3 @@ redis:
   persistence:
     enabled: true
     persistentVolumeClaimName: "redis"
-    size: 1Gi
