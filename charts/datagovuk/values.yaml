@@ -34,7 +34,7 @@ datagovuk:
       key: django_secret_key
     sentryDSNRef:
       name: datagovuk
-      key: sentry_dsn
+      key: datagovuk_sentry_dsn
     rateLimitCount: "100"
     rateLimitPeriod: "60"
 
