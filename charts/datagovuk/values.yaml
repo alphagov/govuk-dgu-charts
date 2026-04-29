@@ -29,6 +29,12 @@ datagovuk:
     basicAuthBypassSecretKeyRef:
       name: datagovuk
       key: basic_auth_bypass
+    djangoSecretKeyRef:
+      name: datagovuk
+      key: django_secret_key
+    sentryDSNRef:
+      name: datagovuk
+      key: sentry_dsn
     rateLimitCount: "100"
     rateLimitPeriod: "60"
 
