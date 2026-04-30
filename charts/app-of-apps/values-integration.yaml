@@ -102,6 +102,7 @@ ckanHelmValues:
     enabled: true
 datagovukHelmValues:
   environment: integration
+  slackChannel: "#datagovuk-technical"
   arch: arm64
   find:
     appResources:
