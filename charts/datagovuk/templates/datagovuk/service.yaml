@@ -1,0 +1,15 @@
+{{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-datagovuk
+spec:
+  selector:
+    app: {{ $.Release.Name }}-datagovuk
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: http
+---
+{{- end }}

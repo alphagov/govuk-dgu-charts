@@ -11,6 +11,33 @@ dev:
 # running mixed-arch clusters.
 arch: amd64
 
+datagovuk:
+  replicaCount: 1
+  command: ["/bin/sh", "-c", "/start"]
+  ingress:
+    enabled: true
+    host: datagovuk.eks.test.govuk.digital
+    ingressClassName: ""
+    annotations:
+  config:
+    basicAuthNameSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_name
+    basicAuthPasswordSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_password
+    basicAuthBypassSecretKeyRef:
+      name: datagovuk
+      key: basic_auth_bypass
+    djangoSecretKeyRef:
+      name: datagovuk
+      key: django_secret_key
+    sentryDSNRef:
+      name: datagovuk
+      key: datagovuk_sentry_dsn
+    rateLimitCount: "100"
+    rateLimitPeriod: "60"
+
 find:
   replicaCount: 1
   args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
@@ -29,6 +56,7 @@ find:
       - /api
       - /harvest
       - /user/login
+      - /find-assets
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
     solrUrl: "http://ckan-dev-solr/solr/ckan"

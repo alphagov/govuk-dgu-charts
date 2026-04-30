@@ -26,3 +26,5 @@ type: Opaque
 stringData:
   basic_auth_name: "admin"
   basic_auth_password: "password"
+  django_secret_key: "019dbb14-fbfa-73eb-927f-e86288a2bda9"
+  datagovuk_sentry_dsn: "https://public@sentry.example.com/1"
