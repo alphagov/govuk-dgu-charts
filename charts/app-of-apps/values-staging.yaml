@@ -76,7 +76,6 @@ ckanHelmValues:
     persistence:
       enabled: true
       persistentVolumeClaimName: solr
-      size: 2Gi
   postgres:
     enabled: false
   dev:
