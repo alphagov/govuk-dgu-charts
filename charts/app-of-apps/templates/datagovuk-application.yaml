@@ -6,6 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
+    slackChannel: {{ .Values.datagovukHelmValues.slackChannel | quote }}
     notifications.argoproj.io/subscribe.on-sync-succeeded.slack: {{ .Values.datagovukHelmValues.slackChannel }}
     notifications.argoproj.io/subscribe.on-sync-failed.slack: {{ .Values.datagovukHelmValues.slackChannel }}
 spec:
