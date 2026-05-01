@@ -28,6 +28,9 @@ ckan:
   probes:
     enabled: false
   ckanIniConfigMap: ckan-production-ini-2-10
+  checkLinks:
+    persistence:
+      size: 1Gi
   config:
     dbInit: true
     site:

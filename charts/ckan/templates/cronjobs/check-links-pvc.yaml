@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-check-links-pvc
+spec:
+  resources:
+    requests:
+      storage: {{ .Values.ckan.checkLinks.persistence.size | default "1Gi" }}
+  accessModes:
+    - ReadWriteOnce
