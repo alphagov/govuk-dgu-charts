@@ -8,7 +8,8 @@ metadata:
     app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "0 9 * * *"
-  suspend: {{ .Values.suspendCronJobs }}
+  suspend: true
+  concurrencyPolicy: Forbid
   jobTemplate:
     metadata:
       name: {{ .Release.Name }}-check-links
@@ -46,7 +47,6 @@ spec:
               type: RuntimeDefault
           volumes:
             - name: check-links-output
-              # emptyDir: {}
               persistentVolumeClaim:
                 claimName: {{ .Release.Name }}-check-links-pvc
           {{- if eq "arm64" .Values.arch }}
