@@ -13,6 +13,15 @@
       name: {{ .sqlalchemyUrlSecretKeyRef.name }}
       key: {{ .sqlalchemyUrlSecretKeyRef.key }}
 {{ end }}
+- name: POSTGRES_URL
+{{- if $.Values.dev.enabled }}
+  value: {{ print "postgresql://ckan:ckan@" $.Release.Name "-postgres/ckan" }}
+{{ else }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ .sqlalchemyUrlSecretKeyRef.name }}
+      key: {{ .sqlalchemyUrlSecretKeyRef.key }}
+{{ end }}
 - name: CKAN_BEAKER_SESSION_SECRET
 {{- if $.Values.dev.enabled }}
   value: "9EZiPwkeS+cZpqb0VDWrN+Q0M"
