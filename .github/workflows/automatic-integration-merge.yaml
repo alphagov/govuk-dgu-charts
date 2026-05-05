@@ -2,9 +2,6 @@ name: Auto-Approve Image Tag Updates
 on:
   pull_request:
     types: [opened]
-  push:
-    branches:
-      - DGUK-506-automatically-merge-datagovuk-integration
 
 jobs:
   auto-approve:
