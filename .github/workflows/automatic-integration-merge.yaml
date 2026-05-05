@@ -9,7 +9,9 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')
+    if: |
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')) ||
+      (github.event_name == 'push')
     
     permissions:
       pull-requests: write
