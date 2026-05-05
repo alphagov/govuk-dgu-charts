@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Set up GitHub CLI
-        uses: cli/gh-action@v2
+        uses: actions/setup-gh@v4
 
       - name: Approve the PR
         env:
