@@ -47,7 +47,7 @@ spec:
               drop: ["ALL"]
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/
               port: http
               httpHeaders:
                 - name: host
@@ -57,7 +57,7 @@ spec:
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/
               port: http
               httpHeaders:
                 - name: host
