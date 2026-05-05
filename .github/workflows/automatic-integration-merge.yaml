@@ -4,7 +4,7 @@ on:
     types: [opened]
   push:
     branches:
-      - DGUK-506-automatically-merge-datagovuk-integration
+      - DGUK-506-automatically-merge-datagovuk-integrationg
 
 jobs:
   auto-approve:
@@ -21,4 +21,4 @@ jobs:
         run: |
           gh pr review ${{ github.event.pull_request.number }} \
             --approve \
-            --body "Automated approval for integration image tag update."
+            --body "Automated approval for integration image tag update"
