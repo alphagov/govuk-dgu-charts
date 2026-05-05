@@ -9,9 +9,7 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    if: |
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')) ||
-      (github.event_name == 'push')
+    if: contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')
     
     permissions:
       pull-requests: write
@@ -19,10 +17,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Approve the PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr review ${{ github.event.pull_request.number }} \
             --approve \
-            --body "Automated approval for integration image tag update."
+            --body "Automated approval for integration image tag updates."
