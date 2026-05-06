@@ -3,27 +3,43 @@ name: Auto-Approve and Merge Integration Image Tag Updates
 on:
   pull_request:
     types: [opened]
+    # Restrict to branches created by the CI automation only — this is the
+    # first line of defence against title-injection attacks where an external
+    # actor crafts a matching PR title to trigger an auto-merge into main.
+    branches:
+      - main
+    paths:
+      - 'charts/datagovuk/images/integration/datagovuk.yaml'
 
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')
+    # Verify both the branch naming convention AND the title — belt-and-braces
+    # guard against title injection.  Branch names are set programmatically by
+    # create-pr.sh (ci/<sha>-integration) so they cannot be spoofed by PR title
+    # alone.
+    if: |
+      startsWith(github.event.pull_request.head.ref, 'ci/') &&
+      endsWith(github.event.pull_request.head.ref, '-integration') &&
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')
 
     permissions:
       pull-requests: write
       contents: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
+      # GITHUB_TOKEN cannot approve a PR opened by the same token (GitHub
+      # blocks self-approval).  PR_GITHUB_TOKEN is a separate PAT (govuk-ci
+      # bot) used here specifically to provide the required second approver
+      # identity.
       - name: Approve the PR
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
         run: |
           gh pr review ${{ github.event.pull_request.number }} \
             --approve \
-            --body "Automated approval for datagovuk integration image tag updates."
+            --body "Automated approval for datagovuk integration image tag updates." \
+            --repo ${{ github.repository }}
 
       - name: Enable auto-merge
         env:
@@ -32,4 +48,5 @@ jobs:
           gh pr merge ${{ github.event.pull_request.number }} \
             --auto \
             --merge \
-            --delete-branch
+            --delete-branch \
+            --repo ${{ github.repository }}
