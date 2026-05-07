@@ -4,6 +4,8 @@
   value: "True"
 - name: DJANGO_ALLOWED_HOSTS
   value: "datagovuk.eks.{{ .Values.environment }}.govuk.digital, www{{ $environment }}.data.gov.uk"
+- name: SENTRY_ENVIRONMENT
+  value: {{ $environment }}
 {{- if $.Values.dev.enabled }}
 - name: DJANGO_SECURE_SSL_REDIRECT
   value: "False"
