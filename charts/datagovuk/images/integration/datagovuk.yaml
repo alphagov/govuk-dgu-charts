@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk
-tag: 237e81eaf35c7ef3cc0f25d5235b97dbff0fefba
-branch: DGUK-506-automate-integration-deployment
+tag: dd86f6f64c0038138e826d9fe2c54c5d6cafbb25
+branch: main
