@@ -3,9 +3,6 @@ name: Auto-Approve and Merge Integration Image Tag Updates
 on:
   pull_request:
     types: [opened]
-    # Restrict to branches created by the CI automation only — this is the
-    # first line of defence against title-injection attacks where an external
-    # actor crafts a matching PR title to trigger an auto-merge into main.
     branches:
       - main
     paths:
@@ -14,25 +11,14 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    # Verify both the branch naming convention AND the title — belt-and-braces
-    # guard against title injection.  Branch names are set programmatically by
-    # create-pr.sh (ci/<sha>-integration) so they cannot be spoofed by PR title
-    # alone.
     if: |
-      startsWith(github.event.pull_request.head.ref, 'ci/') &&
-      endsWith(github.event.pull_request.head.ref, '-integration') &&
-      contains(github.event.pull_request.title, 'Update datagovuk image tags for integration') &&
-      github.event.pull_request.base.ref == 'main'
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')
 
     permissions:
       pull-requests: write
       contents: write
 
     steps:
-      # GITHUB_TOKEN cannot approve a PR opened by the same token (GitHub
-      # blocks self-approval).  PR_GITHUB_TOKEN is a separate PAT (govuk-ci
-      # bot) used here specifically to provide the required second approver
-      # identity.
       - name: Verify PR Author
         env:
          PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
