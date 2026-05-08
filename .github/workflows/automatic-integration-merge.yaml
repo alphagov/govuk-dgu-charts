@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize]
     branches:
       - main
-      - test-DGUK-505-update-auto-merge-pat
+      - DGUK-505-update-auto-merge-pat
     paths:
       - 'charts/datagovuk/images/integration/datagovuk.yaml'
 
