@@ -2,9 +2,9 @@ name: Auto-Approve and Merge Integration Image Tag Updates
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     branches:
-      - main
+      - feature/DGUK-505-auto-deploy-integration
     paths:
       - 'charts/datagovuk/images/integration/datagovuk.yaml'
 
