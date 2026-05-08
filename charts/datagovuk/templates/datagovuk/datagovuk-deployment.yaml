@@ -49,9 +49,6 @@ spec:
             httpGet:
               path: /health/
               port: http
-              httpHeaders:
-                - name: host
-                  value: {{ .Values.datagovuk.ingress.host }}
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 10
@@ -59,9 +56,6 @@ spec:
             httpGet:
               path: /health/
               port: http
-              httpHeaders:
-                - name: host
-                  value: {{ .Values.datagovuk.ingress.host }}
             periodSeconds: 5
             successThreshold: 3
             timeoutSeconds: 10
