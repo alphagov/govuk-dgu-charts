@@ -1,4 +1,3 @@
-{{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -9,4 +8,3 @@ spec:
       storage: {{ .Values.ckan.checkLinks.persistence.size | default "1Gi" }}
   accessModes:
     - ReadWriteOnce
-{{- end }}

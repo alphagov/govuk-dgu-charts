@@ -118,12 +118,10 @@ data:
         }
         {{- end }}
 
-        {{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
         location /check-links-output {
           autoindex on;
           alias /output;
         }
-        {{- end }}
 
         # deny access to metrics and other api endpoints
         location ~ ^/(api|api/3|metrics) {
