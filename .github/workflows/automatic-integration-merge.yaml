@@ -21,7 +21,8 @@ jobs:
     if: |
       startsWith(github.event.pull_request.head.ref, 'ci/') &&
       endsWith(github.event.pull_request.head.ref, '-integration') &&
-      contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for integration') &&
+      github.event.pull_request.base.ref == 'main'
 
     permissions:
       pull-requests: write
@@ -32,6 +33,13 @@ jobs:
       # blocks self-approval).  PR_GITHUB_TOKEN is a separate PAT (govuk-ci
       # bot) used here specifically to provide the required second approver
       # identity.
+      - name: Verify PR Author
+        env:
+         PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+        run: |
+          if [ "${{ github.event.pull_request.user.login }}" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
+            echo "Unexpected PR author"; exit 1
+          fi
       - name: Approve the PR
         env:
           GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
