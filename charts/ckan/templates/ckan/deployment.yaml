@@ -136,6 +136,8 @@ spec:
             capabilities:
               drop: ["ALL"]
           volumeMounts:
+            - name: check-links-output
+              mountPath: /output
             - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
@@ -157,6 +159,9 @@ spec:
             name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
         - name: config
           emptyDir: {}
+        - name: check-links-output
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-check-links-pvc
         - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
             name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}

@@ -118,6 +118,11 @@ data:
         }
         {{- end }}
 
+        location /check-links-output {
+          autoindex on;
+          alias /output;
+        }
+
         # deny access to metrics and other api endpoints
         location ~ ^/(api|api/3|metrics) {
           deny all;

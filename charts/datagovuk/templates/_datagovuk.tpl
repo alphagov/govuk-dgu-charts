@@ -21,5 +21,9 @@
     secretKeyRef:
       name: {{ .sentryDSNRef.name }}
       key: {{ .sentryDSNRef.key }}
+- name: POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
 {{- end }}
 {{- end }}
