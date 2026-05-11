@@ -62,12 +62,12 @@ jobs:
             --body "Automated approval for datagovuk integration image tag updates." \
             --repo ${{ github.repository }}
 
-      - name: Enable auto-merge
-        env:
-          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
-        run: |
-          gh pr merge ${{ github.event.pull_request.number }} \
-            --auto \
-            --merge \
-            --delete-branch \
-            --repo ${{ github.repository }}
+      # - name: Enable auto-merge
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
+      #   run: |
+      #     gh pr merge ${{ github.event.pull_request.number }} \
+      #       --auto \
+      #       --merge \
+      #       --delete-branch \
+      #       --repo ${{ github.repository }}
