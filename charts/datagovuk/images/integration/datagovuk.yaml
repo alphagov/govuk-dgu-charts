@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk
-tag: 968108380c63e4511dd6708669294ac85083a4bf
-branch: main
+tag: 729e17b7d502f31cc221b66deb91a9991b12f555
+branch: testing-non-ndl-member-actions-workflow
