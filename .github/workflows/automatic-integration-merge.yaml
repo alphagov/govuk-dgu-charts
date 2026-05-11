@@ -2,7 +2,7 @@ name: Auto-Approve and Merge Integration Image Tag Updates
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     branches:
       - main
     paths:
@@ -14,8 +14,6 @@ on:
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
-    if: |
-      contains(github.event.pull_request.title, 'Update datagovuk image tags for integration')
 
     permissions:
       pull-requests: write
