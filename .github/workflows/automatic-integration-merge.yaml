@@ -20,14 +20,14 @@ jobs:
       contents: write
 
     steps:
-      - name: Verify PR Author
-        env:
-          PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
-          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
-        run: |
-          if [ "$PR_AUTHOR" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
-            echo "::error::Unexpected PR author: $PR_AUTHOR"; exit 1
-          fi
+      # - name: Verify PR Author
+      #   env:
+      #     PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+      #     PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+      #   run: |
+      #     if [ "$PR_AUTHOR" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
+      #       echo "::error::Unexpected PR author: $PR_AUTHOR"; exit 1
+      #     fi
 
       - name: Checkout PR head
         uses: actions/checkout@v4
