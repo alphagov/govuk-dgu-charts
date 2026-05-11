@@ -24,10 +24,11 @@ jobs:
     steps:
       - name: Verify PR Author
         env:
-         PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+          PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
-          if [ "${{ github.event.pull_request.user.login }}" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
-            echo "Unexpected PR author"; exit 1
+          if [ "$PR_AUTHOR" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
+            echo "::error::Unexpected PR author: $PR_AUTHOR"; exit 1
           fi
 
       - name: Checkout PR head
@@ -39,20 +40,20 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
         run: |
-          COMMIT_SHA=$(grep '^tag:' charts/datagovuk/images/integration/datagovuk.yaml | awk '{print $2}')
+          COMMIT_SHA=$(awk '/^tag:/ {print $2}' charts/datagovuk/images/integration/datagovuk.yaml)
           echo "Checking commit SHA: $COMMIT_SHA"
 
-          STATUS=$(gh api repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main --jq '.status') || {
-            echo "Error: Could not compare commits. SHA may not exist in alphagov/datagovuk: $COMMIT_SHA"
-            exit 1
-          }
-          echo "Compare status (sha...main): $STATUS"
-
-          if [ "$STATUS" != "ahead" ] && [ "$STATUS" != "identical" ]; then
-            echo "Error: Commit $COMMIT_SHA is not on the main branch in alphagov/datagovuk (status: $STATUS)"
+          if ! STATUS=$(gh api "repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main" --jq '.status'); then
+            echo "::error::Could not find commit $COMMIT_SHA in alphagov/datagovuk."
             exit 1
           fi
-          echo "Verified: $COMMIT_SHA is on the main branch in alphagov/datagovuk"
+
+          if [[ ! "$STATUS" =~ ^(ahead|identical)$ ]]; then
+            echo "::error::Commit $COMMIT_SHA is not on the main branch (Status: $STATUS)."
+            exit 1
+          fi
+
+          echo "Verified: $COMMIT_SHA is safely on the main branch."
 
       - name: Approve the PR
         env:
