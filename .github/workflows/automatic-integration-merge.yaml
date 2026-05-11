@@ -29,6 +29,31 @@ jobs:
           if [ "${{ github.event.pull_request.user.login }}" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
             echo "Unexpected PR author"; exit 1
           fi
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Verify commit SHA is on main branch in datagovuk
+        env:
+          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
+        run: |
+          COMMIT_SHA=$(grep '^tag:' charts/datagovuk/images/integration/datagovuk.yaml | awk '{print $2}')
+          echo "Checking commit SHA: $COMMIT_SHA"
+
+          STATUS=$(gh api repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main --jq '.status') || {
+            echo "Error: Could not compare commits. SHA may not exist in alphagov/datagovuk: $COMMIT_SHA"
+            exit 1
+          }
+          echo "Compare status (sha...main): $STATUS"
+
+          if [ "$STATUS" != "ahead" ] && [ "$STATUS" != "identical" ]; then
+            echo "Error: Commit $COMMIT_SHA is not on the main branch in alphagov/datagovuk (status: $STATUS)"
+            exit 1
+          fi
+          echo "Verified: $COMMIT_SHA is on the main branch in alphagov/datagovuk"
+
       - name: Approve the PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
