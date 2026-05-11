@@ -6,6 +6,8 @@
   value: "datagovuk.eks.{{ .Values.environment }}.govuk.digital, www{{ $environment }}.data.gov.uk"
 - name: SENTRY_ENVIRONMENT
   value: {{ $environment }}
+- name: GOOGLE_TAG_MANAGER_ID
+  value: GTM-5WRWCH8X
 {{- if $.Values.dev.enabled }}
 - name: DJANGO_SECURE_SSL_REDIRECT
   value: "False"
