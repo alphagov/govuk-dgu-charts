@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-check-links-pvc
+  name: {{ .Release.Name }}-check-links-output-pvc
 spec:
   resources:
     requests:

@@ -162,7 +162,7 @@ spec:
           emptyDir: {}
         - name: check-links-output
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-check-links-pvc
+            claimName: {{ .Release.Name }}-check-links-output-pvc
         - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
             name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
