@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk
-tag: 4df12ab37ff7deca6c80212c5ea7a66566e5ec35
-branch: main
+tag: d813e9f3eb5911ba8702329485317fcab98fbca4
+branch: test-github-actions
