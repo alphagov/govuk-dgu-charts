@@ -1,0 +1,92 @@
+{{- if .Values.appEnabled }}
+{{- $fullName := print .Release.Name "-check-links-output" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ $fullName }}
+  template:
+    metadata:
+      labels:
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: nginx
+          image: "{{ .Values.checklinks.nginx.image.repository }}:{{ .Values.checklinks.nginx.image.tag }}"
+          imagePullPolicy: {{ .Values.checklinks.nginx.image.pullPolicy | default "Always" }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.checklinks.nginx.port }}
+          livenessProbe: &nginx-probe
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 2
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 20
+          readinessProbe:
+            <<: *nginx-probe  # Intentionally same path as liveness.
+            failureThreshold: 2
+            timeoutSeconds: 15
+          {{- with .Values.ckan.nginx.resources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: check-links-output
+              mountPath: /output
+              readOnly: true # Only allow read access to the check-links output in the nginx container
+            - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-tmp
+              mountPath: /tmp
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
+      volumes:
+        - name: check-links-output
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-check-links-pvc
+        - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
+          configMap:
+            name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
+        - name: nginx-tmp
+          emptyDir: {}
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
+{{- end }}

@@ -136,11 +136,6 @@ spec:
             capabilities:
               drop: ["ALL"]
           volumeMounts:
-            {{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
-            - name: check-links-output
-              mountPath: /output
-              readOnly: true # Only allow read access to the check-links output in the nginx container
-            {{- end }}
             - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
@@ -162,11 +157,6 @@ spec:
             name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
         - name: config
           emptyDir: {}
-        {{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
-        - name: check-links-output
-          persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-check-links-pvc
-        {{- end }}
         - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
             name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
