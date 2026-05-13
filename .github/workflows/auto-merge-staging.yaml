@@ -24,7 +24,7 @@ jobs:
           PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
-          if [ "$PR_AUTHOR" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
+          if [ "$PR_AUTHOR" != "Obsiye" ]; then
             echo "::error::Unexpected PR author: $PR_AUTHOR"; exit 1
           fi
 
