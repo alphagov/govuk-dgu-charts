@@ -2,7 +2,7 @@ name: Auto-Approve and Merge Staging Image Tag Updates
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     branches:
       - main
     paths:
@@ -12,10 +12,7 @@ jobs:
   auto-approve:
     runs-on: ubuntu-latest
     if: |
-      startsWith(github.event.pull_request.head.ref, 'ci/') &&
-      endsWith(github.event.pull_request.head.ref, '-staging') &&
-      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging') &&
-      github.event.pull_request.base.ref == 'main'
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging')
 
     permissions:
       pull-requests: write
