@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk
-tag: bde2e4c9d9d1ef95535e4dc35a90fa5b21fb74d0
-branch: main
+tag: 3ac58e724ca7de7f6be4953beb5ab93c125f88c8
+branch: test-ci-token
