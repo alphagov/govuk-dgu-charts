@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened]
     branches:
-      - main
+      - DGUK-539-auto-deploy-staging
     paths:
       - 'charts/datagovuk/images/staging/datagovuk.yaml'
 
@@ -12,10 +12,7 @@ jobs:
   auto-approve:
     runs-on: ubuntu-latest
     if: |
-      startsWith(github.event.pull_request.head.ref, 'ci/') &&
-      endsWith(github.event.pull_request.head.ref, '-staging') &&
-      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging') &&
-      github.event.pull_request.base.ref == 'main'
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging')
 
     permissions:
       pull-requests: write
