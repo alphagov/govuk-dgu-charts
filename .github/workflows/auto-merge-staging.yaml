@@ -1,0 +1,72 @@
+name: Auto-Approve and Merge Staging Image Tag Updates
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+    paths:
+      - 'charts/datagovuk/images/staging/datagovuk.yaml'
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging')
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Verify PR Author
+        env:
+          PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          if [ "$PR_AUTHOR" != "Obsiye" ]; then
+            echo "::error::Unexpected PR author: $PR_AUTHOR"; exit 1
+          fi
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Verify commit SHA is on main branch in datagovuk
+        env:
+          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
+        run: |
+          COMMIT_SHA=$(awk '/^tag:/ {print $2}' charts/datagovuk/images/staging/datagovuk.yaml)
+          echo "Checking commit SHA: $COMMIT_SHA"
+
+          if ! STATUS=$(gh api "repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main" --jq '.status'); then
+            echo "::error::Could not find commit $COMMIT_SHA in alphagov/datagovuk."
+            exit 1
+          fi
+
+          if [[ ! "$STATUS" =~ ^(ahead|identical)$ ]]; then
+            echo "::error::Commit $COMMIT_SHA is not on the main branch (Status: $STATUS)."
+            exit 1
+          fi
+
+          echo "Verified: $COMMIT_SHA is safely on the main branch."
+
+      - name: Approve the PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review ${{ github.event.pull_request.number }} \
+            --approve \
+            --body "Automated approval for datagovuk staging image tag updates." \
+            --repo ${{ github.repository }}
+
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} \
+            --auto \
+            --merge \
+            --delete-branch \
+            --repo ${{ github.repository }}
