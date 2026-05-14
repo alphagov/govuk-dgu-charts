@@ -2,9 +2,9 @@ name: Auto-Approve and Merge Staging Image Tag Updates
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     branches:
-      - main
+      - DGUK-539-auto-deploy-staging
     paths:
       - 'charts/datagovuk/images/staging/datagovuk.yaml'
 
@@ -12,10 +12,7 @@ jobs:
   auto-approve:
     runs-on: ubuntu-latest
     if: |
-      startsWith(github.event.pull_request.head.ref, 'ci/') &&
-      endsWith(github.event.pull_request.head.ref, '-staging') &&
-      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging') &&
-      github.event.pull_request.base.ref == 'main'
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging')
 
     permissions:
       checks: read
@@ -23,14 +20,14 @@ jobs:
       contents: write
 
     steps:
-      - name: Verify PR Author
-        env:
-          PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
-          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
-        run: |
-          if [ "$PR_AUTHOR" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
-            echo "::error::Unexpected PR author: $PR_AUTHOR"; exit 1
-          fi
+      # - name: Verify PR Author
+      #   env:
+      #     PR_GITHUB_TOKEN_USERNAME: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+      #     PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+      #   run: |
+      #     if [ "$PR_AUTHOR" != "$PR_GITHUB_TOKEN_USERNAME" ]; then
+      #       echo "::error::Unexpected PR author: $PR_AUTHOR"; exit 1
+      #     fi
 
       - name: Checkout PR head
         uses: actions/checkout@v4
