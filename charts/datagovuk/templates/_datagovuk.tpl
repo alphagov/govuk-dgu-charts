@@ -13,6 +13,23 @@
   value: "False"
 {{- end }}
 {{- with .Values.datagovuk.config }}
+{{ if ne $environment "production" }}
+- name: BASIC_AUTH_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ .basicAuthNameSecretKeyRef.name }}
+      key: {{ .basicAuthNameSecretKeyRef.key }}
+- name: BASIC_AUTH_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .basicAuthPasswordSecretKeyRef.name }}
+      key: {{ .basicAuthPasswordSecretKeyRef.key }}
+- name: BASIC_AUTH_BYPASS
+  valueFrom:
+    secretKeyRef:
+      name: {{ .basicAuthBypassSecretKeyRef.name }}
+      key: {{ .basicAuthBypassSecretKeyRef.key }}
+{{- end }}
 - name: DJANGO_SECRET_KEY
   valueFrom: 
     secretKeyRef:
