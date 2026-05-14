@@ -1,4 +1,4 @@
-name: Auto-Approve and Merge Datagovuk Image Tag Updates
+name: Approve and Merge datagovuk updates
 
 on:
   pull_request:
