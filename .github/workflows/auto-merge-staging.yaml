@@ -1,4 +1,4 @@
-name: Auto-Approve and Merge Integration Image Tag Updates
+name: Auto-Approve and Merge Staging Image Tag Updates
 
 on:
   pull_request:
@@ -6,15 +6,15 @@ on:
     branches:
       - main
     paths:
-      - 'charts/datagovuk/images/integration/datagovuk.yaml'
+      - 'charts/datagovuk/images/staging/datagovuk.yaml'
 
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
     if: |
       startsWith(github.event.pull_request.head.ref, 'ci/') &&
-      endsWith(github.event.pull_request.head.ref, '-integration') &&
-      contains(github.event.pull_request.title, 'Update datagovuk image tags for integration') &&
+      endsWith(github.event.pull_request.head.ref, '-staging') &&
+      contains(github.event.pull_request.title, 'Update datagovuk image tags for staging') &&
       github.event.pull_request.base.ref == 'main'
 
     permissions:
@@ -41,7 +41,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
         run: |
-          COMMIT_SHA=$(awk '/^tag:/ {print $2}' charts/datagovuk/images/integration/datagovuk.yaml)
+          COMMIT_SHA=$(awk '/^tag:/ {print $2}' charts/datagovuk/images/staging/datagovuk.yaml)
           echo "Checking commit SHA: $COMMIT_SHA"
 
           if ! STATUS=$(gh api "repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main" --jq '.status'); then
@@ -61,14 +61,14 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           timeout: 240s # 4 minutes
-          
+
       - name: Approve the PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr review ${{ github.event.pull_request.number }} \
             --approve \
-            --body "Automated approval for datagovuk integration image tag updates." \
+            --body "Automated approval for datagovuk staging image tag updates." \
             --repo ${{ github.repository }}
 
       - name: Enable auto-merge
