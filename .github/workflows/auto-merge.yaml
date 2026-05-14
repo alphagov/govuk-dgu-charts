@@ -2,7 +2,7 @@ name: Approve and Merge datagovuk updates
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened]
     branches:
       - DGUK-539-auto-deploy-staging
     paths:
@@ -27,7 +27,6 @@ jobs:
             echo "::error::Unauthorized PR author: $ACTUAL_AUTHOR"
             exit 1
           fi
-      
 
       - name: Checkout PR head
         uses: actions/checkout@v4
