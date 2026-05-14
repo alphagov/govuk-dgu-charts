@@ -27,6 +27,7 @@ jobs:
       #       echo "::error::Unauthorized PR author: $ACTUAL_AUTHOR"
       #       exit 1
       #     fi
+      # 
 
       - name: Checkout PR head
         uses: actions/checkout@v4
