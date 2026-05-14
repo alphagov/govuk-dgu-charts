@@ -1,3 +1,3 @@
 repository: ghcr.io/alphagov/datagovuk
-tag: 289fec7fd93ce2ca52f6f8f58a567ecd45409f5c
-branch: main
+tag: e0832f6f31ea41b8f06493d74f4ba51e47326d752d3d78303a2070a2f467e03e
+branch: DGUK-539-auto-deploy-staging

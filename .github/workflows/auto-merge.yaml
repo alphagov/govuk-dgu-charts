@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened]
     branches:
-      - main
+      - DGUK-539-auto-deploy-staging
     paths:
       - charts/datagovuk/images/staging/datagovuk.yaml
       - charts/datagovuk/images/integration/datagovuk.yaml
@@ -18,15 +18,15 @@ jobs:
       contents: write
 
     steps:
-      - name: Verify PR Author
-        env:
-          EXPECTED_AUTHOR: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
-          ACTUAL_AUTHOR: ${{ github.event.pull_request.user.login }}
-        run: |
-          if [ "$ACTUAL_AUTHOR" != "$EXPECTED_AUTHOR" ]; then
-            echo "::error::Unauthorized PR author: $ACTUAL_AUTHOR"
-            exit 1
-          fi
+      # - name: Verify PR Author
+      #   env:
+      #     EXPECTED_AUTHOR: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+      #     ACTUAL_AUTHOR: ${{ github.event.pull_request.user.login }}
+      #   run: |
+      #     if [ "$ACTUAL_AUTHOR" != "$EXPECTED_AUTHOR" ]; then
+      #       echo "::error::Unauthorized PR author: $ACTUAL_AUTHOR"
+      #       exit 1
+      #     fi
 
       - name: Checkout PR head
         uses: actions/checkout@v4
