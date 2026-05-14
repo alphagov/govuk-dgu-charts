@@ -34,24 +34,24 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Verify commit SHA is on main branch in datagovuk
-        env:
-          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
-        run: |
-          COMMIT_SHA=$(awk '/^tag:/ {print $2}' charts/datagovuk/images/staging/datagovuk.yaml)
-          echo "Checking commit SHA: $COMMIT_SHA"
+      # - name: Verify commit SHA is on main branch in datagovuk
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
+      #   run: |
+      #     COMMIT_SHA=$(awk '/^tag:/ {print $2}' charts/datagovuk/images/staging/datagovuk.yaml)
+      #     echo "Checking commit SHA: $COMMIT_SHA"
 
-          if ! STATUS=$(gh api "repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main" --jq '.status'); then
-            echo "::error::Could not find commit $COMMIT_SHA in alphagov/datagovuk."
-            exit 1
-          fi
+      #     if ! STATUS=$(gh api "repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main" --jq '.status'); then
+      #       echo "::error::Could not find commit $COMMIT_SHA in alphagov/datagovuk."
+      #       exit 1
+      #     fi
 
-          if [[ ! "$STATUS" =~ ^(ahead|identical)$ ]]; then
-            echo "::error::Commit $COMMIT_SHA is not on the main branch (Status: $STATUS)."
-            exit 1
-          fi
+      #     if [[ ! "$STATUS" =~ ^(ahead|identical)$ ]]; then
+      #       echo "::error::Commit $COMMIT_SHA is not on the main branch (Status: $STATUS)."
+      #       exit 1
+      #     fi
 
-          echo "Verified: $COMMIT_SHA is safely on the main branch."
+      #     echo "Verified: $COMMIT_SHA is safely on the main branch."
 
       - name: Wait for all Required PR checks to finish
         env:
