@@ -2,7 +2,7 @@ name: Approve and Merge datagovuk updates
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     branches:
       - DGUK-539-auto-deploy-staging
     paths:
