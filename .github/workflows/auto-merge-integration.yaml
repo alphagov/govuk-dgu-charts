@@ -56,10 +56,11 @@ jobs:
 
           echo "Verified: $COMMIT_SHA is safely on the main branch."
 
-      - name: Wait for all Required PR checks to finish
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr checks ${{ github.event.pull_request.number }} --watch --required --fail-fast
+      - name: Wait for all PR checks to finish
+        uses: poseidon/wait-for-status-checks@899c768d191b56eef585c18f8558da19e1f3e707
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          timeout: 240s # 4 minutes
           
       - name: Approve the PR
         env:
