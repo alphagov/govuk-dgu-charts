@@ -9,4 +9,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           show-progress: false
+      - name: Temporary delay for testing
+        run: sleep 20
       - uses: alphagov/govuk-infrastructure/.github/actions/actionlint@main
