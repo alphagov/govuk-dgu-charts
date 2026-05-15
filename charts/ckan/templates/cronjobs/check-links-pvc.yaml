@@ -1,3 +1,4 @@
+{{- $ckanEfs := print .Release.Name "-ckan-efs" -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -10,5 +11,5 @@ spec:
     - ReadWriteMany
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ $fullName }}-efs
-      app.kubernetes.io/component: {{ $fullName }}-efs
+      app.kubernetes.io/name: {{ $ckanEfs }}
+      app.kubernetes.io/component: {{ $ckanEfs }}
