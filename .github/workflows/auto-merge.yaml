@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened]
     branches:
-      - DGUK-539-auto-deploy-staging
+      - main
     paths:
       - charts/datagovuk/images/staging/datagovuk.yaml
       - charts/datagovuk/images/integration/datagovuk.yaml
@@ -56,8 +56,7 @@ jobs:
         run: |
           FILE="charts/datagovuk/images/${ENV_NAME}/datagovuk.yaml"
           COMMIT_SHA=$(awk '/^tag:/ {print $2}' "$FILE")
-          
-          # Run the API check and catch 404s gracefully in one line
+
           STATUS=$(gh api "repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main" --jq '.status' || echo "missing")
           [[ "$STATUS" =~ ^(ahead|identical)$ ]] || { echo "::error::Commit $COMMIT_SHA is not on main (status: $STATUS)"; exit 1; }
 
