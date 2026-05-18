@@ -73,6 +73,13 @@
   value: /config/production.ini
 - name: CKAN_REDIS_URL
   value: redis://{{ .redis.host | default (print $.Release.Name "-redis") }}/{{ .redis.dbNumber | default "1" }}
+- name: SENTRY_DSN
+  valueFrom: 
+    secretKeyRef:
+      name: {{ .sentryDSNRef.name }}
+      key: {{ .sentryDSNRef.key }}
+- name: SENTRY_ENVIRONMENT
+  value: {{ $.Values.environment }}
   {{- if $.Values.dev.enabled }}
 - name: CKAN_TEST_SYSADMIN_NAME
   value: ckan_admin_test

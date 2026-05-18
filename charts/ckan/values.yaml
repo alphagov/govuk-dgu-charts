@@ -53,6 +53,9 @@ ckan:
     beakerSessionValidateKeyRef:
       name: ckan
       key: beaker_session_validate_key
+    sentryDSNRef:
+      name: ckan
+      key: ckan_sentry_dsn
     solr:
       url: ""
       user: ""
