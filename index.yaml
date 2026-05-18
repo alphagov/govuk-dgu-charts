@@ -39,6 +39,15 @@ entries:
     version: 1.0.0
   argo-bootstrap:
   - apiVersion: v2
+    created: "2026-05-18T15:10:19.484707767Z"
+    description: Bootstraps CKAN in Argo CD
+    digest: 74aa4339d81cdb8e97664b1e077d8a72f0de3532486eb78b3d05a7c0dd5ff92d
+    name: argo-bootstrap
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-dgu-charts/releases/download/argo-bootstrap-1.4.0/argo-bootstrap-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v2
     created: "2025-04-11T11:59:13.48991751Z"
     description: Bootstraps CKAN in Argo CD
     digest: 81c8ff0510d07387773848627f1ec102d8229f2a5bc63795dc4a46cdc055a50d
@@ -122,4 +131,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-dgu-charts/releases/download/ndl-load-test-0.1.2/ndl-load-test-0.1.2.tgz
     version: 0.1.2
-generated: "2026-03-18T10:32:10.053200265Z"
+generated: "2026-05-18T15:10:19.882769302Z"
