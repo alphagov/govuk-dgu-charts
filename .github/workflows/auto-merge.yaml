@@ -1,0 +1,86 @@
+name: Approve and Merge datagovuk updates
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - main
+    paths:
+      - charts/datagovuk/images/staging/datagovuk.yaml
+      - charts/datagovuk/images/integration/datagovuk.yaml
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: read
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Verify PR Author
+        env:
+          EXPECTED_AUTHOR: ${{ secrets.PR_GITHUB_TOKEN_USERNAME }}
+          ACTUAL_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          if [ "$ACTUAL_AUTHOR" != "$EXPECTED_AUTHOR" ]; then
+            echo "::error::Unauthorized PR author: $ACTUAL_AUTHOR"
+            exit 1
+          fi
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+
+      - name: Extract & Validate Metadata
+        id: workflow_meta_data
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          ENV_NAME="${HEAD_REF##*-}"
+          
+          if [[ ! "$ENV_NAME" =~ ^(staging|integration)$ ]]; then
+            echo "::error::Invalid environment extracted: $ENV_NAME"; exit 1
+          fi
+          
+          [[ "$HEAD_REF" == ci/* ]] || { echo "::error::Head ref must start with ci/"; exit 1; }
+          [[ "$TITLE" == *"Update datagovuk image tags for $ENV_NAME"* ]] || { echo "::error::Unexpected PR title"; exit 1; }
+          
+          # Pass the extracted environment to future steps
+          echo "env=$ENV_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Verify commit SHA is on main branch in datagovuk
+        env:
+          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
+          ENV_NAME: ${{ steps.workflow_meta_data.outputs.env }}
+        run: |
+          FILE="charts/datagovuk/images/${ENV_NAME}/datagovuk.yaml"
+          COMMIT_SHA=$(awk '/^tag:/ {print $2}' "$FILE")
+
+          STATUS=$(gh api "repos/alphagov/datagovuk/compare/${COMMIT_SHA}...main" --jq '.status' || echo "missing")
+          [[ "$STATUS" =~ ^(ahead|identical)$ ]] || { echo "::error::Commit $COMMIT_SHA is not on main (status: $STATUS)"; exit 1; }
+
+      - name: Wait for all PR checks to finish
+        uses: poseidon/wait-for-status-checks@899c768d191b56eef585c18f8558da19e1f3e707 # v0.6.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          timeout: 240s # 4 minutes
+
+      - name: Approve PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          gh pr review ${{ github.event.pull_request.number }} 
+          --approve 
+          --body "Automated approval for datagovuk ${{ steps.workflow_meta_data.outputs.env }} image tag updates." 
+          --repo ${{ github.repository }}
+
+      - name: Enable Auto-Merge
+        env:
+          GH_TOKEN: ${{ secrets.PR_GITHUB_TOKEN }}
+        run: >
+          gh pr merge ${{ github.event.pull_request.number }} 
+          --auto 
+          --merge 
+          --delete-branch 
+          --repo ${{ github.repository }}
