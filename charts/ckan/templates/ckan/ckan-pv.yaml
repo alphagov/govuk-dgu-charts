@@ -1,4 +1,4 @@
-{{- $fullName := print .Release.Name "-ckan-efs" -}}
+{{- $fullName := print .Release.Name "-ckan-efs-pv" -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:

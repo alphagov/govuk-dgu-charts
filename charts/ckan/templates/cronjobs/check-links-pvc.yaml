@@ -1,4 +1,4 @@
-{{- $ckanEfs := print .Release.Name "-ckan-efs" -}}
+{{- $ckanEfs := print .Release.Name "-ckan-efs-pv" -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
