@@ -110,6 +110,18 @@ ckanHelmValues:
 datagovukHelmValues:
   environment: production
   arch: arm64
+  datagovuk:
+    ingress:
+      host: datagovuk.eks.production.govuk.digital
+      ingressClassName: aws-alb
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/shield-advanced-protection: "true"
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
+          access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-production-aws-logging, access_logs.s3.prefix=elb/www-datagovuk
   find:
     appResources:
       limits:
@@ -125,7 +137,7 @@ datagovukHelmValues:
       rateLimitPeriod: "60"
       solrUrl: "http://ckan-solr/solr/ckan"
     ingress:
-      host: datagovuk.eks.production.govuk.digital
+      host: find.eks.production.govuk.digital
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
