@@ -1,4 +1,4 @@
-{{- $fullName := print .Release.Name "-ckan-efs-pv" -}}
+{{- $fullName := print .Release.Name "-ckan-efs-pv-1" -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -17,4 +17,4 @@ spec:
     - nfsvers=4.1
   nfs:
     server: ckan_outputs.{{ .Values.environment }}.govuk-internal.digital
-    path: /
+    path: /output

@@ -1,8 +1,8 @@
-{{- $ckanEfs := print .Release.Name "-ckan-efs-pv" -}}
+{{- $ckanEfs := print .Release.Name "-ckan-efs-pv-1" -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-check-links-efs-pv-pvc
+  name: {{ .Release.Name }}-check-links-efs-pv-1-pvc
 spec:
   resources:
     requests:

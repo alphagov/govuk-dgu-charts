@@ -27,13 +27,12 @@ spec:
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
               workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
               imagePullPolicy: Always
-              # command: [ "/bin/sh", "-c", "python check_links.py --output-dir=/" ]
-              command: [ "/bin/sh", "-c", "sleep 10000" ]
+              command: [ "/bin/sh", "-c", "python check_links.py --output-dir=/output" ]
               env:
                 {{- include "ckan.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: check-links-output
-                  mountPath: /
+                  mountPath: /output
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -49,7 +48,7 @@ spec:
           volumes:
             - name: check-links-output
               persistentVolumeClaim:
-                claimName: {{ .Release.Name }}-check-links-efs-pv-pvc
+                claimName: {{ .Release.Name }}-check-links-efs-pv-1-pvc
           {{- if eq "arm64" .Values.arch }}
           tolerations:
             - key: arch

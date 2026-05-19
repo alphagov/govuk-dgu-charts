@@ -54,6 +54,19 @@ spec:
               mountPath: /init
             - name: prom-tmp
               mountPath: /prom_tmp
+        - name: fs-owner-change
+          image: busybox
+          command:
+            - chown
+            - "900:900"
+            - "/output"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - mountPath: /output
+              name: check-links-output
       containers:
         - name: ckan
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
@@ -138,7 +151,7 @@ spec:
           volumeMounts:
             {{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
             - name: check-links-output
-              mountPath: /
+              mountPath: /output
               readOnly: true # Only allow read access to the check-links output in the nginx container
             {{- end }}
             - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
@@ -165,7 +178,7 @@ spec:
         {{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
         - name: check-links-output
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-check-links-efs-pv-pvc
+            claimName: {{ .Release.Name }}-check-links-efs-pv-1-pvc
         {{- end }}
         - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
