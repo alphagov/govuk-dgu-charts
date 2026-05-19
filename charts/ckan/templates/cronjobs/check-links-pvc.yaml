@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-check-links-efs-pvc
+  name: {{ .Release.Name }}-check-links-efs-pv-pvc
 spec:
   resources:
     requests:

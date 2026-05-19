@@ -165,7 +165,7 @@ spec:
         {{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
         - name: check-links-output
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-check-links-efs-pvc
+            claimName: {{ .Release.Name }}-check-links-efs-pv-pvc
         {{- end }}
         - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
