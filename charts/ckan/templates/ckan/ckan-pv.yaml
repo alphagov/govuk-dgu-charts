@@ -17,4 +17,4 @@ spec:
     - nfsvers=4.1
   nfs:
     server: ckan_outputs.{{ .Values.environment }}.govuk-internal.digital
-    path: /output
+    path: /

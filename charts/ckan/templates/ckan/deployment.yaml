@@ -138,7 +138,7 @@ spec:
           volumeMounts:
             {{- if or (eq "test" .Values.environment) (eq "integration" .Values.environment) }}
             - name: check-links-output
-              mountPath: /output
+              mountPath: /
               readOnly: true # Only allow read access to the check-links output in the nginx container
             {{- end }}
             - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
