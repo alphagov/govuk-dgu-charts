@@ -125,7 +125,7 @@ datagovukHelmValues:
       rateLimitPeriod: "60"
       solrUrl: "http://ckan-solr/solr/ckan"
     ingress:
-      host: find.eks.production.govuk.digital
+      host: datagovuk.eks.production.govuk.digital
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
