@@ -30,17 +30,17 @@ spec:
         fsGroup: 900
         seccompProfile:
           type: RuntimeDefault
-      # initContainers:
-      #   - name: init-chown
-      #     image: busybox
-      #     command: [ "sh", "-c", "chown -R 900:900 /" ]
-      #     securityContext:
-      #       allowPrivilegeEscalation: false
-      #       capabilities:
-      #         drop: ["ALL"]
-      #     volumeMounts:
-      #       - mountPath: &output-path /mnt/output
-      #         name: check-links-output
+      initContainers:
+        - name: init-chown
+          image: busybox
+          command: [ "sh", "-c", "chown -R 900:900 /mnt/output" ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - mountPath: &output-path /mnt/output
+              name: check-links-output
       containers:
         - name: nginx
           image: "{{ .Values.checklinks.nginx.image.repository }}:{{ .Values.checklinks.nginx.image.tag }}"
@@ -71,7 +71,7 @@ spec:
               drop: ["ALL"]
           volumeMounts:
             - name: check-links-output
-              mountPath: /mnt/output
+              mountPath: *output-path
               readOnly: true # Only allow read access to the check-links output in the nginx container
             - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
