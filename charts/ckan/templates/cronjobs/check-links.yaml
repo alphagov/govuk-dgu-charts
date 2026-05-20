@@ -48,7 +48,7 @@ spec:
           volumes:
             - name: check-links-output
               persistentVolumeClaim:
-                claimName: {{ .Release.Name }}-check-links-pvc
+                claimName: {{ .Release.Name }}-check-links-1-pvc
           {{- if eq "arm64" .Values.arch }}
           tolerations:
             - key: arch

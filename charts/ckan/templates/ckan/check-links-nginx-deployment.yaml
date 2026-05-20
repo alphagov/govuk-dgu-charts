@@ -33,7 +33,7 @@ spec:
       initContainers:
         - name: init-chown
           image: busybox
-          command: [ "sh", "-c", "chown -R 900:900 /mnt/output" ]
+          command: [ "sh", "-c", "mkdir -p /mnt/output && chown -R 900:900 /mnt/output" ]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -85,7 +85,7 @@ spec:
       volumes:
         - name: check-links-output
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-check-links-pvc
+            claimName: {{ .Release.Name }}-check-links-1-pvc
         - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
             name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
