@@ -39,7 +39,7 @@ spec:
             capabilities:
               drop: ["ALL"]
           volumeMounts:
-            - mountPath: /
+            - mountPath: &uploads-path /mnt/output
               name: check-links-output
       containers:
         - name: nginx
@@ -71,7 +71,7 @@ spec:
               drop: ["ALL"]
           volumeMounts:
             - name: check-links-output
-              mountPath: /
+              mountPath: *uploads-path
               readOnly: true # Only allow read access to the check-links output in the nginx container
             - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
