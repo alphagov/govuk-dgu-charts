@@ -97,7 +97,7 @@ data:
 
         location /check-links-output {
           autoindex on;
-          alias /output;
+          alias /;
         }
       }
     }
