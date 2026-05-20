@@ -34,6 +34,10 @@ spec:
         - name: init-chown
           image: busybox
           command: [ "sh", "-c", "chown -R 900:900 /output" ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           volumeMounts:
             - mountPath: /output
               name: check-links-output
