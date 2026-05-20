@@ -34,7 +34,7 @@ spec:
         - name: init-chown
           image: busybox
           # command: [ "sh", "-c", "mkdir -p /mnt/output && chown -R 900:900 /mnt/output" ]
-          command: [ "sh", "-c", "mkdir -p /mnt/output" ]
+          command: [ "sh", "-c", "mkdir -p /mnt/output && touch /mnt/output/tmp" ]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
