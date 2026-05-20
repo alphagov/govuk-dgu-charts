@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ .Release.Name }}-datagovuk
+  labels:
+    app: {{ .Release.Name }}-datagovuk
+    helm.sh/chart: govuk-dgu-charts
+    app.kubernetes.io/name: datagovuk
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-datagovuk
+  podMetricsEndpoints:
+  - port: metrics
