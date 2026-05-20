@@ -85,7 +85,7 @@ spec:
       volumes:
         - name: check-links-output
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-check-links-efs-pv-1-pvc
+            claimName: {{ .Release.Name }}-check-links-efs-pv-2-pvc
         - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
             name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
