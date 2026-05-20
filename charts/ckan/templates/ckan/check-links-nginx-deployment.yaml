@@ -30,17 +30,17 @@ spec:
         fsGroup: 900
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        - name: init-chown
-          image: busybox
-          command: [ "sh", "-c", "chown -R 900:900 /" ]
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
-          volumeMounts:
-            - mountPath: &uploads-path /mnt/output
-              name: check-links-output
+      # initContainers:
+      #   - name: init-chown
+      #     image: busybox
+      #     command: [ "sh", "-c", "chown -R 900:900 /" ]
+      #     securityContext:
+      #       allowPrivilegeEscalation: false
+      #       capabilities:
+      #         drop: ["ALL"]
+      #     volumeMounts:
+      #       - mountPath: &output-path /mnt/output
+      #         name: check-links-output
       containers:
         - name: nginx
           image: "{{ .Values.checklinks.nginx.image.repository }}:{{ .Values.checklinks.nginx.image.tag }}"
@@ -71,7 +71,7 @@ spec:
               drop: ["ALL"]
           volumeMounts:
             - name: check-links-output
-              mountPath: *uploads-path
+              mountPath: /mnt/output
               readOnly: true # Only allow read access to the check-links output in the nginx container
             - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
@@ -85,7 +85,7 @@ spec:
       volumes:
         - name: check-links-output
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-check-links-efs-pv-3-pvc
+            claimName: {{ .Release.Name }}-check-links-pvc
         - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
             name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
