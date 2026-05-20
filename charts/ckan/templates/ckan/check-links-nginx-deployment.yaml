@@ -34,13 +34,13 @@ spec:
         - name: init-chown
           image: busybox
           # command: [ "sh", "-c", "mkdir -p /mnt/output && chown -R 900:900 /mnt/output" ]
-          command: [ "sh", "-c", "mkdir -p /mnt/output && touch /mnt/output/tmp" ]
+          command: [ "sh", "-c", "mkdir -p /var/lib/ckan/output" ]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
           volumeMounts:
-            - mountPath: &output-path /mnt/output
+            - mountPath: &output-path /var/lib/ckan/output
               name: check-links-output
       containers:
         - name: nginx
