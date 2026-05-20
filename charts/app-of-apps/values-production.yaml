@@ -112,7 +112,6 @@ datagovukHelmValues:
   arch: arm64
   datagovuk:
     ingress:
-      host: datagovuk.eks.production.govuk.digital
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing

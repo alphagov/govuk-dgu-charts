@@ -107,7 +107,6 @@ datagovukHelmValues:
   environment: staging
   datagovuk:
     ingress:
-      host: datagovuk.eks.staging.govuk.digital
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing
