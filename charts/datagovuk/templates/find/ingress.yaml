@@ -32,8 +32,14 @@ spec:
             pathType: Prefix
             backend:
               service:
+              {{- if ne "production" $.Values.environment }}
+                name: {{ $.Release.Name }}-datagovuk
+                port:
+                  number: 8000
+              {{- else }}
                 name: {{ $.Release.Name }}-frontend-find
                 port:
                   number: 3000
+              {{- end }}
 {{- end }}
 {{- end }}
