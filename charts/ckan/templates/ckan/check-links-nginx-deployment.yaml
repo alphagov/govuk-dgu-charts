@@ -34,7 +34,7 @@ spec:
         - name: init-chown
           image: busybox
           # command: [ "sh", "-c", "mkdir -p /mnt/output && chown -R 900:900 /mnt/output" ]
-          command: [ "sh", "-c", "mkdir -p /var/lib/ckan/output" ]
+          command: [ "sh", "-c", "mkdir -p /var/lib/ckan/output && touch /var/lib/ckan/output/tmp" ]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
