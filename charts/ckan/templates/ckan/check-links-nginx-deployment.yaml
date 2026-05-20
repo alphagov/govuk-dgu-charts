@@ -33,7 +33,8 @@ spec:
       initContainers:
         - name: init-chown
           image: busybox
-          command: [ "sh", "-c", "mkdir -p /mnt/output && chown -R 900:900 /mnt/output" ]
+          # command: [ "sh", "-c", "mkdir -p /mnt/output && chown -R 900:900 /mnt/output" ]
+          command: [ "sh", "-c", "mkdir -p /mnt/output" ]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
