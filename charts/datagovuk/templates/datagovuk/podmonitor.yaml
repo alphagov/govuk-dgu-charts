@@ -1,3 +1,4 @@
+{{- if ne "test" $.Values.environment }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
@@ -13,3 +14,4 @@ spec:
       app: {{ .Release.Name }}-datagovuk
   podMetricsEndpoints:
   - port: metrics
+{{- end }}
