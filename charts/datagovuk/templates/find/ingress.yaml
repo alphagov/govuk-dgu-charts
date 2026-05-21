@@ -11,7 +11,7 @@ metadata:
   annotations:
     {{- tpl (toYaml .annotations) $ | trim | nindent 4 }}
     {{- if ne "production" $.Values.environment }}
-      {{- tpl (toYaml $.Values.datagovuk.ingress.annotations) $ | trim | nindent 6 }}
+    alb.ingress.kubernetes.io/healthcheck-path: "/health/"
     {{- end }}
   {{- end }}
 spec:
