@@ -19,6 +19,7 @@ datagovuk:
     host: datagovuk.eks.test.govuk.digital
     ingressClassName: ""
     annotations:
+      service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: "/health/"
   config:
     basicAuthNameSecretKeyRef:
       name: datagovuk
