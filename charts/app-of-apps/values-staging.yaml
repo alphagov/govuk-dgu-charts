@@ -147,7 +147,7 @@ datagovukHelmValues:
               "www.staging.data.gov.uk",
               "staging.data.gov.uk"
           ]}}]
-        alb.ingress.kubernetes.io/conditions.datagovuk-frontend-find: |
+        alb.ingress.kubernetes.io/conditions.datagovuk-datagovuk: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.staging.data.gov.uk",
               "staging.data.gov.uk"
