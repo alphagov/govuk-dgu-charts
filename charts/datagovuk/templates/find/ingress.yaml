@@ -10,6 +10,9 @@ metadata:
   {{- if not (empty .annotations) }}
   annotations:
     {{- tpl (toYaml .annotations) $ | trim | nindent 4 }}
+    {{- if ne "production" $.Values.environment }}
+    alb.ingress.kubernetes.io/healthcheck-path: "/health/"
+    {{- end }}
   {{- end }}
 spec:
   {{ if not (empty .ingressClassName) }}
