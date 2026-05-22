@@ -27,7 +27,7 @@ spec:
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
               workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
               imagePullPolicy: Always
-              command: [ python, check_links.py, --output-dir=/output ]
+              command: [ python, check_links.py, --output-dir=/output, --limit=1000 ]
               env:
                 {{- include "ckan.environment-variables" . | nindent 16 }}
               volumeMounts:
