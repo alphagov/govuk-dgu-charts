@@ -15,7 +15,7 @@ datagovuk:
   replicaCount: 1
   command: ["/bin/sh", "-c", "/start"]
   ingress:
-    enabled: true
+    enabled: false
     host: datagovuk.eks.test.govuk.digital
     ingressClassName: ""
     annotations:
