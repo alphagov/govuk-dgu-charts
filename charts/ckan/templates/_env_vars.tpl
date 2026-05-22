@@ -109,6 +109,6 @@
       key: {{ .s3.credentials.awsSecretAccessKeySecretKeyRef.key }}
 {{- end }}
 - name: CKAN_OUTPUT_BUCKET_NAME
-  value: datagovuk-{{ $.Values.environment }}-ckan-organogram
+  value: govuk-ckan-output-{{ $.Values.environment }}
 {{- end }}
 {{- end }}
