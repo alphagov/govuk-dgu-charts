@@ -15,7 +15,7 @@ datagovuk:
   replicaCount: 1
   command: ["/bin/sh", "-c", "/start"]
   ingress:
-    enabled: true
+    enabled: false
     host: datagovuk.eks.test.govuk.digital
     ingressClassName: ""
     annotations:
@@ -57,6 +57,8 @@ find:
       - /harvest
       - /user/login
       - /find-assets
+      - /javascript
+      - /search.html
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
     solrUrl: "http://ckan-dev-solr/solr/ckan"
