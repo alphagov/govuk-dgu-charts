@@ -151,7 +151,7 @@ datagovukHelmValues:
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.data.gov.uk"
           ]}}]
-        alb.ingress.kubernetes.io/conditions.datagovuk-frontend-find: |
+        alb.ingress.kubernetes.io/conditions.datagovuk-datagovuk: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.data.gov.uk"
           ]}}]
