@@ -1,4 +1,4 @@
-{{- if .Values.datagovuk.ingress.enabled }}
+{{- if eq "production" $.Values.environment }}
 {{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
 {{- $stablePath := print "eks." $.Values.environment -}}
 {{- $environmentPath := eq "ephemeral" $.Values.environment | ternary $ephemeralPath $stablePath -}}
