@@ -57,6 +57,8 @@ find:
       - /harvest
       - /user/login
       - /find-assets
+      - /javascript
+      - /search.html
   config:
     ckanDomain: "ckan.publishing.service.gov.uk"
     solrUrl: "http://ckan-dev-solr/solr/ckan"
