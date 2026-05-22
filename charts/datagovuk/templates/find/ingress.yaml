@@ -10,7 +10,9 @@ metadata:
   {{- if not (empty .annotations) }}
   annotations:
     {{- tpl (toYaml .annotations) $ | trim | nindent 4 }}
+    {{- if ne "production" $.Values.environment }}
     alb.ingress.kubernetes.io/healthcheck-path: "/health/"
+    {{- end }}
   {{- end }}
 spec:
   {{ if not (empty .ingressClassName) }}
@@ -33,8 +35,14 @@ spec:
             pathType: Prefix
             backend:
               service:
+              {{- if ne "production" $.Values.environment }}
                 name: {{ $.Release.Name }}-datagovuk
                 port:
                   number: 8000
+              {{- else }}
+                name: {{ $.Release.Name }}-frontend-find
+                port:
+                  number: 3000
+              {{- end }}
 {{- end }}
 {{- end }}
