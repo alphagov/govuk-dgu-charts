@@ -75,7 +75,7 @@ spec:
               drop: ["ALL"]
           volumeMounts:
             - name: check-links-output
-              mountPath: /output
+              mountPath: /check_links
               readOnly: true # Only allow read access to the check-links output in the nginx container
             - name: {{ .Values.checklinks.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
