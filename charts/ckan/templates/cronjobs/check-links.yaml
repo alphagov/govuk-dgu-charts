@@ -29,7 +29,7 @@ spec:
               imagePullPolicy: Always
               command: [ python, check_links.py, --output-dir=/output, --limit=100 ]
               env:
-                {{- include "ckan.environment-variables" . | nindent 16 }}
+                {{- include "check-links.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: check-links-output
                   mountPath: /output

@@ -108,7 +108,10 @@
       name: {{ .s3.credentials.awsSecretAccessKeySecretKeyRef.name }}
       key: {{ .s3.credentials.awsSecretAccessKeySecretKeyRef.key }}
 {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "check-links.environment-variables" -}}
 - name: CKAN_OUTPUT_BUCKET_NAME
   value: govuk-ckan-output-{{ $.Values.environment }}
-{{- end }}
 {{- end }}
