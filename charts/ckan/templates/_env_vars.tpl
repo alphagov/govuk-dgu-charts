@@ -111,7 +111,7 @@
 {{ else }}
   valueFrom:
     secretKeyRef:
-      name: {{ .sqlalchemyUrlSecretKeyRef.name }}
-      key: {{ .sqlalchemyUrlSecretKeyRef.key }}
+      name: {{ $.Values.ckan.config.sqlalchemyUrlSecretKeyRef.name }}
+      key: {{ $.Values.ckan.config.sqlalchemyUrlSecretKeyRef.key }}
 {{ end }}
 {{- end }}
