@@ -37,6 +37,11 @@ spec:
           command: [ python, check_links_download.py ]
           env:
             {{- include "check-links.environment-variables" . | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
           volumeMounts:
             - name: check-links-output
               mountPath: /check_links
