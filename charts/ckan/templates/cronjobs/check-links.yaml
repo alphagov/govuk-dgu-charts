@@ -7,8 +7,8 @@ metadata:
   labels:
     app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
-  schedule: "0 9 * * *"
-  suspend: true
+  schedule: "0 20 * * *"
+  suspend: false
   concurrencyPolicy: Forbid
   jobTemplate:
     metadata:
