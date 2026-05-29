@@ -141,6 +141,28 @@ ckan:
         cpu: 50m
         memory: 512Mi
 
+checklinks:
+  nginx:
+    image:
+      repository: nginx
+      pullPolicy: Always
+      tag: stable
+    port: 8080
+    proxyConnectTimeout: 2s
+    proxyReadTimeout: 30s
+    clientMaxBodySize: 50M
+    configMap:
+      create: true
+      name: ""
+    denyCrawlers: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 50m
+        memory: 512Mi
+
 solr:
   enabled: true
   persistence:
