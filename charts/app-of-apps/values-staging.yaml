@@ -31,7 +31,7 @@ ckanHelmValues:
           ]}}]
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-check-links-output: |
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "ckan.integration.publishing.service.gov.uk"
+              "ckan.staging.publishing.service.gov.uk"
           ]}}]
       tls:
         enabled: true
