@@ -35,6 +35,7 @@ spec:
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
           workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
           command: [ python, check_links_download.py ]
+          # command: [ sleep, "10" ] # Temporary command to allow time for check-links script to run and output to be available before nginx starts. This should be replaced with the actual download script once it's implemented.
           env:
             {{- include "check-links.environment-variables" . | nindent 12 }}
           securityContext:
@@ -46,6 +47,29 @@ spec:
             - name: check-links-output
               mountPath: /check_links
       containers:
+        - name: check-new-reports
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+          workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+          command: [ "bash", "-c", "trap : TERM INT; sleep infinity & wait" ]
+          livenessProbe:
+            exec:
+              # command: [ "bash", "-c", "sleep 100 && exit 1" ]
+              # command: [ sleep, "100", "&&", exit, "1" ]
+              # command: [ sleep, "10" ]
+              command: [ python, check_links_has_new_reports.py ]
+            initialDelaySeconds: 2
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 20
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: check-links-output
+              mountPath: /check_links
+              readOnly: true # Only allow read access to the check-links output in the nginx container
         - name: nginx
           image: "{{ .Values.checklinks.nginx.image.repository }}:{{ .Values.checklinks.nginx.image.tag }}"
           imagePullPolicy: {{ .Values.checklinks.nginx.image.pullPolicy | default "Always" }}
