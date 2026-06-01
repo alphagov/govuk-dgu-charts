@@ -56,7 +56,7 @@ spec:
               # command: [ "bash", "-c", "sleep 100 && exit 1" ]
               # command: [ sleep, "100", "&&", exit, "1" ]
               # command: [ sleep, "10" ]
-              command: [ python, check_links_has_new_reports.py ]
+              command: [ python, check_links_has_new_reports.py, --s3-dir=check_links/, --mount-path=/check_links ]
             initialDelaySeconds: 2
             failureThreshold: 3
             periodSeconds: 5
