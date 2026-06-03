@@ -12,6 +12,10 @@
 - name: DJANGO_SECURE_SSL_REDIRECT
   value: "False"
 {{- end }}
+{{ if eq $environment "integration" }}
+- name: FEATURE_FLAGS_ENABLED
+  value: "early-years"
+{{- end }}
 {{- with .Values.datagovuk.config }}
 {{ if ne $environment "production" }}
 - name: BASIC_AUTH_USERNAME
