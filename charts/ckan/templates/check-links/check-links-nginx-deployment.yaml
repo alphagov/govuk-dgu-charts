@@ -42,7 +42,7 @@ spec:
               command: [ "bash", "-c", "python check_links_has_new_reports.py --s3-dir=check_links/ --mount-path=/check_links" ]
             initialDelaySeconds: 2
             failureThreshold: 3
-            periodSeconds: 5
+            periodSeconds: 14400 # Check every 4 hours
             timeoutSeconds: 20
           securityContext:
             allowPrivilegeEscalation: false
