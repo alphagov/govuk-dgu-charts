@@ -1,7 +1,8 @@
+{{- $fullName := print .Release.Name "-check-links" -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Release.Name }}-check-links
+  name: {{ $fullName }}
   annotations:
     argocd.argoproj.io/ignore-healthcheck: "true"
   labels:
@@ -12,13 +13,13 @@ spec:
   concurrencyPolicy: Forbid
   jobTemplate:
     metadata:
-      name: {{ .Release.Name }}-check-links
+      name: {{ $fullName }}
       labels:
         app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       template:
         metadata:
-          name: {{ .Release.Name }}-check-links
+          name: {{ $fullName }}
           labels:
             app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
         spec:
@@ -27,12 +28,14 @@ spec:
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
               workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
               imagePullPolicy: Always
-              command: [ "bash", "-c", "python check_links.py --output-dir=/check_links" ]
+              command: [ "bash", "-c", ". chart/check_links-sort-upload.sh" ]
               env:
                 {{- include "check-links.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: check-links-output
                   mountPath: /check_links
+                - name: check-links-sort-upload-script
+                  mountPath: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts/chart
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -60,6 +63,9 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumes:
+            - name: check-links-sort-upload-script
+              configMap:
+                name: {{ $fullName }}-sort-upload-script
             - name: check-links-output
               emptyDir: {}
           {{- if eq "arm64" .Values.arch }}
