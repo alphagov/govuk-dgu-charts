@@ -10,4 +10,4 @@ data:
   check_links-deletion.sh: |-
     cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
     python check_links_download.py
-    python process_check_links_report.py --input /check_links/check_links_report_20260607T0000.csv --output-dir /check_links --set-state deleted --mode live
+    python process_check_links_report.py --input /check_links/check_links_report_20260607T0000.csv --output-dir /check_links --set-state active --mode live
