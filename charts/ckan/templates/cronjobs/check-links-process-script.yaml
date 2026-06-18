@@ -1,0 +1,14 @@
+{{- $fullName := (print .Release.Name "-check-links-process") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-script
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  check_links-process.sh: |-
+    cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+    python check_links_download.py
+    python process_check_links_report.py --input /check_links/check_links_report_20260619T0801.csv --output-dir /check_links --set-state deleted --mode live
+    python solr_reindex_package_ids.py --input-file /check_links/packages_to_reindex_20260619T0801.txt
