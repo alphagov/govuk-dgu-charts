@@ -1,4 +1,4 @@
-{{- $fullName := (print .Release.Name "-check-links-deletion") -}}
+{{- $fullName := (print .Release.Name "-check-links-process") -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,7 +7,7 @@ metadata:
     app: {{ $fullName }}
     app.kubernetes.io/name: {{ $fullName }}
 data:
-  check_links-deletion.sh: |-
+  check_links-process.sh: |-
     cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
     python check_links_download.py
-    python process_check_links_report.py --input /check_links/check_links_report_20260619T0801.csv --output-dir /check_links --set-state deleted --mode live
+    python process_check_links_report.py --input /check_links/check_links_report_20260619T0801.csv --output-dir /check_links --set-state active --mode live
