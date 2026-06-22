@@ -10,5 +10,8 @@ data:
   check_links-process.sh: |-
     cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
     python check_links_download.py
-    python process_check_links_report.py --input /check_links/check_links_report_20260619T0801.csv --output-dir /check_links --set-state deleted --mode live
-    python solr_reindex_package_ids.py --input-file /check_links/packages_to_reindex_20260619T0801.txt
+
+    export REPORT_TIMESTAMP=20260619T0801
+
+    python process_check_links_report.py --input "/check_links/check_links_report_$REPORT_TIMESTAMP.csv" --output-dir /check_links --set-state active --mode live
+    python solr_reindex_package_ids.py --input-file "/check_links/packages_to_reindex_$REPORT_TIMESTAMP.txt"
