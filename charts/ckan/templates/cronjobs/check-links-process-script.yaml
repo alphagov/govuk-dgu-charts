@@ -12,7 +12,7 @@ data:
     python check_links_download.py
 
     export REPORT_TIMESTAMP=20260619T0801
-    export STATE=active
+    export STATE=deleted
 
     python process_check_links_report.py --input "/check_links/check_links_report_$REPORT_TIMESTAMP.csv" --output-dir /check_links --set-state "$STATE" --mode live
     python solr_reindex_package_ids.py --input-file "/check_links/packages_to_reindex_$REPORT_TIMESTAMP.txt"
