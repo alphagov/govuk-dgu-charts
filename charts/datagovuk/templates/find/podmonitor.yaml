@@ -14,20 +14,4 @@ spec:
       app: {{ .Release.Name }}-find
   podMetricsEndpoints:
   - port: metrics
----
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: {{ .Release.Name }}-frontend-find
-  labels:
-    app: {{ .Release.Name }}-frontend-find
-    helm.sh/chart: govuk-dgu-charts
-    app.kubernetes.io/name: frontend-find
-    app.kubernetes.io/managed-by: Helm
-spec:
-  selector:
-    matchLabels:
-      app: {{ .Release.Name }}-frontend-find
-  podMetricsEndpoints:
-  - port: metrics
 {{- end }}
