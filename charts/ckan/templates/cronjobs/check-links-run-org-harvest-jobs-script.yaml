@@ -1,0 +1,17 @@
+{{- $fullName := (print .Release.Name "-check-links-run-org-harvest-jobs-script") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  check_links-run-org-harvest-jobs.sh: |-
+    cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+    python check_links_download.py
+
+    export REPORT_TIMESTAMP={{ .Values.checklinks.report.timestamp }}
+
+    pip install -r check_links-requirements.txt
+    python check_links_run_org_harvest_jobs.py --report-path=/check_links/check_links_report_$REPORT_TIMESTAMP.csv
