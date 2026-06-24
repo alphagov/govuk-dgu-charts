@@ -1,3 +1,4 @@
+{{- if .Values.checklinks.report.enabled }}
 {{- $fullName := print .Release.Name "-check-links-process" -}}
 apiVersion: batch/v1
 kind: CronJob
@@ -9,7 +10,7 @@ metadata:
     app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "0 0 * * 0"  # At 00:00 on Sunday
-  suspend: false
+  suspend: true
   concurrencyPolicy: Forbid
   jobTemplate:
     metadata:
@@ -23,6 +24,25 @@ spec:
           labels:
             app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
         spec:
+          initContainers:
+            - name: config-set
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+              command: [ "/bin/sh", "-c", '. /init/init.sh']
+              imagePullPolicy: Always
+              env:
+                {{ include "ckan.environment-variables" . | nindent 16 }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+              volumeMounts:
+                - name: production-ini
+                  mountPath: /map
+                  readOnly: true
+                - name: config
+                  mountPath: /config
+                - name: ckan-init
+                  mountPath: /init
           containers:
             - name: check-links-script
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
@@ -32,6 +52,9 @@ spec:
               env:
                 {{- include "check-links.environment-variables" . | nindent 16 }}
               volumeMounts:
+                - name: config
+                  mountPath: /config
+                  readOnly: true
                 - name: check-links-output
                   mountPath: /check_links
                 - name: check-links-process-script
@@ -49,6 +72,14 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           volumes:
+            - name: ckan-init
+              configMap:
+                name: {{ .Release.Name }}-ckan-init
+            - name: production-ini
+              configMap:
+                name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+            - name: config
+              emptyDir: {}
             - name: check-links-process-script
               configMap:
                 name: {{ $fullName }}-script
@@ -63,3 +94,4 @@ spec:
           nodeSelector:
             kubernetes.io/arch: {{ .Values.arch }}
           {{- end }}
+{{- end }}
