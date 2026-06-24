@@ -74,7 +74,7 @@ ckanHelmValues:
     report:
       enabled: true
       timestamp: "20260619T0801"
-      state: "deleted"
+      state: "active"
   solr:
     appResources:
       limits:
