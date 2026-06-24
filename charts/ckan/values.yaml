@@ -162,6 +162,9 @@ checklinks:
       requests:
         cpu: 50m
         memory: 512Mi
+  report:
+    timestamp: ""
+    state: ""
 
 solr:
   enabled: true

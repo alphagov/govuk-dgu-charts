@@ -1,3 +1,4 @@
+{{- if .Values.checklinks.report.timestamp }}
 {{- $fullName := print .Release.Name "-check-links-process" -}}
 apiVersion: batch/v1
 kind: CronJob
@@ -9,7 +10,7 @@ metadata:
     app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "0 0 * * 0"  # At 00:00 on Sunday
-  suspend: false
+  suspend: true
   concurrencyPolicy: Forbid
   jobTemplate:
     metadata:
@@ -94,3 +95,4 @@ spec:
           nodeSelector:
             kubernetes.io/arch: {{ .Values.arch }}
           {{- end }}
+{{- end }}
