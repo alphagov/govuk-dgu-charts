@@ -70,6 +70,10 @@ ckanHelmValues:
         memory: 2Gi
       requests:
         memory: 1Gi
+  checklinks:
+    report:
+      timestamp: "20260619T0801"
+      state: "deleted"
   solr:
     appResources:
       limits:
