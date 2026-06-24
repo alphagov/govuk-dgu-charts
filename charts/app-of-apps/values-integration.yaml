@@ -35,7 +35,7 @@ ckanHelmValues:
       tls:
         enabled: true
     probes:
-      enabled: false
+      enabled: true
     ckanIniConfigMap: ckan-production-ini-2-10
     config:
       dbInit: false
