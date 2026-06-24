@@ -1,4 +1,4 @@
-{{- if .Values.checklinks.report.timestamp }}
+{{- if .Values.checklinks.report.enabled }}
 {{- $fullName := print .Release.Name "-check-links-run-org-harvest-jobs" -}}
 apiVersion: batch/v1
 kind: CronJob

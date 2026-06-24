@@ -72,6 +72,7 @@ ckanHelmValues:
         memory: 1Gi
   checklinks:
     report:
+      enabled: true
       timestamp: "20260619T0801"
       state: "deleted"
   solr:
