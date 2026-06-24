@@ -7,7 +7,7 @@ ckanHelmValues:
         memory: 2Gi
       requests:
         memory: 1Gi
-    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120"]
+    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4"]
     ingress:
       host: ckan.eks.integration.govuk.digital
       ingressClassName: aws-alb
@@ -35,7 +35,7 @@ ckanHelmValues:
       tls:
         enabled: true
     probes:
-      enabled: false
+      enabled: true
     ckanIniConfigMap: ckan-production-ini-2-10
     config:
       dbInit: false
