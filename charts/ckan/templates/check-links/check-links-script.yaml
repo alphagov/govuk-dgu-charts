@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}
 data:
   download-and-wait.sh: |-
-    cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+    cd /app/check-links
     python check_links_download.py
 
     # catch termination signals and wait indefinitely until the container is terminated
