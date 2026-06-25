@@ -32,8 +32,8 @@ spec:
           type: RuntimeDefault
       containers:
         - name: check-new-reports
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
-          workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "check-links" "files" $.Files) }}'
+          workingDir: /app/check-links
           command: [ "bash", "-c", ". chart/download-and-wait.sh" ]
           env:
             {{- include "check-links.environment-variables" . | nindent 12 }}
@@ -51,7 +51,7 @@ spec:
               drop: ["ALL"]
           volumeMounts:
             - name: check-links-script
-              mountPath: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts/chart
+              mountPath: /app/check-links/chart
             - name: check-links-output
               mountPath: /check_links
         - name: nginx
