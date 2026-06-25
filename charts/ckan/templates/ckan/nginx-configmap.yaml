@@ -51,6 +51,25 @@ data:
         "" "nosniff";
       }
 
+      {{- if .Values.ckan.nginx.denyCrawlers }}
+      # Block known aggressive scrapers and crawlers that cause excessive load
+      map $http_user_agent $is_bad_bot {
+        default                   0;
+        ~*Bytespider               1;
+        ~*Sogou                    1;
+        ~*Amazonbot                1;
+        ~*PetalBot                 1;
+        ~*SemrushBot               1;
+        ~*AhrefsBot                1;
+        ~*MJ12bot                  1;
+        ~*DotBot                   1;
+        ~*BLEXBot                  1;
+        ~*Clickagy                 1;
+        ~*serpstatbot              1;
+        ~*DataForSeoBot            1;
+      }
+      {{- end }}
+
       log_format json_event escape=json '{'
         '"@timestamp":"$time_iso8601",'
         '"body_bytes_sent":$body_bytes_sent,'
@@ -95,6 +114,11 @@ data:
         {{- end }}
 
         location / {
+          {{- if .Values.ckan.nginx.denyCrawlers }}
+          if ($is_bad_bot) {
+            return 403;
+          }
+          {{- end }}
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
           proxy_pass         http://{{ $fullName }};
