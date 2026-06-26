@@ -163,6 +163,7 @@ checklinks:
     enabled: false
     timestamp: ""
     state: ""
+    process_source_url: ""
 
 solr:
   enabled: true
