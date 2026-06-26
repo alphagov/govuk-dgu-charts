@@ -23,4 +23,4 @@ data:
 
     pip install -r check_links-requirements.txt
     python process_check_links_report.py --input "$PROCESS_FILE" --output-dir /check_links --set-state "$STATE" --mode live
-    python solr_reindex_package_ids.py --input-file "$PROCESS_FILE"
+    python solr_reindex_package_ids.py --input-file "packages_to_reindex_$REPORT_TIMESTAMP.txt"
