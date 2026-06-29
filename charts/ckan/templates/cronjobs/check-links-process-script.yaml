@@ -1,0 +1,26 @@
+{{- $fullName := (print .Release.Name "-check-links-process-script") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  check_links-process.sh: |-
+    #!/bin/bash
+    set -e
+
+    cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+    python check_links_download.py
+
+    export STATE={{ .Values.checklinks.report.state }}
+    export REPORT_TIMESTAMP={{ .Values.checklinks.report.timestamp }}
+    export PROCESS_FILE="/check_links/broken_links_to_delete_$REPORT_TIMESTAMP.csv"
+    export PROCESS_SOURCE_URL={{ .Values.checklinks.report.process_source_url }}
+
+    wget "$PROCESS_SOURCE_URL" -O "$PROCESS_FILE"
+
+    pip install -r check_links-requirements.txt
+    python process_check_links_report.py --input "$PROCESS_FILE" --output-dir /check_links --set-state "$STATE" --mode live
+    python solr_reindex_package_ids.py --input-file "packages_to_reindex_$REPORT_TIMESTAMP.txt"

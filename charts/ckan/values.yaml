@@ -28,9 +28,6 @@ ckan:
   probes:
     enabled: false
   ckanIniConfigMap: ckan-production-ini-2-10
-  checkLinks:
-    persistence:
-      size: 1Gi
   config:
     dbInit: true
     site:
@@ -162,6 +159,11 @@ checklinks:
       requests:
         cpu: 50m
         memory: 512Mi
+  report:
+    enabled: false
+    timestamp: ""
+    state: ""
+    process_source_url: ""
 
 solr:
   enabled: true

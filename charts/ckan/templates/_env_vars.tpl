@@ -114,4 +114,17 @@
       name: {{ $.Values.ckan.config.sqlalchemyUrlSecretKeyRef.name }}
       key: {{ $.Values.ckan.config.sqlalchemyUrlSecretKeyRef.key }}
 {{ end }}
+- name: CKAN_SQLALCHEMY_URL
+{{- if $.Values.dev.enabled }}
+  value: {{ print "postgresql://ckan:ckan@" $.Release.Name "-postgres/ckan" }}
+{{ else }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ $.Values.ckan.config.sqlalchemyUrlSecretKeyRef.name }}
+      key: {{ $.Values.ckan.config.sqlalchemyUrlSecretKeyRef.key }}
+{{ end }}
+- name: CKAN_REDIS_URL
+  value: redis://{{ $.Values.ckan.config.redis.host | default (print $.Release.Name "-redis") }}/{{ $.Values.ckan.config.redis.dbNumber | default "1" }}
+- name: CKAN_SOLR_URL
+  value: {{ $.Values.ckan.config.solr.url | default (print "http://" $.Release.Name "-solr/solr/ckan") }}
 {{- end }}
