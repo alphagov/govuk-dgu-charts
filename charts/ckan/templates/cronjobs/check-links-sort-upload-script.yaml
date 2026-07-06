@@ -9,6 +9,6 @@ metadata:
 data:
   check_links-sort-upload.sh: |-
     cd /app/check-links
-    pip install -r check_links-requirements.txt
+    pip install -r requirements.txt
     python check_links.py --output-dir=/check_links
     python check_links_sort.py --input-dir=/check_links

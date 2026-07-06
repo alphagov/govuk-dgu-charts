@@ -44,7 +44,7 @@ spec:
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "check-links" "files" $.Files) }}'
               workingDir: /app/check-links
               imagePullPolicy: Always
-              command: [ "bash", "-c", "pip install -r check_links-requirements.txt && python check_links.py --output-dir=/check_links --verbose" ]
+              command: [ "bash", "-c", "pip install -r requirements.txt && python check_links.py --output-dir=/check_links --verbose" ]
               env:
                 {{- include "check-links.environment-variables" . | nindent 16 }}
               volumeMounts:
