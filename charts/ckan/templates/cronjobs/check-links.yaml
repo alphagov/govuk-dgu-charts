@@ -26,7 +26,7 @@ spec:
           containers:
             - name: check-links-script
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
-              workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+              workingDir: /app/check-links
               imagePullPolicy: Always
               command: [ "bash", "-c", ". chart/check_links-sort-upload.sh" ]
               env:
@@ -35,14 +35,14 @@ spec:
                 - name: check-links-output
                   mountPath: /check_links
                 - name: check-links-sort-upload-script
-                  mountPath: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts/chart
+                  mountPath: /app/check-links/chart
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
                   drop: ["ALL"]
             - name: check-links-verbose-script
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
-              workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+              workingDir: /app/check-links
               imagePullPolicy: Always
               command: [ "bash", "-c", "pip install -r check_links-requirements.txt && python check_links.py --output-dir=/check_links --verbose" ]
               env:
