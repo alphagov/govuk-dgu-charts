@@ -25,7 +25,7 @@ spec:
         spec:
           containers:
             - name: check-links-script
-              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "check-links" "files" $.Files) }}'
               workingDir: /app/check-links
               imagePullPolicy: Always
               command: [ "bash", "-c", ". chart/check_links-sort-upload.sh" ]
@@ -41,7 +41,7 @@ spec:
                 capabilities:
                   drop: ["ALL"]
             - name: check-links-verbose-script
-              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "check-links" "files" $.Files) }}'
               workingDir: /app/check-links
               imagePullPolicy: Always
               command: [ "bash", "-c", "pip install -r check_links-requirements.txt && python check_links.py --output-dir=/check_links --verbose" ]
