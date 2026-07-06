@@ -11,7 +11,7 @@ data:
     #!/bin/bash
     set -e
 
-    cd /app/check-links
+    cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
     python check_links_download.py
 
     export STATE={{ .Values.checklinks.report.state }}
@@ -21,6 +21,6 @@ data:
 
     wget "$PROCESS_SOURCE_URL" -O "$PROCESS_FILE"
 
-    pip install -r requirements.txt
+    pip install -r check_links-requirements.txt
     python process_check_links_report.py --input "$PROCESS_FILE" --output-dir /check_links --set-state "$STATE" --mode live
     python solr_reindex_package_ids.py --input-file "packages_to_reindex_$REPORT_TIMESTAMP.txt"
