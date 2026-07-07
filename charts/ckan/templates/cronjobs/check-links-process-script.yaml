@@ -18,9 +18,10 @@ data:
     export REPORT_TIMESTAMP={{ .Values.checklinks.report.timestamp }}
     export PROCESS_FILE="/check_links/broken_links_to_delete_$REPORT_TIMESTAMP.csv"
     export PROCESS_SOURCE_URL={{ .Values.checklinks.report.process_source_url }}
+    export REINDEX_FILE="/check_links/${STATE}_packages_to_reindex_${REPORT_TIMESTAMP}.txt"
 
     wget "$PROCESS_SOURCE_URL" -O "$PROCESS_FILE"
 
     pip install -r check_links-requirements.txt
-    python process_check_links_report.py --input "$PROCESS_FILE" --output-dir /check_links --set-state "$STATE" --mode live
-    python solr_reindex_package_ids.py --input-file "/check_links/packages_to_reindex_$REPORT_TIMESTAMP.txt"
+    python process_check_links_report.py --input "$PROCESS_FILE" --output-dir /check_links --set-state "$STATE" --reindex-timestamp "$REPORT_TIMESTAMP" --mode live
+    python solr_reindex_package_ids.py --input-file "$REINDEX_FILE"
