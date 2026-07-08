@@ -1,4 +1,4 @@
 repository: ghcr.io/alphagov/check-links
-tag: aec0cb31d15f12e535b9bdbe96ebed9bee115bcd
+tag: null
 branch: main
 repo: https://github.com/alphagov/datagovuk-scripts
