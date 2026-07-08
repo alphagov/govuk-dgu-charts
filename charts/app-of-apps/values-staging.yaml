@@ -73,9 +73,9 @@ ckanHelmValues:
   checklinks:
     report:
       enabled: true
-      timestamp: "20260619T0801"
+      timestamp: "20260615T1628"
       state: "deleted"
-      process_source_url: "https://raw.githubusercontent.com/alphagov/datagovuk-scripts/a91dd6e51afea6445dce855db1b2a70b2f1ccf2d/check-links-analysis/reports/filtered/15-06-2026/broken_links_to_delete_20260626T1022.csv"
+      process_source_url: "https://raw.githubusercontent.com/alphagov/datagovuk-scripts/refs/heads/main/check-links-analysis/reports/filtered/15-06-2026/broken_links_to_delete_20260707T1611.csv"
   solr:
     appResources:
       limits:
