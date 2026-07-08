@@ -1,0 +1,21 @@
+{{- $fullName := (print .Release.Name "-check-links-reindex-script") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  check_links-reindex.sh: |-
+    #!/bin/bash
+    set -e
+
+    cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+
+    export REINDEX_SOURCE_URL={{ .Values.checklinks.report.reindex_source_url }}
+
+    wget "$REINDEX_SOURCE_URL" -O "/check_links/packages_to_reindex.txt"
+
+    pip install -r check_links-requirements.txt
+    python solr_reindex_package_ids.py --input-file "/check_links/packages_to_reindex.txt"
