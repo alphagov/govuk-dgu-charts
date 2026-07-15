@@ -67,6 +67,13 @@ data:
         ~*Clickagy                 1;
         ~*serpstatbot              1;
         ~*DataForSeoBot            1;
+        ~*meta-externalagent       1;
+        ~*GPTBot                   1;
+        ~*ClaudeBot                1;
+        ~*Claude-Web               1;
+        ~*anthropic-ai             1;
+        ~*CCBot                    1;
+        ~*ChatGPT-User             1;
       }
       {{- end }}
 
