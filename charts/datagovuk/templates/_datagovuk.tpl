@@ -14,7 +14,7 @@
 {{- end }}
 {{ if eq $environment "integration" }}
 - name: FEATURE_FLAGS_ENABLED
-  value: "early-years"
+  value: "early-years,solr-search"
 {{- end }}
 {{- with .Values.datagovuk.config }}
 {{ if ne $environment "production" }}
