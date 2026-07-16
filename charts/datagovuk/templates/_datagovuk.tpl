@@ -35,12 +35,12 @@
       key: {{ .basicAuthBypassSecretKeyRef.key }}
 {{- end }}
 - name: DJANGO_SECRET_KEY
-  valueFrom: 
+  valueFrom:
     secretKeyRef:
       name: {{ .djangoSecretKeyRef.name }}
       key: {{ .djangoSecretKeyRef.key }}
 - name: SENTRY_DSN
-  valueFrom: 
+  valueFrom:
     secretKeyRef:
       name: {{ .sentryDSNRef.name }}
       key: {{ .sentryDSNRef.key }}
@@ -48,5 +48,7 @@
   valueFrom:
     fieldRef:
       fieldPath: status.podIP
+- name: SOLR_URL
+  value: {{ .solr.url | default (print "http://" $.Release.Name "-solr/solr/ckan") }}
 {{- end }}
 {{- end }}
