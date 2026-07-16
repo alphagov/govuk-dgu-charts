@@ -1,5 +1,7 @@
 {{- define "datagovuk.environment-variables" -}}
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
+{{/* note that ckan-dev is the release name provided when installing the ckan helm chart locally */}}
+{{- $solr_url := eq .Values.environment "test" | ternary "http://ckan-dev-solr/solr/ckan" "http://ckan-solr/solr/ckan" -}}
 - name: USE_DOCKER
   value: "True"
 - name: DJANGO_ALLOWED_HOSTS
@@ -49,6 +51,6 @@
     fieldRef:
       fieldPath: status.podIP
 - name: SOLR_URL
-  value: {{ .solr.url | default (print "http://" $.Release.Name "-solr/solr/ckan") }}
+  value: {{ $solr_url }}
 {{- end }}
 {{- end }}
