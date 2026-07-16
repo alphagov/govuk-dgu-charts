@@ -1,5 +1,7 @@
 {{- define "datagovuk.environment-variables" -}}
 {{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
+{{/* note that ckan-dev is the release name provided when installing the ckan helm chart locally */}}
+{{- $solr_url := eq .Values.environment "test" | ternary "http://ckan-dev-solr/solr/ckan" "http://ckan-solr/solr/ckan" -}}
 - name: USE_DOCKER
   value: "True"
 - name: DJANGO_ALLOWED_HOSTS
@@ -14,7 +16,7 @@
 {{- end }}
 {{ if eq $environment "integration" }}
 - name: FEATURE_FLAGS_ENABLED
-  value: "early-years"
+  value: "solr-search"
 {{- end }}
 {{- with .Values.datagovuk.config }}
 {{ if ne $environment "production" }}
@@ -35,12 +37,12 @@
       key: {{ .basicAuthBypassSecretKeyRef.key }}
 {{- end }}
 - name: DJANGO_SECRET_KEY
-  valueFrom: 
+  valueFrom:
     secretKeyRef:
       name: {{ .djangoSecretKeyRef.name }}
       key: {{ .djangoSecretKeyRef.key }}
 - name: SENTRY_DSN
-  valueFrom: 
+  valueFrom:
     secretKeyRef:
       name: {{ .sentryDSNRef.name }}
       key: {{ .sentryDSNRef.key }}
@@ -48,5 +50,7 @@
   valueFrom:
     fieldRef:
       fieldPath: status.podIP
+- name: SOLR_URL
+  value: {{ $solr_url }}
 {{- end }}
 {{- end }}

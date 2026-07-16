@@ -152,6 +152,14 @@ Now your local CKAN deployment will use the `localhost:54392/ckan.2.10.4` image.
 1. after testing is complete remember to set the target revision back to `main` in `dgu-app-of-apps`.
 1. if you are creating a PR drop the commit which updates the `targetRevision` in step 1.
 
+#### Checking the yaml created from the chart
+
+To see what yaml is created from the chart, run this command in the relevant directory - 
+
+`helm template  . --debug --values values.yaml > values-datagovuk.yaml`
+
+In this case the command was run in the `charts/datagovuk` directory, the output will be in the same directory for you to inspect.
+
 ### Github API token permissions
 
 When creating fine-grained API tokens, ensure that read/write permissions for PRs and Content are allowed (this will allow for PR and commit creation) and that CI user is used to create the PRs.

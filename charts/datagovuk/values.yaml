@@ -37,6 +37,12 @@ datagovuk:
       key: datagovuk_sentry_dsn
     rateLimitCount: "100"
     rateLimitPeriod: "60"
+    solr:
+      url: ""
+      user: ""
+      passwordSecretKeyRef:
+        name: ckan
+        key: solr_password
 
 find:
   replicaCount: 1
