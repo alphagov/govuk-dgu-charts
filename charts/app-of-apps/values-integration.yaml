@@ -109,6 +109,7 @@ datagovukHelmValues:
   arch: arm64
   datagovuk:
     ingress:
+      enabled: true
       ingressClassName: aws-alb
       annotations:
         alb.ingress.kubernetes.io/scheme: internet-facing

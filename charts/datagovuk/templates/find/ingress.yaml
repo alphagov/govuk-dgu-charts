@@ -36,15 +36,5 @@ spec:
                 name: {{ $.Release.Name }}-datagovuk
                 port:
                   number: 8000
-    - host: datagovuk-directory.{{ $environmentPath }}.govuk.digital
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $.Release.Name }}-datagovuk-directory
-                port:
-                  number: 8000
 {{- end }}
 {{- end }}

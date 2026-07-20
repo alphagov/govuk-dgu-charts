@@ -5,7 +5,7 @@
 - name: USE_DOCKER
   value: "True"
 - name: DJANGO_ALLOWED_HOSTS
-  value: "datagovuk-directory.eks.{{ .Values.environment }}.govuk.digital,datagovuk.eks.{{ .Values.environment }}.govuk.digital,find.eks.{{ .Values.environment }}.govuk.digital,www.{{ $environment }}.data.gov.uk,www.data.gov.uk"
+  value: "datagovuk.eks.{{ .Values.environment }}.govuk.digital,find.eks.{{ .Values.environment }}.govuk.digital,www.{{ $environment }}.data.gov.uk,www.data.gov.uk"
 - name: SENTRY_ENVIRONMENT
   value: {{ $environment }}
 - name: GOOGLE_TAG_MANAGER_ID
