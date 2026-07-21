@@ -23,7 +23,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Release.Name }}-datagovuk
+                name: {{ $.Release.Name }}-datagovuk-directory
                 port:
                   number: 8000
 {{- end }}
