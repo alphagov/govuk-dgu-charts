@@ -74,6 +74,8 @@ data:
         ~*anthropic-ai             1;
         ~*CCBot                    1;
         ~*ChatGPT-User             1;
+        ~*amazon-Quick             1;
+        ~*TalonGDPvalAttachmentGroupExplorer 1;
       }
       {{- end }}
 
@@ -116,7 +118,7 @@ data:
         add_header Permissions-Policy $permissions_policy;
         add_header X-Content-Type-Options $x_content_type_options always;
 
-        {{- if ( or (ne .Values.environment "production") (eq .Values.ckan.nginx.denyCrawlers true ) ) }}
+        {{- if ne .Values.environment "production" }}
         add_header X-Robots-Tag "noindex";
         {{- end }}
 
