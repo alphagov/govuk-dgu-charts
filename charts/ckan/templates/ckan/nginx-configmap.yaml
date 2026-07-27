@@ -52,7 +52,7 @@ data:
       }
 
       {{- if .Values.ckan.nginx.denyCrawlers }}
-      # Block known aggressive scrapers and crawlers that cause excessive load
+      # Block bots that send too many requests and slow down the app
       map $http_user_agent $is_bad_bot {
         default                   0;
         ~*Bytespider               1;
@@ -119,6 +119,7 @@ data:
         add_header X-Content-Type-Options $x_content_type_options always;
 
         {{- if ne .Values.environment "production" }}
+        # Tell search engines not to index non-production sites
         add_header X-Robots-Tag "noindex";
         {{- end }}
 
