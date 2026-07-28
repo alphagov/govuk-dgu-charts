@@ -43,6 +43,10 @@ datagovuk:
       passwordSecretKeyRef:
         name: ckan
         key: solr_password
+    redis:
+      host: "dgu-shared-dev-redis"
+      port: "6379"
+      dbNumber: "2"
 
 find:
   replicaCount: 1

@@ -48,5 +48,7 @@
       fieldPath: status.podIP
 - name: SOLR_URL
   value: {{ $solr_url }}
+- name: REDIS_URL
+  value: redis://{{ $.Values.datagovuk.config.redis.host | default (print $.Release.Name "-redis") }}/{{ $.Values.datagovuk.config.redis.dbNumber | default "2" }}
 {{- end }}
 {{- end }}

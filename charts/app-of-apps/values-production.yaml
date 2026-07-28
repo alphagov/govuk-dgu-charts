@@ -132,6 +132,9 @@ datagovukHelmValues:
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/load-balancer-attributes: >
           access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-production-aws-logging, access_logs.s3.prefix=elb/www-datagovuk
+    config:
+      redis:
+        host: "dgu-shared-redis"
   find:
     appResources:
       limits:
