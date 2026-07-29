@@ -1,0 +1,52 @@
+{{- if .Values.ckan.dbBackupSync.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-ckan-database-backup-sync
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
+  labels:
+    app.kubernetes.io/arch: arm64
+spec:
+  schedule: "0 11 * * 2"
+  suspend: {{ .Values.suspendCronJobs }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}-ckan-database-backup-sync
+      labels:
+        app.kubernetes.io/arch: arm64
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          name: {{ .Release.Name }}-ckan-database-backup-sync
+          labels:
+            app.kubernetes.io/arch: arm64
+        spec:
+          serviceAccountName: ckan-db-backup-xaccount-sync
+          containers:
+            - name: db-backup-sync
+              image: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v51"
+              imagePullPolicy: Always
+              command: [ "aws", "s3", "sync", "s3://{{.Values.ckan.dbBackupSync.sourceS3BucketName}}/ckan-postgres/", "s3://{{.Values.ckan.dbBackupSync.targetS3BucketName}}/ckan-postgres/" ]
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: arm64
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: arm64
+{{ end }}

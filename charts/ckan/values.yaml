@@ -137,6 +137,11 @@ ckan:
       requests:
         cpu: 50m
         memory: 512Mi
+  dbBackupSync:
+    enabled: false
+    iamRoleARN: ""
+    sourceS3BucketName: ""
+    targetS3BucketName: ""
 
 checklinks:
   nginx:
