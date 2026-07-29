@@ -127,4 +127,6 @@
   value: redis://{{ $.Values.ckan.config.redis.host | default (print $.Release.Name "-redis") }}/{{ $.Values.ckan.config.redis.dbNumber | default "1" }}
 - name: CKAN_SOLR_URL
   value: {{ $.Values.ckan.config.solr.url | default (print "http://" $.Release.Name "-solr/solr/ckan") }}
+- name: USER_AGENT_URL
+  value: "https://www.northyorkmoors.org.uk/"
 {{- end }}
