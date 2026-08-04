@@ -180,9 +180,9 @@ data:
 
     # Harvesting settings
     ckan.harvest.mq.type = redis
-    ckan.harvest.mq.hostname = {{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}
-    ckan.harvest.mq.port = {{ .Values.ckan.config.redis.port | default "6379" }}
-    ckan.harvest.mq.redis_db = {{ .Values.ckan.config.redis.dbNumber | default "1" }}
+    # Omit mq.hostname/port/redis_db so ckanext-harvest uses ckan.redis.url via
+    # Redis.from_url() — redis-py 8 defaults socket_timeout=5s on the direct
+    # Redis() constructor, which breaks the blocking BLPOP call in gather-consumer
 
     # 12 hours timeout
     ckan.harvest.timeout = 720
