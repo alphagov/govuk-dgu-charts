@@ -113,6 +113,8 @@ datagovukHelmValues:
   environment: integration
   arch: arm64
   datagovuk:
+    monitoring:
+      enabled: true
     ingress:
       enabled: true
       ingressClassName: aws-alb

@@ -122,6 +122,8 @@ datagovukHelmValues:
   arch: arm64
   environment: staging
   datagovuk:
+    monitoring:
+      enabled: true
     ingress:
       ingressClassName: aws-alb
       annotations:
