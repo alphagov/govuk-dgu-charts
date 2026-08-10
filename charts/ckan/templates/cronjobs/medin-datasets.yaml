@@ -1,4 +1,4 @@
-{{- $fullName := print .Release.Name "-delete-datasets" -}}
+{{- $fullName := print .Release.Name "-medin-datasets" -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -43,18 +43,18 @@ spec:
                 - name: ckan-init
                   mountPath: /init
           containers:
-            - name: delete-datasets-script
+            - name: medin-datasets-script
               image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
               workingDir: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
               imagePullPolicy: Always
-              command: [ "bash", "-c", ". chart/delete-datasets.sh" ]
+              command: [ "bash", "-c", ". chart/medin-datasets.sh" ]
               env:
                 {{- include "check-links.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: config
                   mountPath: /config
                   readOnly: true
-                - name: delete-datasets-script
+                - name: medin-datasets-script
                   mountPath: /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts/chart
               securityContext:
                 allowPrivilegeEscalation: false
@@ -77,7 +77,7 @@ spec:
                 name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
             - name: config
               emptyDir: {}
-            - name: delete-datasets-script
+            - name: medin-datasets-script
               configMap:
                 name: {{ $fullName }}-script
           {{- if eq "arm64" .Values.arch }}

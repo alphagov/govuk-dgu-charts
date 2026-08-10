@@ -1,0 +1,32 @@
+{{- $fullName := (print .Release.Name "-medin-datasets-script") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  medin-datasets.sh: |-
+    #!/bin/bash
+    set -e
+
+    # delete datasets not modified since 2024-09-09 for the MEDIN organisation
+    psql $CKAN_SQLALCHEMY_URL -c "update package set state = 'deleted' where owner_org = 'c756c8da-f176-4640-950e-9c00b9e404df' and state = 'active' and metadata_modified < '2024-09-09';"
+
+    # export the list of deleted datasets to a CSV file
+    psql $CKAN_SQLALCHEMY_URL -c "select id from package where owner_org = 'c756c8da-f176-4640-950e-9c00b9e404df' and state = 'deleted' and metadata_modified < '2024-09-09'" | sed 1,2d | sed -e :a -e '$d;N;2,2ba' -e 'P;D' > /tmp/dataset_deleted.csv
+
+    # export the list of datasets to reactivate to a CSV file
+    psql $CKAN_SQLALCHEMY_URL -c "SELECT package_id FROM harvest_object WHERE guid IN (SELECT guid FROM harvest_object where harvest_source_id = '885ee504-c712-4f8d-9034-1c230bcd88a6' AND DATE_PART('Day',now() - gathered::timestamptz) < 1 AND report_status = 'errored') AND report_status = 'added'" | sed 1,2d | sed -e :a -e '$d;N;2,2ba' -e 'P;D' > /tmp/dataset_reactivate.csv
+
+    # reactivate datasets just harvested for the MEDIN organisation
+    psql $CKAN_SQLALCHEMY_URL -c "update package set state = 'active' where owner_org = 'c756c8da-f176-4640-950e-9c00b9e404df' and ID IN (SELECT package_id FROM harvest_object WHERE guid IN (SELECT guid FROM harvest_object where harvest_source_id = '885ee504-c712-4f8d-9034-1c230bcd88a6' AND DATE_PART('Day',now() - gathered::timestamptz) < 1 AND report_status = 'errored') AND report_status = 'added')"
+
+    cd /usr/lib/ckan/venv/src/ckanext-datagovuk/bin/python_scripts
+
+    # reindex the deleted datasets in Solr
+    python solr_reindex_package_ids.py --input-file "/tmp/dataset_deleted.csv"
+
+    # reindex the reactivated datasets in Solr
+    python solr_reindex_package_ids.py --input-file "/tmp/dataset_reactivate.csv"
