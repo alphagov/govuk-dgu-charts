@@ -35,6 +35,8 @@ spec:
               containerPort: {{ .Values.datagovuk.monitoring.metricsPort }}
           env:
              {{ include "datagovuk.environment-variables" . | nindent 12 }}
+            - name: FEATURE_FLAGS_ENABLED
+              value: "solr-search"
           {{- with .Values.datagovuk.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}

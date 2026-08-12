@@ -1,5 +1,9 @@
 {{- define "datagovuk.environment-variables" -}}
-{{- $environment := eq .Values.environment "test" | ternary "development" .Values.environment -}}
+{{- $eks_envs := eq .Values.environment "ephemeral" | ternary "ephemeral" $.Values.environment -}}
+{{- $environment := eq $.Values.environment "test" | ternary "development" $eks_envs -}}
+{{- $ephemeralPath := print $.Values.argo_environment ".ephemeral.govuk.digital" }}
+{{- $stablePath := eq "production" $environment | ternary "publishing.service.gov.uk" (print $environment ".publishing.service.gov.uk")}}
+{{- $environmentPath := eq .Values.environment "ephemeral" | ternary $ephemeralPath $stablePath -}}
 {{/* note that ckan-dev is the release name provided when installing the ckan helm chart locally */}}
 {{- $solr_url := eq .Values.environment "test" | ternary "http://ckan-dev-solr/solr/ckan" "http://ckan-solr/solr/ckan" -}}
 - name: USE_DOCKER
@@ -48,5 +52,7 @@
       fieldPath: status.podIP
 - name: SOLR_URL
   value: {{ $solr_url }}
+- name: CKAN_DOMAIN
+  value: ckan.{{ $environmentPath }}
 {{- end }}
 {{- end }}
