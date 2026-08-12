@@ -1,0 +1,33 @@
+{{ if eq $.Values.environment "integration" }}
+{{- if .Values.find.ingress.enabled }}
+{{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
+{{- $stablePath := print "eks." $.Values.environment -}}
+{{- $environmentPath := eq "ephemeral" $.Values.environment | ternary $ephemeralPath $stablePath -}}
+{{- with .Values.find.ingress }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: find-only
+  {{- if not (empty .annotations) }}
+  annotations:
+    {{- tpl (toYaml .annotations) $ | trim | nindent 4 }}
+    alb.ingress.kubernetes.io/healthcheck-path: "/health/"
+  {{- end }}
+spec:
+  {{ if not (empty .ingressClassName) }}
+  ingressClassName: {{ .ingressClassName }}
+  {{ end }}
+  rules:
+    - host: find-only.{{ $environmentPath }}.govuk.digital
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Release.Name }}-find
+                port:
+                  number: 3000
+{{- end }}
+{{- end }}
+{{- end }}
