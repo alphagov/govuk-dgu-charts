@@ -32,7 +32,7 @@ spec:
             - name: http
               containerPort: 8000
             - name: metrics
-              containerPort: {{ .Values.datagovuk.monitoring.metricsPort }}
+              containerPort: {{ .Values.monitoring.metricsPort }}
           env:
              {{ include "datagovuk.environment-variables" . | nindent 12 }}
             - name: FEATURE_FLAGS_ENABLED

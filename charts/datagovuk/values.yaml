@@ -19,9 +19,6 @@ datagovuk:
     host: datagovuk.eks.test.govuk.digital
     ingressClassName: ""
     annotations:
-  monitoring:
-    enabled: false
-    metricsPort: 8000
   config:
     basicAuthNameSecretKeyRef:
       name: datagovuk
