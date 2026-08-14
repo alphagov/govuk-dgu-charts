@@ -23,7 +23,7 @@ spec:
         service: datagovuk-app
       annotations:
         summary: "High 5xx error rate on datagovuk application"
-        description: "{{ .Release.Name }}-datagovuk has a 5xx error rate of {{ $value | humanizePercentage }} (threshold: 20%) over the last 5 minutes"
+        description: "datagovuk-app has a 5xx error rate of {{ $value | humanizePercentage }} (threshold: 20%) over the last 5 minutes"
         runbook_url: "https://govuk-dgu-charts.publishing.service.gov.uk/runbooks/datagovuk-app-high-errors"
     - alert: DatagovukApp5xxErrorRateCritical
       expr: |
@@ -35,6 +35,6 @@ spec:
         service: datagovuk-app
       annotations:
         summary: "Critical 5xx error rate on datagovuk application"
-        description: "{{ .Release.Name }}-datagovuk has a critical 5xx error rate of {{ $value | humanizePercentage }} (threshold: 50%) over the last 5 minutes"
+        description: "datagovuk-app has a critical 5xx error rate of {{ $value | humanizePercentage }} (threshold: 50%) over the last 5 minutes"
         runbook_url: "https://govuk-dgu-charts.publishing.service.gov.uk/runbooks/datagovuk-app-critical-errors"
 {{- end }}
