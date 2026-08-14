@@ -116,7 +116,7 @@ ckanHelmValues:
       enabled: true
     appResources:
       limits:
-        memory: 3Gi
+        memory: 2Gi
         cpu: 1
       requests:
         memory: 1Gi
