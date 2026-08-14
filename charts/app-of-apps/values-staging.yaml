@@ -102,11 +102,11 @@ ckanHelmValues:
       enabled: true
     appResources:
       limits:
-        memory: 1Gi
+        memory: 2Gi
         cpu: 1
       requests:
-        memory: 512Mi
-        cpu: 250m
+        memory: 1Gi
+        cpu: 500m
   fetch:
     replicaCount: 1
     appResources:

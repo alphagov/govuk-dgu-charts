@@ -1,0 +1,40 @@
+{{- if .Values.appEnabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-ckan
+  labels:
+    app: {{ .Release.Name }}-ckan
+    helm.sh/chart: govuk-dgu-charts
+    app.kubernetes.io/name: ckan
+    app.kubernetes.io/managed-by: Helm
+spec:
+  groups:
+  - name: ckan.rules
+    interval: 30s
+    rules:
+    - alert: Ckan5xxErrorRateHigh
+      expr: |
+        (sum(rate(http_requests_total{status=~"5.."}[5m])) by (job) /
+         sum(rate(http_requests_total[5m])) by (job)) * 100 > 20
+      for: 5m
+      labels:
+        severity: warning
+        service: ckan
+      annotations:
+        summary: "High 5xx error rate on CKAN"
+        description: "CKAN has a 5xx error rate of {{ $value | humanizePercentage }} (threshold: 20%) over the last 5 minutes"
+        runbook_url: "https://govuk-dgu-charts.publishing.service.gov.uk/runbooks/ckan-high-errors"
+    - alert: Ckan5xxErrorRateCritical
+      expr: |
+        (sum(rate(http_requests_total{status=~"5.."}[5m])) by (job) /
+         sum(rate(http_requests_total[5m])) by (job)) * 100 > 50
+      for: 2m
+      labels:
+        severity: critical
+        service: ckan
+      annotations:
+        summary: "Critical 5xx error rate on CKAN"
+        description: "CKAN has a critical 5xx error rate of {{ $value | humanizePercentage }} (threshold: 50%) over the last 5 minutes"
+        runbook_url: "https://govuk-dgu-charts.publishing.service.gov.uk/runbooks/ckan-critical-errors"
+{{- end }}
