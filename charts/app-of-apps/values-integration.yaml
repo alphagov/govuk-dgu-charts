@@ -113,6 +113,7 @@ datagovukHelmValues:
   environment: integration
   arch: arm64
   datagovuk:
+    replicaCount: 2
     monitoring:
       enabled: true
     ingress:
