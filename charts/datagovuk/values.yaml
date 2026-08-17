@@ -21,7 +21,6 @@ datagovuk:
     annotations:
   monitoring:
     enabled: false
-    metricsPort: 80
   config:
     basicAuthNameSecretKeyRef:
       name: datagovuk
