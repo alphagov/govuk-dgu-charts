@@ -1,0 +1,17 @@
+{{- $fullName := (print .Release.Name "-medin-remove-duplicates-script") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  medin-remove-duplicates.sh: |-
+    #!/bin/bash
+    set -e
+
+    cd /app
+
+    # reindex the reactivated datasets in Solr
+    python remove_duplicate_datasets --log-dir "/tmp"
