@@ -30,8 +30,6 @@ spec:
               command: [ python, manage.py, e2e_fixtures, --create ]
               env:
                 {{ include "datagovuk.environment-variables" . | nindent 16 }}
-                - name: FEATURE_FLAGS_ENABLED
-                  value: ""
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
