@@ -122,6 +122,7 @@ datagovukHelmValues:
   arch: arm64
   environment: staging
   datagovuk:
+    replicaCount: 2
     monitoring:
       enabled: true
     ingress:
