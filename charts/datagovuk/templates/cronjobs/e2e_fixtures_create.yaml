@@ -1,0 +1,64 @@
+{{- if (ne .Values.environment "production") }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-e2e-fixtures-create
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
+  labels:
+    app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+spec:
+  schedule: "0 10 * * 0" # Run at 10AM; after the solr-index-clear cronjob runs at 8AM
+  suspend: {{ .Values.suspendCronJobs }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}-e2e-fixtures-create
+      labels:
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      template:
+        metadata:
+          name: {{ .Release.Name }}-e2e-fixtures-create
+          labels:
+            app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+        spec:
+          containers:
+            - name: datagovuk
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "datagovuk" "files" $.Files) }}'
+              imagePullPolicy: Always
+              command: [ python, manage.py, e2e_fixtures, --create ]
+              env:
+                {{ include "datagovuk.environment-variables" . | nindent 16 }}
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+                - name: app-tmp
+                  mountPath: /app/tmp
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 900
+            runAsGroup: 900
+            fsGroup: 900
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: tmp
+              emptyDir: {}
+            - name: app-tmp
+              emptyDir: {}
+          {{- if eq "arm64" .Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.arch }}
+          {{- end }}
+{{- end }}
