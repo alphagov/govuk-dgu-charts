@@ -1,0 +1,14 @@
+{{- if .Values.scripts.enabled }}
+{{- $fullName := (print .Release.Name "-ckan-scripts") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  script.sh: |-
+    cd /scripts
+    python script.py {{ .Values.scripts.args }}
+{{- end }}
