@@ -6,10 +6,12 @@ ckanHelmValues:
     url: "https://raw.githubusercontent.com/alphagov/datagovuk-scripts/refs/heads/remove-datasets/remove-datasets/remove_datasets.py"
     args: "--org natural-resources-wales --log-dir /scripts --solr-only False --remove-all True --report-only True"
     appResources:
-      limits:
-        memory: 4Gi
       requests:
         memory: 2Gi
+        cpu: 500m
+      limits:
+        memory: 8Gi
+        cpu: 2
   ckan:
     appResources:
       limits:
