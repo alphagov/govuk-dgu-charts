@@ -14,6 +14,7 @@ arch: amd64
 datagovuk:
   replicaCount: 1
   command: ["/bin/sh", "-c", "/start"]
+  featureFlagsEnabled: ""
   ingress:
     enabled: false
     host: datagovuk.eks.test.govuk.digital
