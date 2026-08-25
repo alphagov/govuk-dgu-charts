@@ -107,7 +107,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-          {{- with .Values.ckan.appResources }}
+          {{- with .Values.scripts.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
