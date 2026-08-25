@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}
 data:
   script.sh: |-
+    gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8 &
     cd /scripts
     python script.py {{ .Values.scripts.args }}
 {{- end }}

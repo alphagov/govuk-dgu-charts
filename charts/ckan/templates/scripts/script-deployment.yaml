@@ -96,7 +96,7 @@ spec:
             - name: scripts
               mountPath: /scripts
           command: ["/bin/sh", "-c"]
-          args: {{ .Values.ckan.args }}
+          args: [ ". /ckan-scripts/script.sh" ]
           env:
             {{ include "scripts.environment-variables" . | nindent 12 }}
             - name: PROMETHEUS_MULTIPROC_DIR
