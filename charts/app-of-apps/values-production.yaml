@@ -127,6 +127,7 @@ datagovukHelmValues:
   environment: production
   arch: arm64
   datagovuk:
+    featureFlagsEnabled: ""
     replicaCount: 2
     monitoring:
       enabled: true
