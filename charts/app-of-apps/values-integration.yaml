@@ -4,7 +4,7 @@ ckanHelmValues:
   scripts:
     enabled: true
     url: "https://raw.githubusercontent.com/alphagov/datagovuk-scripts/refs/heads/remove-datasets/remove-datasets/remove_datasets.py"
-    args: "--org natural-resources-wales --log-dir /scripts --solr-only False --remove-all True --report-only False"
+    args: "--org natural-resources-wales --log-dir /scripts --solr-only False --remove-all True --report-only True"
   ckan:
     appResources:
       limits:
