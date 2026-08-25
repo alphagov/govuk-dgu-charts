@@ -50,7 +50,7 @@ spec:
               imagePullPolicy: Always
               command: [ "bash", "-c", ". chart/check_links-process.sh" ]
               env:
-                {{- include "check-links.environment-variables" . | nindent 16 }}
+                {{- include "scripts.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: config
                   mountPath: /config

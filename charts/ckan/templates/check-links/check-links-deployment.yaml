@@ -36,7 +36,7 @@ spec:
           workingDir: /app/check-links
           command: [ "bash", "-c", ". chart/download-and-wait.sh" ]
           env:
-            {{- include "check-links.environment-variables" . | nindent 12 }}
+            {{- include "scripts.environment-variables" . | nindent 12 }}
           livenessProbe:
             exec:
               command: [ "bash", "-c", "python check_links_has_new_reports.py --s3-dir=check_links/ --mount-path=/check_links" ]
