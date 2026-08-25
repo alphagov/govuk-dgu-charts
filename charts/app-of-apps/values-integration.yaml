@@ -12,6 +12,8 @@ ckanHelmValues:
       limits:
         memory: 8Gi
         cpu: 2
+    probes:
+      enabled: false
   ckan:
     appResources:
       limits:
