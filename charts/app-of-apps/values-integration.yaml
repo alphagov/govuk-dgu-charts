@@ -7,7 +7,9 @@ ckanHelmValues:
     args: "--org natural-resources-wales --log-dir /scripts --solr-only False --remove-all True --report-only True"
     appResources:
       limits:
-        memory: 3Gi
+        memory: 4Gi
+      requests:
+        memory: 2Gi
   ckan:
     appResources:
       limits:
