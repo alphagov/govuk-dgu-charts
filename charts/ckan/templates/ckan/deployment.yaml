@@ -59,8 +59,6 @@ spec:
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
-            - name: http
-              containerPort: {{ .Values.ckan.appPort }}
             - name: metrics
               containerPort: {{ .Values.monitoring.metricsPort }}
           volumeMounts:
