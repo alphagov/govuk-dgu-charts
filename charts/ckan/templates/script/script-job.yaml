@@ -97,9 +97,9 @@ spec:
           livenessProbe:
             exec:
               command: [ "bash", "-c", "ckan" ]
-            initialDelaySeconds: 5
-            failureThreshold: 3
-            periodSeconds: 10
+            initialDelaySeconds: 10
+            failureThreshold: 10
+            periodSeconds: 600
             timeoutSeconds: 20
           {{- end }}
       restartPolicy: Never
