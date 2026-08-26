@@ -1,4 +1,4 @@
-{{- $image := print "ghcr.io/alphagov/ckan:5dca9b1880686d54fa8f50ad77b84350a7572fc1" }}
+{{- $image := "ghcr.io/alphagov/ckan:v1.19.3" -}}
 {{- $fullName := print .Release.Name "-ckan-scripts" -}}
 apiVersion: batch/v1
 kind: Job
