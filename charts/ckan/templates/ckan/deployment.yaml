@@ -109,7 +109,11 @@ spec:
             timeoutSeconds: 60
           {{- end }}
         - name: nginx
+          {{- if eq $.Values.environment "test" }}
+          image: nginx
+          {{ else }}
           image: "{{ .Values.ckan.nginx.image.repository }}:{{ .Values.ckan.nginx.image.tag }}"
+          {{- end }}
           imagePullPolicy: {{ .Values.ckan.nginx.image.pullPolicy | default "Always" }}
           ports:
             - name: http
