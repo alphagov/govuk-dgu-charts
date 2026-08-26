@@ -1,27 +1,15 @@
-{{- if .Values.scripts.deployEnabled }}
+{{- $image := print "ghcr.io/alphagov/ckan:5dca9b1880686d54fa8f50ad77b84350a7572fc1" }}
 {{- $fullName := print .Release.Name "-ckan-scripts" -}}
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: {{ $fullName }}
   labels:
     app: {{ $fullName }}
     app.kubernetes.io/name: {{ $fullName }}
-    app.kubernetes.io/component: app
-  annotations:
-    reloader.stakater.com/auto: "true"
+    app.kubernetes.io/component: job
 spec:
-  replicas: {{ .Values.ckan.replicaCount }}
-  revisionHistoryLimit: 2
-  selector:
-    matchLabels:
-      app: {{ $fullName }}
   template:
-    metadata:
-      labels:
-        app: {{ $fullName }}
-        app.kubernetes.io/name: {{ $fullName }}
-        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
     spec:
       securityContext:
         runAsNonRoot: true
@@ -35,7 +23,7 @@ spec:
       {{- end }}
       initContainers:
         - name: config-set
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+          image: {{ $image }}
           command: [ "/bin/sh", "-c", '. /init/init.sh']
           imagePullPolicy: Always
           env:
@@ -55,7 +43,7 @@ spec:
             - name: prom-tmp
               mountPath: /prom_tmp
         - name: script-set
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+          image: {{ $image }}
           command: [ "/bin/sh", "-c", '. /ckan-script-set/script-set.sh']
           imagePullPolicy: Always
           env:
@@ -65,20 +53,13 @@ spec:
             capabilities:
               drop: ["ALL"]
           volumeMounts:
-            - name: production-ini
-              mountPath: /map
-              readOnly: true
-            - name: config
-              mountPath: /config
-            - name: ckan-init
-              mountPath: /init
             - name: ckan-script-set
               mountPath: /ckan-script-set
             - name: scripts
               mountPath: /scripts
       containers:
         - name: ckan
-          image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+          image: {{ $image }}
           imagePullPolicy: Always
           ports:
             - name: http
@@ -113,27 +94,14 @@ spec:
           {{- end }}
           {{- if .Values.scripts.probes.enabled }}
           livenessProbe:
-            httpGet:
-              path: /healthcheck
-              port: http
-            periodSeconds: 60
-            timeoutSeconds: 60
-          readinessProbe:
-            httpGet:
-              path: /healthcheck
-              port: http
-            periodSeconds: 5
-            successThreshold: 3
-            timeoutSeconds: 30
-          startupProbe:
-            httpGet:
-              path: /healthcheck
-              port: http
-            initialDelaySeconds: 60
-            failureThreshold: 60
+            exec:
+              command: [ "bash", "-c", "ckan" ]
+            initialDelaySeconds: 5
+            failureThreshold: 3
             periodSeconds: 10
-            timeoutSeconds: 60
+            timeoutSeconds: 20
           {{- end }}
+      restartPolicy: Never
       volumes:
         - name: ckan-init
           configMap:
@@ -143,9 +111,6 @@ spec:
             name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
         - name: config
           emptyDir: {}
-        - name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
-          configMap:
-            name: {{ .Values.ckan.nginx.configMap.name | default (printf "%s-nginx-conf" $fullName) }}
         - name: ckan-script-set
           configMap:
             name: {{ $fullName }}-set
@@ -165,4 +130,4 @@ spec:
       nodeSelector:
         kubernetes.io/arch: {{ .Values.arch }}
       {{- end }}
-{{- end }}
+  backoffLimit: 4
