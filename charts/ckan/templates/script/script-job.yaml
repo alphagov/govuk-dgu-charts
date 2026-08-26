@@ -1,5 +1,6 @@
+{{- if .Values.script.enabled }}
 {{- $image := "ghcr.io/alphagov/ckan:v1.19.3" -}}
-{{- $fullName := print .Release.Name "-ckan-scripts" -}}
+{{- $fullName := print .Release.Name "-ckan-script" -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -47,7 +48,7 @@ spec:
           command: [ "/bin/sh", "-c", '. /ckan-script-set/script-set.sh']
           imagePullPolicy: Always
           env:
-            {{ include "scripts.environment-variables" . | nindent 12 }}
+            {{ include "script.environment-variables" . | nindent 12 }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -55,8 +56,8 @@ spec:
           volumeMounts:
             - name: ckan-script-set
               mountPath: /ckan-script-set
-            - name: scripts
-              mountPath: /scripts
+            - name: script
+              mountPath: /script
       containers:
         - name: ckan
           image: {{ $image }}
@@ -72,14 +73,14 @@ spec:
               readOnly: true
             - name: prom-tmp
               mountPath: /prom_tmp
-            - name: ckan-scripts
-              mountPath: /ckan-scripts
-            - name: scripts
-              mountPath: /scripts
+            - name: ckan-script
+              mountPath: /ckan-script
+            - name: script
+              mountPath: /script
           command: ["/bin/sh", "-c"]
-          args: [ ". /ckan-scripts/script.sh" ]
+          args: [ ". /ckan-script/script.sh" ]
           env:
-            {{ include "scripts.environment-variables" . | nindent 12 }}
+            {{ include "script.environment-variables" . | nindent 12 }}
             - name: PROMETHEUS_MULTIPROC_DIR
               value: /prom_tmp
             - name: PROMETHEUS_METRICS_PORT
@@ -88,11 +89,11 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-          {{- with .Values.scripts.appResources }}
+          {{- with .Values.script.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          {{- if .Values.scripts.probes.enabled }}
+          {{- if .Values.script.probes.enabled }}
           livenessProbe:
             exec:
               command: [ "bash", "-c", "ckan" ]
@@ -114,10 +115,10 @@ spec:
         - name: ckan-script-set
           configMap:
             name: {{ $fullName }}-set
-        - name: ckan-scripts
+        - name: ckan-script
           configMap:
             name: {{ $fullName }}
-        - name: scripts
+        - name: script
           emptyDir: {}
         - name: prom-tmp
           emptyDir: {}
@@ -131,3 +132,4 @@ spec:
         kubernetes.io/arch: {{ .Values.arch }}
       {{- end }}
   backoffLimit: 4
+{{- end }}

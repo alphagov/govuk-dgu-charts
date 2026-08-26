@@ -1,5 +1,5 @@
-{{- if .Values.scripts.enabled }}
-{{- $fullName := (print .Release.Name "-ckan-scripts-set") -}}
+{{- if .Values.script.enabled }}
+{{- $fullName := (print .Release.Name "-ckan-script-set") -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,5 +9,5 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}
 data:
   script-set.sh: |-
-    wget "{{ .Values.scripts.url }}" -O "/scripts/script.py"
+    wget "{{ .Values.script.url }}" -O "/script/script.py"
 {{- end }}

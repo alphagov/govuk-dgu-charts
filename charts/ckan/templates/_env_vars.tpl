@@ -102,7 +102,7 @@
 {{- end }}
 {{- end }}
 
-{{- define "scripts.environment-variables" -}}
+{{- define "script.environment-variables" -}}
 - name: CKAN_OUTPUT_BUCKET_NAME
   value: govuk-ckan-output-{{ $.Values.environment }}
 - name: POSTGRES_URL

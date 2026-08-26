@@ -49,7 +49,7 @@ spec:
               imagePullPolicy: Always
               command: [ "bash", "-c", ". chart/medin-datasets.sh" ]
               env:
-                {{- include "scripts.environment-variables" . | nindent 16 }}
+                {{- include "script.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: config
                   mountPath: /config

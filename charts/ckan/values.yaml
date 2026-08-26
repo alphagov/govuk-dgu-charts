@@ -11,6 +11,13 @@ appEnabled: true
 # set to true to suspend all cron jobs in this chart
 suspendCronJobs: false
 
+script:
+  enabled: false
+  url: ""
+  args: ""
+  probes:
+    enabled: true
+
 ckan:
   replicaCount: 1
   serviceAccount:
