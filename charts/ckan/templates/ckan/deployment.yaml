@@ -59,7 +59,7 @@ spec:
           image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
           imagePullPolicy: Always
           ports:
-            - name: http
+            - name: ckan-http
               containerPort: {{ .Values.ckan.appPort }}
             - name: metrics
               containerPort: {{ .Values.monitoring.metricsPort }}
@@ -89,20 +89,20 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthcheck
-              port: http
+              port: ckan-http
             periodSeconds: 60
             timeoutSeconds: 60
           readinessProbe:
             httpGet:
               path: /healthcheck
-              port: http
+              port: ckan-http
             periodSeconds: 5
             successThreshold: 3
             timeoutSeconds: 30
           startupProbe:
             httpGet:
               path: /healthcheck
-              port: http
+              port: ckan-http
             initialDelaySeconds: 60
             failureThreshold: 60
             periodSeconds: 10

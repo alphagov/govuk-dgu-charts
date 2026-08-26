@@ -30,7 +30,7 @@ spec:
               imagePullPolicy: Always
               command: [ "bash", "-c", ". chart/check_links-sort-upload.sh" ]
               env:
-                {{- include "check-links.environment-variables" . | nindent 16 }}
+                {{- include "script.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: check-links-output
                   mountPath: /check_links
@@ -46,7 +46,7 @@ spec:
               imagePullPolicy: Always
               command: [ "bash", "-c", "pip install -r requirements.txt && python check_links.py --output-dir=/check_links --verbose" ]
               env:
-                {{- include "check-links.environment-variables" . | nindent 16 }}
+                {{- include "script.environment-variables" . | nindent 16 }}
               volumeMounts:
                 - name: check-links-output
                   mountPath: /check_links

@@ -1,0 +1,135 @@
+{{- if .Values.script.enabled }}
+{{- $image := "ghcr.io/alphagov/ckan:v1.19.3" -}}
+{{- $fullName := print .Release.Name "-ckan-script" -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: job
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 900
+        runAsGroup: 900
+        fsGroup: 900
+        seccompProfile:
+          type: RuntimeDefault
+      {{ if .Values.ckan.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.ckan.serviceAccount.name | default (print "ckan-" .Release.Name) }}
+      {{- end }}
+      initContainers:
+        - name: config-set
+          image: {{ $image }}
+          command: [ "/bin/sh", "-c", '. /init/init.sh']
+          imagePullPolicy: Always
+          env:
+            {{ include "ckan.environment-variables" . | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: production-ini
+              mountPath: /map
+              readOnly: true
+            - name: config
+              mountPath: /config
+            - name: ckan-init
+              mountPath: /init
+            - name: prom-tmp
+              mountPath: /prom_tmp
+        - name: script-set
+          image: {{ $image }}
+          command: [ "/bin/sh", "-c", '. /ckan-script-set/script-set.sh']
+          imagePullPolicy: Always
+          env:
+            {{ include "script.environment-variables" . | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: ckan-script-set
+              mountPath: /ckan-script-set
+            - name: script
+              mountPath: /script
+      containers:
+        - name: ckan
+          image: {{ $image }}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: {{ .Values.ckan.appPort }}
+            - name: metrics
+              containerPort: {{ .Values.monitoring.metricsPort }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: prom-tmp
+              mountPath: /prom_tmp
+            - name: ckan-script
+              mountPath: /ckan-script
+            - name: script
+              mountPath: /script
+          command: ["/bin/sh", "-c"]
+          args: [ ". /ckan-script/script.sh" ]
+          env:
+            {{ include "script.environment-variables" . | nindent 12 }}
+            - name: PROMETHEUS_MULTIPROC_DIR
+              value: /prom_tmp
+            - name: PROMETHEUS_METRICS_PORT
+              value: "9394"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          {{- with .Values.script.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.script.probes.enabled }}
+          livenessProbe:
+            exec:
+              command: [ "bash", "-c", "ckan" ]
+            initialDelaySeconds: 5
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 20
+          {{- end }}
+      restartPolicy: Never
+      volumes:
+        - name: ckan-init
+          configMap:
+            name: {{ .Release.Name }}-ckan-init
+        - name: production-ini
+          configMap:
+            name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+        - name: config
+          emptyDir: {}
+        - name: ckan-script-set
+          configMap:
+            name: {{ $fullName }}-set
+        - name: ckan-script
+          configMap:
+            name: {{ $fullName }}
+        - name: script
+          emptyDir: {}
+        - name: prom-tmp
+          emptyDir: {}
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
+  backoffLimit: 4
+{{- end }}
