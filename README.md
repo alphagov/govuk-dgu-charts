@@ -145,6 +145,16 @@ Now your local CKAN deployment will use the `localhost:54392/ckan.2.10.4` image.
 `datagovuk-find` can be accessed at `find.eks.test.govuk.digital:8081`
 `ckan` can be accessed at `ckan.eks.test.govuk.digital:8081`
 
+### Running scripts on the cluster
+
+Sometimes it is necessary to run an ad hoc scripts on the cluster for things like removing datasets for a publiisher if there are legacy datasets or orphaned datasets, to do this please follow these steps:
+
+- Update the values-env files `script` section with the script to run. If you want to try it out in Integration first, then just update `values-integration.yaml` first and follow [steps to test it out](#test-helm-chart-in-eks) before updating other environments. When you are ready to run the script against Staging and Production you will need to create a PR for review and merge it in to deploy onto the EKS cluster.
+- After the job has completed the logs should be available to view in argo or via the `kubectl logs` command if needed.
+- When you are satisfied that the job has completed successfully you need to delete the job by running `kubectl delete job/ckan-ckan-script -n datagovuk`, if you don't remove the job subsequent jobs will fail with a sync error.
+
+NOTE - unlike other config files the image used in the `script-job.yaml` is pinned, this is to prevent the job from re-running each time there is a new CKAN tag. So if your script requires a later version of the CKAN build then also update the CKAN tag in the `script-job.yaml`
+
 #### Test Helm chart in EKS
 
 1. update the `targetRevision` in `ckan-application.yaml` or `datagovuk-application.yaml` to be the branch you want to test against.
