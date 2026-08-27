@@ -35,8 +35,6 @@ spec:
               containerPort: {{ .Values.monitoring.metricsPort }}
           env:
              {{ include "datagovuk.environment-variables" . | nindent 12 }}
-            - name: FEATURE_FLAGS_ENABLED
-              value: {{ .Values.datagovuk.featureFlagsEnabled | quote }}
           {{- with .Values.datagovuk.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
