@@ -38,6 +38,18 @@ datagovuk:
     sentryDSNRef:
       name: datagovuk
       key: datagovuk_sentry_dsn
+    zendeskApiKeySecretKeyRef:
+      name: datagovuk
+      key: zendesk_api_key
+    zendeskTicketUrlSecretKeyRef:
+      name: datagovuk
+      key: zendesk_ticket_url
+    ndlZendeskEmailSecretKeyRef:
+      name: datagovuk
+      key: ndl_zendesk_email
+    ndlZendeskGroupIdSecretKeyRef:
+      name: datagovuk
+      key: ndl_zendesk_group_id
     rateLimitCount: "100"
     rateLimitPeriod: "60"
     solr:
