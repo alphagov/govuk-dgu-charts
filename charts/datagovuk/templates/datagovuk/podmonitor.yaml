@@ -14,7 +14,7 @@ spec:
     matchLabels:
       app: {{ .Release.Name }}-datagovuk
   podMetricsEndpoints:
-  - port: metrics
+  - port: http
     path: /metrics
     metricRelabelings:
     - action: replace
