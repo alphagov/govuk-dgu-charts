@@ -15,6 +15,7 @@ spec:
       app: {{ .Release.Name }}-datagovuk
   podMetricsEndpoints:
   - port: metrics
+    path: /metrics
     metricRelabelings:
     - action: replace
       sourceLabels: ["__name__"]
