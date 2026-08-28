@@ -109,4 +109,4 @@ externalSecret:
 
 monitoring:
   enabled: false
-  metricsPort: 9394
+  metricsPort: 8000
