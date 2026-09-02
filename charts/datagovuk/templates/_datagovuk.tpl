@@ -54,5 +54,25 @@
   value: {{ $solr_url }}
 - name: CKAN_DOMAIN
   value: ckan.{{ $environmentPath }}
+- name: ZENDESK_API_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ .zendeskApiKeySecretKeyRef.name }}
+      key: {{ .zendeskApiKeySecretKeyRef.key }}
+- name: ZENDESK_TICKET_URL
+  valueFrom:
+    secretKeyRef:
+      name: {{ .zendeskTicketUrlSecretKeyRef.name }}
+      key: {{ .zendeskTicketUrlSecretKeyRef.key }}
+- name: NDL_ZENDESK_EMAIL
+  valueFrom:
+    secretKeyRef:
+      name: {{ .ndlZendeskEmailSecretKeyRef.name }}
+      key: {{ .ndlZendeskEmailSecretKeyRef.key }}
+- name: NDL_ZENDESK_GROUP_ID
+  valueFrom:
+    secretKeyRef:
+      name: {{ .ndlZendeskGroupIdSecretKeyRef.name }}
+      key: {{ .ndlZendeskGroupIdSecretKeyRef.key }}
 {{- end }}
 {{- end }}
