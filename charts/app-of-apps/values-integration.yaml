@@ -5,7 +5,7 @@ ckanHelmValues:
     enabled: true
     url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/2225b9f3f2fc52ec0d92d7556f82799cdcb523c0/scripts/delete_orgs.py"
     dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/20b36bddeefb620e7e0decacf833b69eefaf1ef6/notes/orgs-with-no-resources/orgs-list.txt"
-    args: "--orgs-path /script/data --log-dir /script --report-only False"
+    args: "--orgs-path /script/data.file --log-dir /script --report-only False"
     appResources:
       requests:
         memory: 2Gi
