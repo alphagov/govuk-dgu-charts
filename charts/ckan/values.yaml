@@ -14,6 +14,7 @@ suspendCronJobs: false
 script:
   enabled: false
   url: ""
+  requirementsUrl: ""
   dataUrl: ""
   args: ""
   probes:
