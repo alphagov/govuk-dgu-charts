@@ -16,7 +16,9 @@ script:
   url: ""
   requirementsUrl: ""
   dataUrl: ""
+  dataUrl_2: ""
   args: ""
+  catOutput: false
   probes:
     enabled: true
 

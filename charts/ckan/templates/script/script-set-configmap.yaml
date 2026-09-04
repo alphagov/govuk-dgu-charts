@@ -16,4 +16,7 @@ data:
     {{- if .Values.script.dataUrl }}
     wget "{{ .Values.script.dataUrl }}" -O "/script/data.file"
     {{- end -}}
+    {{- if .Values.script.dataUrl_2 }}
+    wget "{{ .Values.script.dataUrl_2 }}" -O "/script/data-2.file"
+    {{- end -}}
 {{- end }}
