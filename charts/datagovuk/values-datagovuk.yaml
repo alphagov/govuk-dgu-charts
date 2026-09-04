@@ -1,0 +1,511 @@
+---
+# Source: govuk-datagovuk/templates/datagovuk/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-datagovuk
+spec:
+  selector:
+    app: release-name-datagovuk
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: http
+---
+# Source: govuk-datagovuk/templates/datagovuk/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-datagovuk-directory
+spec:
+  selector:
+    app: release-name-datagovuk-directory
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: http
+---
+# Source: govuk-datagovuk/templates/find/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-find
+spec:
+  selector:
+    app: release-name-find
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: http
+---
+# Source: govuk-datagovuk/templates/datagovuk/datagovuk-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-datagovuk
+  labels:
+    app: release-name-datagovuk
+    app.kubernetes.io/name: release-name-datagovuk
+    app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: release-name-datagovuk
+  template:
+    metadata:
+      labels:
+        app: release-name-datagovuk
+        app.kubernetes.io/name: release-name-datagovuk
+        app.kubernetes.io/arch: amd64
+    spec:
+      containers:
+        - name: datagovuk
+          image: 'ghcr.io/alphagov/datagovuk:5899c2fa620b7a0f6b7b64bda3f472445a14a0f5'
+          command: ["/bin/sh","-c","/start"]
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+            - name: metrics
+              containerPort: 9394
+          env:
+             
+            - name: USE_DOCKER
+              value: "True"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "datagovuk.eks.test.govuk.digital,find.eks.test.govuk.digital,www.development.data.gov.uk,www.data.gov.uk"
+            - name: SENTRY_ENVIRONMENT
+              value: development
+            - name: GOOGLE_TAG_MANAGER_ID
+              value: GTM-5WRWCH8X
+            - name: DJANGO_SECURE_SSL_REDIRECT
+              value: "False"
+            
+            - name: BASIC_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: basic_auth_name
+            - name: BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: basic_auth_password
+            - name: BASIC_AUTH_BYPASS
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: basic_auth_bypass
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: django_secret_key
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: datagovuk_sentry_dsn
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SOLR_URL
+              value: http://ckan-dev-solr/solr/ckan
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /health/
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/
+              port: http
+            periodSeconds: 5
+            successThreshold: 3
+            timeoutSeconds: 10
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: app-tmp
+              mountPath: /app/tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: app-tmp
+          emptyDir: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+---
+# Source: govuk-datagovuk/templates/datagovuk/datagovuk-directory-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-datagovuk-directory
+  labels:
+    app: release-name-datagovuk-directory
+    app.kubernetes.io/name: release-name-datagovuk-directory
+    app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: release-name-datagovuk-directory
+  template:
+    metadata:
+      labels:
+        app: release-name-datagovuk-directory
+        app.kubernetes.io/name: release-name-datagovuk-directory
+        app.kubernetes.io/arch: amd64
+    spec:
+      containers:
+        - name: datagovuk-directory
+          image: 'ghcr.io/alphagov/datagovuk:5899c2fa620b7a0f6b7b64bda3f472445a14a0f5'
+          command: ["/bin/sh","-c","/start"]
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+            - name: metrics
+              containerPort: 9394
+          env:
+             
+            - name: USE_DOCKER
+              value: "True"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "datagovuk.eks.test.govuk.digital,find.eks.test.govuk.digital,www.development.data.gov.uk,www.data.gov.uk"
+            - name: SENTRY_ENVIRONMENT
+              value: development
+            - name: GOOGLE_TAG_MANAGER_ID
+              value: GTM-5WRWCH8X
+            - name: DJANGO_SECURE_SSL_REDIRECT
+              value: "False"
+            
+            - name: BASIC_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: basic_auth_name
+            - name: BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: basic_auth_password
+            - name: BASIC_AUTH_BYPASS
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: basic_auth_bypass
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: django_secret_key
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: datagovuk
+                  key: datagovuk_sentry_dsn
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SOLR_URL
+              value: http://ckan-dev-solr/solr/ckan
+            - name: FEATURE_FLAGS_ENABLED
+              value: "solr-search"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /health/
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/
+              port: http
+            periodSeconds: 5
+            successThreshold: 3
+            timeoutSeconds: 10
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: app-tmp
+              mountPath: /app/tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: app-tmp
+          emptyDir: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+---
+# Source: govuk-datagovuk/templates/find/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-find
+  labels:
+    app: release-name-find
+    app.kubernetes.io/name: release-name-find
+    app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: release-name-find
+  template:
+    metadata:
+      labels:
+        app: release-name-find
+        app.kubernetes.io/name: release-name-find
+        app.kubernetes.io/arch: amd64
+    spec:
+      containers:
+        - name: find
+          image: 'ghcr.io/alphagov/datagovuk_find:v4.3.0'
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+            - name: metrics
+              containerPort: 9394
+          env:
+            
+            - name: CKAN_DOMAIN
+              value: ckan.development.publishing.service.gov.uk
+            - name: ES_HOST
+              value: http://release-name-opensearch-sts
+            - name: ES_INDEX
+              value: datasets-development
+            - name: GOVUK_APP_DOMAIN
+              value: "www.gov.uk"
+            - name: GOVUK_ENVIRONMENT
+              value: development
+            - name: GOVUK_PROMETHEUS_EXPORTER
+              value: "force"
+            - name: GOVUK_WEBSITE_ROOT
+              value: "https://www.gov.uk"
+            - name: RAILS_LOG_LEVEL
+              value: "warn"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "1"
+            - name: RAILS_DEVELOPMENT_HOSTS
+              value: find.eks.test.govuk.digital
+            - name: RAILS_SERVE_STATIC_FILES
+              value: "1"
+            - name: RAILS_MAX_THREADS
+              value: "5"
+            - name: RATE_LIMIT_COUNT
+              value: "100"
+            - name: RATE_LIMIT_PERIOD
+              value: "60"
+            
+            - name: SECRET_KEY_BASE
+              value: dummy
+            
+            - name: SENTRY_DSN
+              value: dummy
+            
+            - name: SOLR_URL
+              value: http://ckan-dev-solr/solr/ckan
+            - name: ZENDESK_API_KEY
+              value: dummy
+            
+            - name: ZENDESK_END_POINT
+              value: "https://govuk.zendesk.com/api/v2"
+            - name: ZENDESK_USERNAME
+              value: dummy
+            
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 60
+            timeoutSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            successThreshold: 3
+            timeoutSeconds: 30
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 60
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 60
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /srv/app/datagovuk_find/tmp
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: app-tmp
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+---
+# Source: govuk-datagovuk/templates/find/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: find
+spec:
+  
+  rules:
+    - host: find.eks.test.govuk.digital
+      http:
+        paths:
+          - path: /search
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /dataset
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /data/search
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /site-changes
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /publishers
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /ckan_maintenance
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /harvest
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /user/login
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /find-assets
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /javascript
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /search.html
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-find
+                port:
+                  number: 3000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-datagovuk
+                port:
+                  number: 8000
+    - host: datagovuk-directory.eks.test.govuk.digital
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-datagovuk-directory
+                port:
+                  number: 8000
