@@ -5,7 +5,7 @@ ckanHelmValues:
     enabled: true
     url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/scripts/check_links/retry.py"
     requirementsUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/scripts/check_links/requirements.txt"
-    dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/notes/remove-deferred-broken-links/broken_links_to_delete_20260707T1611.csv"
+    dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/notes/remove-deferred-broken-links/check_links_report_20260615T1628_sorted.csv"
     dataUrl_2: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/373e1cb8f3ddcf90b88f8020518bbfdea29f88cf/notes/remove-deferred-broken-links/orgs_to_process.txt"
     args: "/script/data.file /script/output.file -o /script/data-2.file"
     catOutput: true
