@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 spec:
   schedule: "0 0 * * 0"  # At 00:00 on Sunday
-  suspend: false
+  suspend: true
   concurrencyPolicy: Forbid
   jobTemplate:
     metadata:
