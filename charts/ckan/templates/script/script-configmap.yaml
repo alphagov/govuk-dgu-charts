@@ -10,5 +10,13 @@ metadata:
 data:
   script.sh: |-
     cd /script
+    {{- if .Values.script.requirementsUrl }}
+    pip install -r requirements.txt
+    {{- end }}
     python script.py {{ .Values.script.args }}
+    {{- if .Values.script.catOutput }}
+    echo "Script output:"
+    echo "==============================="
+    cat output.file
+    {{- end }}
 {{- end }}

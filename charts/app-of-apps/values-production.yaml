@@ -3,9 +3,12 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
-    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/2225b9f3f2fc52ec0d92d7556f82799cdcb523c0/scripts/delete_orgs.py"
-    dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/20b36bddeefb620e7e0decacf833b69eefaf1ef6/notes/orgs-with-no-resources/orgs-list.txt"
-    args: "--orgs-path /script/data.file --log-dir /script --report-only False"
+    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/571225e799cca4479979b30c6c48c1f578cdb9fb/scripts/check_links/retry.py"
+    requirementsUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/scripts/check_links/requirements.txt"
+    dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/notes/remove-deferred-broken-links/check_links_report_20260615T1628_sorted.csv"
+    dataUrl_2: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/373e1cb8f3ddcf90b88f8020518bbfdea29f88cf/notes/remove-deferred-broken-links/orgs_to_process.txt"
+    args: "/script/data.file /script/output.file -o /script/data-2.file"
+    catOutput: true
     appResources:
       requests:
         memory: 2Gi
