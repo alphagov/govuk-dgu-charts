@@ -10,6 +10,9 @@ metadata:
 data:
   script-set.sh: |-
     wget "{{ .Values.script.url }}" -O "/script/script.py"
+    {{- if .Values.script.url_2 }}
+    wget "{{ .Values.script.url_2 }}" -O "/script/script-2.py"
+    {{- end -}}
     {{- if .Values.script.requirementsUrl }}
     wget "{{ .Values.script.requirementsUrl }}" -O "/script/requirements.txt"
     {{- end -}}

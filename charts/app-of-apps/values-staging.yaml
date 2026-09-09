@@ -3,12 +3,12 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
-    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/571225e799cca4479979b30c6c48c1f578cdb9fb/scripts/check_links/retry.py"
-    requirementsUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/scripts/check_links/requirements.txt"
-    dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e33c60e9f804521442be129198040bb6abd3f9eb/notes/remove-deferred-broken-links/check_links_report_20260615T1628_sorted.csv"
-    dataUrl_2: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/373e1cb8f3ddcf90b88f8020518bbfdea29f88cf/notes/remove-deferred-broken-links/orgs_to_process.txt"
-    args: "/script/data.file /script/output.file -o /script/data-2.file"
-    catOutput: true
+    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/676f6f74df1a1e6f41e398aacbc41aaa16fd645c/scripts/check_links/process.py"
+    dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/101be2263977c40ea314637c0ae935087404ff04/notes/remove-deferred-broken-links/retried_20260907.csv"
+    args: "--input /script/data.file --output-dir /script --set-state deleted --mode live"
+    url_2: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/676f6f74df1a1e6f41e398aacbc41aaa16fd645c/scripts/check_links/reindex.py"
+    args_2: "--input-file /script/deleted_packages_to_reindex.txt"
+    catOutput: false
     appResources:
       requests:
         memory: 2Gi

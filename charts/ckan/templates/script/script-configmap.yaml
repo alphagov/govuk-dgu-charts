@@ -19,4 +19,7 @@ data:
     echo "==============================="
     cat output.file
     {{- end }}
+    {{- if .Values.script.url_2 }}
+    python script-2.py {{ .Values.script.args_2 }}
+    {{- end }}
 {{- end }}
