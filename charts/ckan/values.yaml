@@ -114,10 +114,6 @@ ckan:
       # Used for: internationalisation of form controls
       - "/i18n"
 
-      # Used by: ckan.publishing.service.gov.uk
-      # Used for: finding members
-      # - "/2/util/user/autocomplete"
-
       # Used for: ckan_v26_ckan_org_sync
       - "/action/organization_list"
       - "/action/organization_show"
