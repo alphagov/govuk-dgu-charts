@@ -22,7 +22,6 @@ spec:
     - group: batch
       kind: Job
       jsonPointers:
-        - /spec/suspend                                              
         - /spec/template/spec/containers/0/env                      
     - group: v1
       kind: ConfigMap
