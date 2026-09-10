@@ -216,4 +216,5 @@ loadTestConfig:
     trendStats: "avg,p(95),p(99)"
   storage:
     enabled: true
+  suspend: false
   ttlSecondsAfterFinished: 3600
