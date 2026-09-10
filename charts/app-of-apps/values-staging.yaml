@@ -203,13 +203,12 @@ loadTestConfig:
   datagovuk_url: "https://www.staging.data.gov.uk"
   ckan_url: "https://ckan.eks.staging.govuk.digital"
   image: grafana/k6:0.55.0
-  # Rightsized soak test — 5m/10m/15m/5m = 35 minutes total
-  # Targeting ~25 req/s (45 VUs based on 100 VUs = 55.8 req/s baseline)
-  # Warm up → ramp up → soak at peak → ramp down
-  vus: 45
-  warmup_duration: "5m"
-  ramp_duration: "10m"
-  soak_duration: "15m"
+  # Validation test — 1m/2m/10m/1m = ~14 minutes total
+  # 10 VUs to verify baseline metrics before full soak test
+  vus: 10
+  warmup_duration: "1m"
+  ramp_duration: "2m"
+  soak_duration: "10m"
   prometheus:
     # GOV.UK Prometheus Operator remote write endpoint (staging cluster)
     # Enables live k6 metrics in Grafana during the test
