@@ -203,17 +203,33 @@ loadTestConfig:
   datagovuk_url: "https://www.staging.data.gov.uk"
   ckan_url: "https://ckan.eks.staging.govuk.digital"
   image: grafana/k6:0.55.0
+  datagovuk_query: "climate"
+  ckan_query: "climate"
+  ckan_rows: 5
   # Validation test — 1m/2m/10m/1m = ~14 minutes total
   # 10 VUs to verify baseline metrics before full soak test
   vus: 10
   warmup_duration: "1m"
   ramp_duration: "2m"
   soak_duration: "10m"
+  thresholds:
+    home_page_threshold_ms: 2000
+    search_threshold_ms: 2000
+    dataset_threshold_ms: 2000
+    ckan_api_threshold_ms: 3000
+    error_rate_threshold: 0.01
   prometheus:
     # GOV.UK Prometheus Operator remote write endpoint (staging cluster)
     # Enables live k6 metrics in Grafana during the test
     remoteWriteUrl: "http://kube-prometheus-stack-prometheus.monitoring.svc:9090/api/v1/write"
     trendStats: "avg,p(95),p(99)"
+  resources:
+    limits:
+      cpu: "1"
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 128Mi
   storage:
     enabled: true
   suspended: false
