@@ -3,7 +3,7 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
-    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/676f6f74df1a1e6f41e398aacbc41aaa16fd645c/scripts/check_links/process.py"
+    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/c7ee1d48594a8852850294e7d6f16f379b900d05/scripts/check_links/process.py"
     dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/101be2263977c40ea314637c0ae935087404ff04/notes/remove-deferred-broken-links/retried_20260907.csv"
     args: "--input /script/data.file --output-dir /script --set-state deleted --mode live"
     url_2: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/676f6f74df1a1e6f41e398aacbc41aaa16fd645c/scripts/check_links/reindex.py"
