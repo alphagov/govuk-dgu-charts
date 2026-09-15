@@ -94,13 +94,15 @@ spec:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           {{- if .Values.script.probes.enabled }}
-          livenessProbe:
+          startupProbe: &probe
             exec:
-              command: [ "bash", "-c", "ckan" ]
+              command: [ "bash", "-c", "ckan --help" ]
             initialDelaySeconds: 10
             failureThreshold: 10
             periodSeconds: 600
             timeoutSeconds: 20
+          livenessProbe:
+            <<: *probe
           {{- end }}
       restartPolicy: Never
       volumes:
