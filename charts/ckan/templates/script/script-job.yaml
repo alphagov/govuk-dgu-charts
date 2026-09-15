@@ -101,8 +101,8 @@ spec:
                 - -c
                 - . /script/liveness-check.sh
             initialDelaySeconds: 10
-            failureThreshold: 10
-            periodSeconds: 600
+            failureThreshold: 1
+            periodSeconds: 15
             timeoutSeconds: 20
           {{- end }}
       restartPolicy: Never
