@@ -9,6 +9,13 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}
 data:
   script-set.sh: |-
+    cat  << 'EOF' > /script/liveness-check.sh
+        #!/bin/sh
+        if ! pgrep ckan > /dev/null; then
+          exit 1
+        fi
+    EOF
+
     {{- if .Values.script.url }}
     wget "{{ .Values.script.url }}" -O "/script/script.py"
     {{- end -}}

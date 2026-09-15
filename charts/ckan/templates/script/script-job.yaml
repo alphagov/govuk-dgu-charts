@@ -99,7 +99,7 @@ spec:
               command: 
                 - bash
                 - -c
-                - pgrep -f ckan > /dev/null
+                - . /script/liveness-check.sh
             initialDelaySeconds: 10
             failureThreshold: 10
             periodSeconds: 600
