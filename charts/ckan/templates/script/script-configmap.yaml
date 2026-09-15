@@ -13,7 +13,9 @@ data:
     {{- if .Values.script.requirementsUrl }}
     pip install -r requirements.txt
     {{- end }}
+    {{- if .Values.script.url }}
     python script.py {{ .Values.script.args }}
+    {{- end }}
     {{- if .Values.script.catOutput }}
     echo "Script output:"
     echo "==============================="
@@ -21,5 +23,8 @@ data:
     {{- end }}
     {{- if .Values.script.url_2 }}
     python script-2.py {{ .Values.script.args_2 }}
+    {{- end }}
+    {{- if .Valules.script.keep_up_time }}
+    trap : TERM INT; sleep {{ .Valules.script.running_time }} & wait
     {{- end }}
 {{- end }}

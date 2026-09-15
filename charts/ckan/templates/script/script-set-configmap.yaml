@@ -9,7 +9,9 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}
 data:
   script-set.sh: |-
+    {{- if .Values.script.url }}
     wget "{{ .Values.script.url }}" -O "/script/script.py"
+    {{- end -}}
     {{- if .Values.script.url_2 }}
     wget "{{ .Values.script.url_2 }}" -O "/script/script-2.py"
     {{- end -}}
