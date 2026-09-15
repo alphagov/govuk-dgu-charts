@@ -25,6 +25,7 @@ data:
     python script-2.py {{ .Values.script.args_2 }}
     {{- end }}
     {{- if .Values.script.keep_up_time }}
+    echo "This pod will terminate at "$(date --date='{{ .Values.script.keep_up_time }} seconds')
     trap : TERM INT; sleep {{ .Values.script.keep_up_time }} & wait
     {{- end }}
 {{- end }}
