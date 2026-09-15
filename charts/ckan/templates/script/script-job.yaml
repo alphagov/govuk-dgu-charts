@@ -96,7 +96,7 @@ spec:
           {{- if .Values.script.probes.enabled }}
           livenessProbe:
             exec:
-              command: [ "bash", "-c", "ckan" ]
+              command: [ "bash", "-c", "ckan", "--help" ]
             initialDelaySeconds: 10
             failureThreshold: 10
             periodSeconds: 600
