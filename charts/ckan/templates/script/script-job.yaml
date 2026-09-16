@@ -94,7 +94,7 @@ spec:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           {{- if .Values.script.probes.enabled }}
-          livenessProbe:
+          startupProbe:
             exec:
               command: 
                 - bash
