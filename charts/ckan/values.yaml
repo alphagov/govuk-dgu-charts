@@ -12,6 +12,7 @@ appEnabled: true
 suspendCronJobs: false
 
 script:
+  keep_up_time: ""
   enabled: false
   url: ""
   requirementsUrl: ""
