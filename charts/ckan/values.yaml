@@ -20,7 +20,6 @@ script:
   dataUrl_2: ""
   args: ""
   catOutput: false
-  catFile: ""
   probes:
     enabled: true
 

@@ -16,13 +16,13 @@ data:
     {{- if .Values.script.url }}
     python script.py {{ .Values.script.args }}
     {{- end }}
+    {{- if .Values.script.url_2 }}
+    python script-2.py {{ .Values.script.args_2 }}
+    {{- end }}
     {{- if .Values.script.catOutput }}
     echo "Script output:"
     echo "==============================="
     cat output.file
-    {{- end }}
-    {{- if .Values.script.url_2 }}
-    python script-2.py {{ .Values.script.args_2 }}
     {{- end }}
     {{- if .Values.script.keep_up_time }}
     echo "This pod will terminate at "$(date --date='{{ .Values.script.keep_up_time }} seconds')
