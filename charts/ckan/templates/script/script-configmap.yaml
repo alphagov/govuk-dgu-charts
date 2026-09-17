@@ -19,7 +19,7 @@ data:
     {{- if .Values.script.catOutput }}
     echo "Script output:"
     echo "==============================="
-    cat output.file
+    find -name "*not_deleted*.csv" -exec cat {} \;
     {{- end }}
     {{- if .Values.script.url_2 }}
     python script-2.py {{ .Values.script.args_2 }}
