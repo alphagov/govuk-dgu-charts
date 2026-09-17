@@ -26,7 +26,7 @@ ckanHelmValues:
         memory: 2Gi
       requests:
         memory: 1Gi
-    args: [ "gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4" ]
+    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4"]
     ingress:
       host: ckan.eks.integration.govuk.digital
       ingressClassName: aws-alb
@@ -84,7 +84,7 @@ ckanHelmValues:
       sourceS3BucketName: "govuk-integration-database-backups"
       targetS3BucketName: "integration-account-ckan-backup"
   pycsw:
-    args: [ "gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120" ]
+    args: ["gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120"]
     probes:
       enabled: true
     appResources:
@@ -153,7 +153,7 @@ datagovukHelmValues:
       requests:
         memory: 1Gi
     replicaCount: 1
-    args: [ "bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid" ]
+    args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
     config:
       googleTagManagerId: GTM-5WRWCH8X
       ckanDomain: "ckan.integration.publishing.service.gov.uk"
