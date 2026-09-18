@@ -94,16 +94,18 @@ spec:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           {{- if .Values.script.probes.enabled }}
-          startupProbe:
+          startupProbe: &probe
             exec:
               command: 
                 - bash
                 - -c
-                - . /script/liveness-check.sh
+                - ckan --help && echo $?
             initialDelaySeconds: 10
             failureThreshold: 1
-            periodSeconds: 15
+            periodSeconds: 60
             timeoutSeconds: 20
+          livenessProbe:
+            <<: *probe
           {{- end }}
       restartPolicy: Never
       volumes:
