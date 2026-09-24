@@ -14,11 +14,15 @@ suspendCronJobs: false
 script:
   keep_up_time: ""
   enabled: false
-  url: ""
   requirementsUrl: ""
+  shell_url: ""
+  shell_args: ""
+  url: ""
   dataUrl: ""
-  dataUrl_2: ""
   args: ""
+  url_2: ""
+  dataUrl_2: ""
+  args_2: ""
   catOutput: false
   probes:
     enabled: true

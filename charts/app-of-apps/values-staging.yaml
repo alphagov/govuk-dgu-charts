@@ -3,14 +3,9 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
-    description: "Running deletion process for step2_filtered_resources_by_invalid_domains.csv"
-    keep_up_time: ""
-    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/cd1cfffce4f716dd9a8245ab8d882dc9a148c679/scripts/check_links/process.py"
-    dataUrl: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/2d68a1fe1581732a486a965ed28f477778fdd1db/notes/delete-broken-links-to-delete-false/step2_filtered_resources_by_invalid_domains.csv"
-    args: "--input /script/data.file --set-state deleted --mode live --failed-output-path /script/output.file --output-dir /script"
-    url_2: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/e848b5ea9b452f531d8aa340fdbd860fc5f1db16/scripts/check_links/reindex.py"
-    args_2: "--input-file /script/deleted_packages_to_reindex.txt"
-    catOutput: true
+    description: "Update organisation index to update ONS contact information"
+    shell_url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/23d53feb13ac337d3db493c992337af2707c2c9b/scripts/reindex-org/reindex_org.sh"
+    shell_args: "office-for-national-statistics"
     appResources:
       requests:
         memory: 2Gi

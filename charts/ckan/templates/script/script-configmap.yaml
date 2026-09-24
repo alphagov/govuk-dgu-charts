@@ -13,6 +13,12 @@ data:
     {{- if .Values.script.requirementsUrl }}
     pip install -r requirements.txt
     {{- end }}
+    {{- if .Values.script.shell_url }}
+      {{- if .Values.script.shell_args }}
+    export ARG="{{ .Values.script.shell_args }}"
+      {{- end }}
+    . ./script-run.sh
+    {{- end }}
     {{- if .Values.script.url }}
     python script.py {{ .Values.script.args }}
     {{- end }}
