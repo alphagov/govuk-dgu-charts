@@ -3,8 +3,9 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
+    description: "Remove the older duplicate dataset for Environment Agency"
     url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/08602c66ca8667f804dc385e34fd94fecedd8e5a/scripts/delete_duplicate_datasets_by_org.py"
-    args: "--org environment-agency --log-dir /script --solr-only False --remove-all False --report-only True --keep-latest True"
+    args: "--org environment-agency --log-dir /script --solr-only False --remove-all False --report-only False --keep-latest True"
     appResources:
       requests:
         memory: 2Gi
