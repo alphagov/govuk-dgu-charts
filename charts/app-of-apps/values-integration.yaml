@@ -3,8 +3,7 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
-    url: "https://raw.githubusercontent.com/alphagov/datagovuk-scripts/7e0dbe9ff0edc9e6963d7d694e2914dc9981f149/remove-datasets/remove_datasets.py"
-    dataUrl: ""
+    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/08602c66ca8667f804dc385e34fd94fecedd8e5a/scripts/delete_duplicate_datasets_by_org.py"
     args: "--org environment-agency --log-dir /script --solr-only False --remove-all False --report-only True --keep-latest True"
     appResources:
       requests:
