@@ -3,9 +3,9 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
-    description: "Update organisation index to update ONS contact information"
-    shell_url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/23d53feb13ac337d3db493c992337af2707c2c9b/scripts/reindex-org/reindex_org.sh"
-    shell_args: "office-for-national-statistics"
+    description: "Reindex organisations"
+    shell_url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/3ca5a57f63bde1bf60373e0b689383463c64c50a/scripts/datapress-harvest-fix/reindex_all_orgs.sh"
+    shell_args: ""
     appResources:
       requests:
         memory: 2Gi
