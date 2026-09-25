@@ -3,9 +3,9 @@ ckanHelmValues:
   arch: arm64
   script:
     enabled: true
-    description: "Update organisation index to update ONS contact information"
-    shell_url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/23d53feb13ac337d3db493c992337af2707c2c9b/scripts/reindex-org/reindex_org.sh"
-    shell_args: "office-for-national-statistics"
+    description: "Remove the older duplicate dataset for Environment Agency"
+    url: "https://raw.githubusercontent.com/alphagov/datagovuk-notes/08602c66ca8667f804dc385e34fd94fecedd8e5a/scripts/delete_duplicate_datasets_by_org.py"
+    args: "--org environment-agency --log-dir /script --solr-only False --remove-all False --report-only False --keep-latest True"
     appResources:
       requests:
         memory: 2Gi
