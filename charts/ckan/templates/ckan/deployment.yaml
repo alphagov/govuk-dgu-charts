@@ -77,6 +77,9 @@ spec:
               value: /prom_tmp
             - name: PROMETHEUS_METRICS_PORT
               value: "9394"
+          envFrom:
+            - secretRef:
+                name: ckan
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
