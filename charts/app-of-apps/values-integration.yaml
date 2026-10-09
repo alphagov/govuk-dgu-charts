@@ -4,7 +4,7 @@ ckanHelmValues:
   script:
     enabled: true
     description: "Delete a list of datasets given by DEFRA"
-    keep_up_time: "3600"
+    keep_up_time: "43200"
     appResources:
       requests:
         memory: 2Gi
