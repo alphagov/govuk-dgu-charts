@@ -96,7 +96,7 @@ spec:
           {{- if .Values.script.probes.enabled }}
           startupProbe: &probe
             exec:
-              command: [ "bash", "-c", "ckan --help" ]
+              command: [ "bash", "-c", "ckan --help && echo $?" ]
             initialDelaySeconds: 10
             failureThreshold: 10
             periodSeconds: 600
