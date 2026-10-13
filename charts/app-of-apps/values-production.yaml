@@ -21,7 +21,7 @@ ckanHelmValues:
       requests:
         memory: 1Gi
     args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4"]
-    replicaCount: 2
+    replicaCount: 3
     ingress:
       host: ckan.eks.production.govuk.digital
       ingressClassName: aws-alb
