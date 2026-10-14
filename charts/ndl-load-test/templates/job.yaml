@@ -85,6 +85,26 @@ spec:
             - name: ERROR_RATE_THRESHOLD
               value: {{ .Values.thresholds.error_rate_threshold | quote }}
 
+            - name: TEST_PROFILE
+              value: {{ .Values.test_profile | default "baseline" | quote }}
+            - name: ISOLATION_ENDPOINT
+              value: {{ .Values.isolation_endpoint | default "" | quote }}
+
+            - name: SEARCH_UI_THRESHOLD_MS
+              value: {{ .Values.thresholds.search_ui_threshold_ms | default "500" | quote }}
+            - name: PACKAGE_SEARCH_THRESHOLD_MS
+              value: {{ .Values.thresholds.package_search_threshold_ms | default "2000" | quote }}
+            - name: PACKAGE_LIST_THRESHOLD_MS
+              value: {{ .Values.thresholds.package_list_threshold_ms | default "2000" | quote }}
+            - name: PACKAGE_SHOW_THRESHOLD_MS
+              value: {{ .Values.thresholds.package_show_threshold_ms | default "3000" | quote }}
+            - name: ORGANIZATION_SHOW_THRESHOLD_MS
+              value: {{ .Values.thresholds.organization_show_threshold_ms | default "3000" | quote }}
+            - name: HARVEST_SOURCE_LIST_THRESHOLD_MS
+              value: {{ .Values.thresholds.harvest_source_list_threshold_ms | default "2000" | quote }}
+            - name: HARVEST_OBJECT_THRESHOLD_MS
+              value: {{ .Values.thresholds.harvest_object_threshold_ms | default "3000" | quote }}
+
             {{- if .Values.prometheus.remoteWriteUrl }}
             - name: K6_PROMETHEUS_RW_SERVER_URL
               value: {{ .Values.prometheus.remoteWriteUrl | quote }}
