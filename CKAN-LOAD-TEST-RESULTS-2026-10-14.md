@@ -617,7 +617,66 @@ The CKAN load test successfully **validated the 4Gi memory restoration** (PR #13
 
 ---
 
-**Document Date:** 2026-10-14  
-**Test Duration:** 35 minutes  
-**Status:** COMPLETE ✅  
-**Next Phase:** Worker scaling validation on staging
+---
+
+# Stress Test Run #2 — October 15, 2026 (Threads Configuration)
+
+## Test Configuration
+- **Profile:** Stress (ramp 50→100 VUs over 7 stages)
+- **Gunicorn:** 4 workers × 4 threads (gthread worker class)
+- **Duration:** 40 minutes
+- **Memory Limit:** 4Gi (unchanged)
+
+## Results: FAILURE ❌
+
+**Error Rate: 99.72%** (131,644 failures / 132,008 requests)
+- Checks passed: 362 / 164,587 (0.21%)
+- Successful HTTP responses: Near zero
+- Failed HTTP responses: 99.72%
+
+**Performance (when requests succeeded):**
+- Average latency: 16.82 seconds
+- p(90): 27.01 seconds
+- p(95): 28.08 seconds
+- Max: 30.01 seconds
+
+**Iterations:** 162,835 completed (throughput: 67.78/sec)
+
+## Analysis
+
+**Comparison to Baseline:**
+- Baseline (4 workers only, 50 VUs): 47% errors, sub-500ms latency
+- Threads (4 workers × 4 threads, 100 VUs): 99.72% errors, 16+ second latency
+
+**Root Cause:** Threads configuration made performance **drastically worse**
+
+**Why Threads Failed:**
+1. Changed two variables at once: configuration AND load (50→100 VUs)
+2. Threads likely causing contention on Flask request context (not thread-safe)
+3. Python GIL + thread overhead reducing throughput
+4. CKAN/Flask may not be optimized for thread-based concurrency
+5. Thread-safe database connection pooling issues possible
+
+**Key Finding:** Threads approach does NOT work for CKAN. Need to isolate cause through incremental testing.
+
+---
+
+## Next Phase: Incremental Testing (Methodical Approach)
+
+Changed plan to test one variable at a time:
+
+**Step 1:** 4 workers (NO threads) at stress profile 50→100 VUs
+- Baseline with just worker increase
+- Establishes what 4 workers can handle
+
+**Step 2:** Increase memory to 6-8Gi, then test 4 workers × 4 threads at 50 VUs only
+- Same load as baseline to isolate thread impact
+- More memory to prevent constraints
+
+**Step 3:** If Step 2 passes, increase to 100 VUs with threads
+- Only if thread + baseline load works
+
+---
+
+**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (Threads Test)  
+**Status:** Moving to Step 1 — 4 workers without threads
