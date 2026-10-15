@@ -73,15 +73,7 @@ spec:
             - name: CKAN_ROWS
               value: {{ .Values.ckan_rows | quote }}
 
-            # Response time thresholds (milliseconds) — configurable at runtime
-            - name: HOMEPAGE_THRESHOLD_MS
-              value: {{ .Values.thresholds.home_page_threshold_ms | quote }}
-            - name: SEARCH_THRESHOLD_MS
-              value: {{ .Values.thresholds.search_threshold_ms | quote }}
-            - name: DATASET_THRESHOLD_MS
-              value: {{ .Values.thresholds.dataset_threshold_ms | quote }}
-            - name: CKAN_API_THRESHOLD_MS
-              value: {{ .Values.thresholds.ckan_api_threshold_ms | quote }}
+            # Error rate threshold — configurable at runtime
             - name: ERROR_RATE_THRESHOLD
               value: {{ .Values.thresholds.error_rate_threshold | quote }}
 
