@@ -661,22 +661,68 @@ The CKAN load test successfully **validated the 4Gi memory restoration** (PR #13
 
 ---
 
-## Next Phase: Incremental Testing (Methodical Approach)
+# Stress Test Run #3 — October 15, 2026 (4 Workers, No Threads)
 
-Changed plan to test one variable at a time:
+## Test Configuration
+- **Profile:** Stress (ramp 50→100 VUs over 7 stages)
+- **Gunicorn:** 4 workers (no threads)
+- **Duration:** 40 minutes
+- **Memory Limit:** 4Gi (unchanged)
 
-**Step 1:** 4 workers (NO threads) at stress profile 50→100 VUs
-- Baseline with just worker increase
-- Establishes what 4 workers can handle
+## Results: FAILURE ❌
 
-**Step 2:** Increase memory to 6-8Gi, then test 4 workers × 4 threads at 50 VUs only
-- Same load as baseline to isolate thread impact
-- More memory to prevent constraints
+**Error Rate: 99.64%** (122,530 failures / 122,963 requests)
+- Checks passed: 433 / 153,349 (0.28%)
+- Iterations: 151,975 completed
+- Successful HTTP responses: 0.36%
 
-**Step 3:** If Step 2 passes, increase to 100 VUs with threads
-- Only if thread + baseline load works
+**Performance (when requests succeeded):**
+- Average latency: 11.74 seconds
+- p(90): 26.8 seconds
+- p(95): 28.1 seconds
+- Max: 31.07 seconds
+
+## Analysis
+
+**Comparison:**
+- Baseline (4 workers, 50 VUs): 47% errors
+- Step 1 (4 workers, stress 50→100 VUs): 99.64% errors
+
+**Key Finding:** The problem is LOAD, not configuration
+
+At 50 VUs, 4 workers was already saturated (47% errors). At 100 VUs, it's completely overwhelmed (99.64% errors).
+
+**Root Cause:** Gunicorn worker queue saturation
+- 4 workers can handle ~25-27 req/s
+- 100 VUs trying to send 100+ req/s
+- Queue fills up, gunicorn returns 503 errors
+
+**What This Means:**
+- We need MORE concurrency capacity
+- Either increase workers (8-12) OR use threads
+- 4 workers alone cannot handle production traffic (275 req/s peak)
 
 ---
 
-**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (Threads Test)  
-**Status:** Moving to Step 1 — 4 workers without threads
+## Next Phase: Step 2 — Test Threads with More Memory
+
+**Hypothesis:** Threads failed before because:
+1. We doubled the load (50→100 VUs)
+2. Memory constraints (4Gi might be tight with threads)
+3. Threads thrashing under extreme load
+
+**Step 2 Plan:**
+1. Increase memory: 4Gi → 6-8Gi
+2. Add threads back: 4 workers × 4 threads
+3. Test at 50 VUs ONLY (same load as baseline which had 47% errors)
+4. See if threads improve on the baseline load level
+
+If threads work at 50 VUs with 6-8Gi memory, we'll know:
+- Threads can work for CKAN
+- Need more memory to avoid constraints
+- Can then test higher VUs
+
+---
+
+**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (Threads Test #1, Workers-Only Test #2)  
+**Status:** Preparing Step 2 — Increase memory to 6-8Gi, add threads, test at 50 VUs
