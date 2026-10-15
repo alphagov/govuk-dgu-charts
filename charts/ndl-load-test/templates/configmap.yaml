@@ -109,7 +109,7 @@ data:
       ];
     }
 
-    // Build thresholds object
+    // Build thresholds object — all values must be non-empty
     let thresholdObj = {
       'http_req_duration{endpoint:search_ui}': [`p(95)<${THRESHOLDS.search_ui}`],
       'http_req_duration{endpoint:package_search}': [`p(95)<${THRESHOLDS.package_search}`],
@@ -118,7 +118,7 @@ data:
       'http_req_duration{endpoint:organization_show}': [`p(95)<${THRESHOLDS.organization_show}`],
       'http_req_duration{endpoint:harvest_source_list}': [`p(95)<${THRESHOLDS.harvest_source_list}`],
       'http_req_duration{endpoint:harvest_object}': [`p(95)<${THRESHOLDS.harvest_object}`],
-      'errors': [`rate<${ERROR_RATE_THRESHOLD}`, {abortOnFail: true}],
+      'errors': [`rate<0.01`, {abortOnFail: true}],
     };
 
     export const options = {
