@@ -18,9 +18,11 @@ ckanHelmValues:
     appResources:
       limits:
         memory: 8Gi
+        cpu: 4
       requests:
         memory: 4Gi
-    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
+        cpu: 2
+    args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 9"]
     replicaCount: 3
     ingress:
       host: ckan.eks.staging.govuk.digital

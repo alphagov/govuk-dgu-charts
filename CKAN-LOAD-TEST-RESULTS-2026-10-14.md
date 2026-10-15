@@ -837,5 +837,33 @@ To handle 100 VUs at current CKAN processing speed:
 
 ---
 
-**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (All Tests Complete)  
-**Status:** Load testing complete. Problem identified: request processing speed, not concurrency.
+# Step 4 — October 15, 2026 (Proper CPU Allocation + Worker Scaling)
+
+## Configuration Update
+
+**Discovery:** Previous tests failed not because of request processing speed, but because workers were CPU-starved.
+
+**Gunicorn Worker Formula:** workers = (cpu_cores × 2) + 1
+
+**Previous Issue:**
+- CPU limit: 1 core (1000m)
+- Workers: 4-8
+- Formula said: (1 × 2) + 1 = 3 workers max
+- Result: CPU thrashing, 99% errors
+
+**Step 4 Configuration:**
+- CPU limit: 4 cores (4000m)
+- CPU request: 2 cores (2000m)
+- Memory limit: 8Gi (keep)
+- Workers: (4 × 2) + 1 = **9 workers**
+- Profile: Stress (50→100 VUs)
+
+**Expected Outcome:**
+With proper CPU allocation, workers can run concurrently without starvation. Should see dramatic improvement in error rates and latency.
+
+Test running now...
+
+---
+
+**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (Tests 1-3 Complete, Step 4 Running)  
+**Status:** Step 4 - CPU + Workers properly scaled under test
