@@ -46,8 +46,11 @@ data:
         timeout: '10s',
       });
 
-      if (res.status !== 200) {
-        throw new Error(`Failed to fetch datasets: ${res.status}`);
+      // Handle rate limiting (429) and other errors gracefully
+      if (res.status === 429) {
+        console.log(`Setup: got 429 rate limit, continuing without dataset pool`);
+      } else if (res.status !== 200) {
+        console.log(`Setup: got status ${res.status}, continuing without dataset pool`);
       }
 
       try {
