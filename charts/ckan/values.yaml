@@ -33,7 +33,11 @@ ckan:
     enabled: false
     iamRoleARN: ""
   appPort: 5000
-  args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8"]
+  securityContext:
+    runAsUser: 503
+    runAsGroup: 502
+    fsGroup: 502
+  args: ["gunicorn --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 8 --worker-tmp-dir /tmp"]
   ingress:
     enabled: true
     host: ckan.eks.test.govuk.digital
@@ -43,7 +47,7 @@ ckan:
       enabled: false
   probes:
     enabled: false
-  ckanIniConfigMap: ckan-production-ini-2-10
+  ckanIniConfigMap: ckan-production-ini-2-10-11
   config:
     dbInit: true
     site:
