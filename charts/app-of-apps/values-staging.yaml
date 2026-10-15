@@ -24,6 +24,10 @@ ckanHelmValues:
         cpu: 2
     args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 9"]
     replicaCount: 3
+    securityContext:
+      runAsUser: 900
+      runAsGroup: 900
+      fsGroup: 900
     ingress:
       host: ckan.eks.staging.govuk.digital
       ingressClassName: aws-alb
