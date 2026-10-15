@@ -1,0 +1,346 @@
+{{- $environment := eq "ephemeral" $.Values.environment | ternary $.Values.argo_environment $.Values.environment -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-ckan-production-ini-2-10-11
+data:
+  production.ini: |
+    #
+    # CKAN configuration - for local docker stack development only
+    #
+    # These are some of the configuration options available for your CKAN
+    # instance. Check the documentation in 'doc/configuration.rst' or at the
+    # following URL for a description of what they do and the full list of
+    # available options:
+    #
+    # https://docs.ckan.org/en/latest/maintaining/configuration.html
+    #
+    # The %(here)s variable will be replaced with the parent directory of this file
+    #
+    [DEFAULT]
+
+    ## Default settings ############################################################
+    ## This enables the `Flask-DebugToolbar
+    ## <https://flask-debugtoolbar.readthedocs.io/>`_ in the web interface, makes
+    ## Webassets serve unminified JS and CSS files, and enables CKAN templates'
+    ## debugging features.
+    ## 
+    ## You will need to ensure the ``Flask-DebugToolbar`` python package is installed,
+    ## by activating your ckan virtual environment and then running::
+    ## 
+    ##     pip install -r /usr/lib/ckan/default/src/ckan/dev-requirements.txt
+    ## 
+    ## If you are running CKAN on Apache, you must change the WSGI
+    ## configuration to run a single process of CKAN. Otherwise
+    ## the execution will fail with: ``AssertionError: The EvalException
+    ## middleware is not usable in a multi-process environment``. Eg. change::
+    ## 
+    ##   WSGIDaemonProcess ckan_default display-name=ckan_default processes=2 threads=15
+    ##   to
+    ##   WSGIDaemonProcess ckan_default display-name=ckan_default threads=15
+    ## 
+    ## .. warning:: This option should be set to ``False`` for a public site.
+    ##    With debug mode enabled, a visitor to your site could execute malicious
+    ##    commands.
+    debug = false
+
+    [app:main]
+
+    ## General settings ############################################################
+    use = egg:ckan
+    ckan.legacy_route_mappings = {}
+    config.mode = default
+
+    ## Development settings ########################################################
+    ckan.devserver.host = localhost
+    ckan.devserver.port = 5000
+    ckan.devserver.threaded = false
+    ckan.devserver.multiprocess = 1
+    ckan.devserver.watch_patterns = 
+    ckan.devserver.ssl_cert = 
+    ckan.devserver.ssl_key = 
+
+    ## Session settings ############################################################
+    ckan.user.last_active_interval = 600
+    cache_dir = /tmp/%(ckan.site_id)s
+    beaker.session.key = ckan
+    beaker.session.secret = please_update
+    beaker.session.auto = false
+    beaker.session.cookie_expires = false
+    # beaker.session.cookie_domain = .example.com
+    beaker.session.save_accessed_time = true
+    beaker.session.secure = false
+    beaker.session.timeout = 
+    beaker.session.type = cookie
+    beaker.session.validate_key = iP0EzelU8_ce-VJh-Axttek7vco
+    beaker.session.httponly = true
+    beaker.session.samesite = Lax
+
+    ## Database settings ###########################################################
+    sqlalchemy.url = postgresql://ckan:ckan@docker.for.mac.host.internal:5432/ckan
+    sqlalchemy.pool_pre_ping = true
+    # sqlalchemy.<OPTION> = 
+
+    ## Site Settings ###############################################################
+    ckan.site_url = http://127.0.0.1:5001
+    apikey_header_name = X-CKAN-API-Key
+    ckan.cache_expires = 0
+    ckan.cache_enabled = false
+    ckan.mimetype_guess = file_ext
+    ckan.tracking_enabled = false
+    ckan.valid_url_schemes = http https ftp
+    ckan.requests.timeout = 5
+    ckan.hide_version = false
+    ckan.redirect_to_login_if_not_authorized = true
+
+    ## Authorization Settings ######################################################
+    ckan.auth.anon_create_dataset = false
+    ckan.auth.create_unowned_dataset = false
+    ckan.auth.create_dataset_if_not_in_organization = false
+    ckan.auth.user_create_groups = false
+    ckan.auth.user_create_organizations = true
+    ckan.auth.user_delete_groups = false
+    ckan.auth.user_delete_organizations = true
+    ckan.auth.create_user_via_api = true
+    ckan.auth.create_user_via_web = true
+    ckan.auth.roles_that_cascade_to_sub_groups = admin
+    ckan.auth.public_user_details = false
+    ckan.auth.public_activity_stream_detail = false
+    ckan.auth.allow_dataset_collaborators = false
+    ckan.auth.allow_admin_collaborators = false
+    ckan.auth.allow_collaborators_to_change_owner_org = false
+    ckan.auth.create_default_api_keys = false
+    ckan.auth.login_view = user.login
+    ckan.auth.reveal_private_datasets = false
+    ckan.auth.enable_cookie_auth_in_api = true
+    ckan.auth.route_after_login = dashboard.datasets
+
+    ## CSRF Protection #############################################################
+    WTF_CSRF_ENABLED = true
+    WTF_CSRF_CHECK_DEFAULT = true
+    WTF_CSRF_SECRET_KEY = "wtf csrf secret key"
+    WTF_CSRF_METHODS = POST PUT PATCH DELETE
+    WTF_CSRF_FIELD_NAME = _csrf_token
+    WTF_CSRF_HEADERS = X-CSRFToken X-CSRF-Token
+    WTF_CSRF_TIME_LIMIT = 3600
+    WTF_CSRF_SSL_STRICT = true
+    WTF_I18N_ENABLED = true
+    ckan.csrf_protection.ignore_extensions = true
+
+    ## Flask-Login Remember me cookie settings #####################################
+    REMEMBER_COOKIE_NAME = remember_token
+    REMEMBER_COOKIE_DURATION = 31536000
+    # REMEMBER_COOKIE_DOMAIN = .example.com
+    REMEMBER_COOKIE_PATH = /
+    REMEMBER_COOKIE_SECURE = false
+    REMEMBER_COOKIE_HTTPONLY = true
+    REMEMBER_COOKIE_REFRESH_EACH_REQUEST = false
+    REMEMBER_COOKIE_SAMESITE = None
+
+    ## API Token Settings ##########################################################
+    api_token.nbytes = 32
+    api_token.jwt.encode.secret = string:%(beaker.session.secret)s
+    api_token.jwt.decode.secret = string:%(beaker.session.secret)s
+    api_token.jwt.algorithm = HS256
+
+    ## Search Settings #############################################################
+    ckan.site_id = dgu
+    solr_url = http://solr:8983/solr/ckan
+    solr_user = 
+    solr_password = 
+    ckan.search.remove_deleted_packages = true
+    ckan.search.solr_commit = true
+    ckan.search.solr_allowed_query_parsers = 
+    ckan.search.show_all_types = dataset
+    ckan.search.default_include_private = true
+    ckan.search.default_package_sort = score desc, metadata_modified desc
+    search.facets = organization groups tags res_format license_id
+    search.facets.limit = 50
+    search.facets.default = 10
+    ckan.extra_resource_fields = 
+    ckan.search.rows_max = 1500
+    ckan.group_and_organization_list_max = 1500
+    ckan.group_and_organization_list_all_fields_max = 25
+    solr_timeout = 60
+
+    # Harvesting settings
+    ckan.harvest.mq.type = redis
+    # ckan.harvest.mq.hostname = redis
+    # ckan.harvest.mq.port = 6379
+    ckan.harvest.mq.redis_db = 1
+
+    # Spatial settings
+    ckan.spatial.validator.profiles = iso19139eden,constraints-1.4,gemini2-1.3
+    ckan.spatial.validator.reject = true
+
+    ## Redis Settings ##############################################################
+    ckan.redis.url = redis://{{ .Values.ckan.config.redis.host | default (print .Release.Name "-redis") }}:{{ .Values.ckan.config.redis.port | default "6379" }}/{{ .Values.ckan.config.redis.dbNumber | default "1" }}
+
+    ## CORS Settings ###############################################################
+    ckan.cors.origin_allow_all = false
+    ckan.cors.origin_whitelist = 
+
+    ## Plugins Settings ############################################################
+    ckan.plugins = activity datagovuk_publisher_form datagovuk dcat harvest ckan_harvester dcat_rdf_harvester dcat_json_harvester dcat_json_interface spatial_metadata spatial_query spatial_harvest_metadata_api gemini_csw_harvester gemini_waf_harvester gemini_doc_harvester inventory_harvester
+    ckan.resource_proxy.timeout = 5
+    ckan.download_proxy = 
+
+    ## Front-End Settings ##########################################################
+    ckan.site_title = {{ .Values.ckan.config.site.title }}
+    ckan.site_description = {{ .Values.ckan.config.site.description }}
+    ckan.site_intro_text = 
+    ckan.site_logo = /base/images/ckan-logo.png
+    ckan.site_about = 
+    ckan.theme = css/main
+    ckan.favicon = /images/icons/ckan.ico
+    ckan.datasets_per_page = 20
+    package_hide_extras = 
+    ckan.dumps_url = 
+    ckan.dumps_format = 
+    ckan.recaptcha.publickey = 
+    ckan.recaptcha.privatekey = 
+    ckan.featured_groups = 
+    ckan.featured_orgs = 
+    ckan.default_group_sort = title
+    ckan.gravatar_default = identicon
+    ckan.debug_supress_header = false
+    ckan.homepage_style = 1
+    ckan.site_custom_css = 
+
+    ## Resource Views Settings #####################################################
+    ckan.views.default_views = image_view datatables_view
+
+    ## Theming Settings ############################################################
+    ckan.template_head_end = 
+    ckan.template_footer_end = 
+    ckan.template_title_delimiter = -
+    extra_template_paths = 
+    extra_public_paths = 
+    ckan.base_public_folder = public
+    ckan.base_templates_folder = templates
+    ckan.default.package_type = dataset
+    ckan.default.group_type = group
+    ckan.default.organization_type = organization
+    ckan.admin_tabs = {}
+
+    ## Storage Settings ############################################################
+    ckan.uploads_enabled = true
+    ckan.storage_path = /var/lib/ckan/default
+    ckan.max_resource_size = 10
+    ckan.max_image_size = 2
+
+    ## S3 Settngs
+    ckan.datagovuk.s3_aws_access_key_id =
+    ckan.datagovuk.s3_aws_secret_access_key =
+    ckan.datagovuk.s3_bucket_name = datagovuk-{{ $environment }}-ckan-organogram
+    ckan.datagovuk.s3_url_prefix = https://s3-eu-west-1.amazonaws.com/datagovuk-{{ $environment }}-ckan-organogram/
+    ckan.datagovuk.s3_aws_region_name = {{ .Values.ckan.config.s3.regionName }}
+
+    ## Uploader Settings ###########################################################
+    ckan.upload.user.types = image
+    ckan.upload.user.mimetypes = image/png image/gif image/jpeg
+    ckan.upload.group.types = image
+    ckan.upload.group.mimetypes = image/png image/gif image/jpeg
+
+    ## Webassets Settings ##########################################################
+    ckan.webassets.path = 
+    ckan.webassets.use_x_sendfile = false
+
+    ## User Settings ###############################################################
+    ckan.user_list_limit = 20
+    ckan.user_reset_landing_page = home.index
+
+    ## Activity Streams Settings ###################################################
+    ckan.activity_streams_enabled = true
+    ckan.activity_streams_email_notifications = false
+    ckan.activity_list_limit = 31
+    ckan.activity_list_limit_max = 100
+    ckan.email_notifications_since = 2 days
+    ckan.hide_activity_from_users = %(ckan.site_id)s
+
+    ## Feeds Settings ##############################################################
+    ckan.feeds.author_name = 
+    ckan.feeds.author_link = 
+    ckan.feeds.authority_name = 
+    ckan.feeds.date = 
+    ckan.feeds.limit = 20
+
+    ## Internationalisation Settings ###############################################
+    ckan.locale_default = en_GB
+    ckan.locale_order = en_GB
+    ckan.locales_offered = en_GB
+    ckan.locales_filtered_out = en_US
+    ckan.i18n_directory = /srv/app/src/ckanext-datagovuk/ckanext/datagovuk/
+    ckan.i18n.extra_directory = 
+    ckan.i18n.extra_gettext_domain = 
+    ckan.i18n.extra_locales = 
+    ckan.i18n.rtl_languages = he ar fa_IR
+    ckan.i18n.rtl_theme = css/main-rtl
+    ckan.display_timezone = UTC
+    ckan.root_path = 
+    ckan.resource_formats = /srv/app/src/ckan/ckan/config/resource_formats.json
+
+    ## Form Settings ###############################################################
+    ckan.dataset.create_on_ui_requires_resources = true
+    package_new_return_url = 
+    package_edit_return_url = 
+    licenses_group_url = 
+
+    ## Email settings ##############################################################
+    smtp.server = localhost
+    smtp.starttls = false
+    smtp.starttls_verify = true
+    smtp.starttls_ca_bundle = 
+    smtp.user = 
+    smtp.password = 
+    smtp.mail_from = 
+    smtp.reply_to = 
+    email_to = 
+    error_email_from = 
+
+    ## Background Job Settings #####################################################
+    ckan.jobs.timeout = 180
+
+    ## DGU test data settings
+    ckan.mock_harvest_source = {{ .Values.ckan.config.mock_harvest_source }}
+
+    ## Logging configuration
+    [loggers]
+    keys = root, ckan, ckanext, werkzeug
+
+    [handlers]
+    keys = console
+
+    [formatters]
+    keys = generic
+
+    [logger_root]
+    level = WARNING
+    handlers = console
+
+    [logger_werkzeug]
+    level = WARNING
+    handlers = console
+    qualname = werkzeug
+    propagate = 0
+
+    [logger_ckan]
+    level = INFO
+    handlers = console
+    qualname = ckan
+    propagate = 0
+
+    [logger_ckanext]
+    level = DEBUG
+    handlers = console
+    qualname = ckanext
+    propagate = 0
+
+    [handler_console]
+    class = StreamHandler
+    args = (sys.stderr,)
+    level = NOTSET
+    formatter = generic
+
+    [formatter_generic]
+    format = %(asctime)s %(levelname)-5.5s [%(name)s] %(message)s
