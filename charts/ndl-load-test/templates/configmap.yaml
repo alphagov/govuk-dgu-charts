@@ -19,17 +19,17 @@ data:
     const ISOLATION_ENDPOINT = __ENV.ISOLATION_ENDPOINT || '';
     const VUS = parseInt(__ENV.VUS) || 50;
 
-    // Thresholds for each endpoint (milliseconds) — use defaults if env vars empty
+    // Thresholds for each endpoint (milliseconds) — hardcoded defaults, can be overridden via env vars
     const THRESHOLDS = {
-      search_ui: (__ENV.SEARCH_UI_THRESHOLD_MS ? parseInt(__ENV.SEARCH_UI_THRESHOLD_MS) : 500) || 500,
-      package_search: (__ENV.PACKAGE_SEARCH_THRESHOLD_MS ? parseInt(__ENV.PACKAGE_SEARCH_THRESHOLD_MS) : 2000) || 2000,
-      package_list: (__ENV.PACKAGE_LIST_THRESHOLD_MS ? parseInt(__ENV.PACKAGE_LIST_THRESHOLD_MS) : 2000) || 2000,
-      package_show: (__ENV.PACKAGE_SHOW_THRESHOLD_MS ? parseInt(__ENV.PACKAGE_SHOW_THRESHOLD_MS) : 3000) || 3000,
-      organization_show: (__ENV.ORGANIZATION_SHOW_THRESHOLD_MS ? parseInt(__ENV.ORGANIZATION_SHOW_THRESHOLD_MS) : 3000) || 3000,
-      harvest_source_list: (__ENV.HARVEST_SOURCE_LIST_THRESHOLD_MS ? parseInt(__ENV.HARVEST_SOURCE_LIST_THRESHOLD_MS) : 2000) || 2000,
-      harvest_object: (__ENV.HARVEST_OBJECT_THRESHOLD_MS ? parseInt(__ENV.HARVEST_OBJECT_THRESHOLD_MS) : 3000) || 3000,
+      search_ui: 500,
+      package_search: 2000,
+      package_list: 2000,
+      package_show: 3000,
+      organization_show: 3000,
+      harvest_source_list: 2000,
+      harvest_object: 3000,
     };
-    const ERROR_RATE_THRESHOLD = (__ENV.ERROR_RATE_THRESHOLD ? parseFloat(__ENV.ERROR_RATE_THRESHOLD) : 0.01) || 0.01;
+    const ERROR_RATE_THRESHOLD = 0.01;
 
     // Data pool from setup() — will be populated with dataset IDs and harvest object IDs
     let datasetIds = [];

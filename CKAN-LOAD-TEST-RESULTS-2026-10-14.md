@@ -305,7 +305,7 @@ With 50 VUs at 4s/cycle:
 
 ---
 
-## CPU & Thread Analysis (Response to Ken's Question)
+## CPU & Thread Analysis (Team Feedback)
 
 ### Current CPU Configuration
 
@@ -404,7 +404,7 @@ Overload: 25 ÷ 53.3 = 0.47× (NO saturation, safe margin)
 - But would double memory usage per pod (150MiB × 4 extra workers)
 - Threads not applicable for I/O-bound workloads (INCORRECT)
 
-**Corrected Approach (FROM KEN):** "Use `--workers 4 --threads 4` (gthread class)"
+**Corrected Approach (FROM TEAM LEAD):** "Use `--workers 4 --threads 4` (gthread class)"
 - **4× throughput improvement** (12→48 concurrent requests)
 - **No memory overhead** (threads share process memory)
 - **Better for I/O-bound apps:** GIL releases on database/network blocking I/O
@@ -458,7 +458,7 @@ args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:app
 args: ["gunicorn -c $CKAN_CONFIG/gunicorn_config.py --bind 0.0.0.0:5000 wsgi:application --timeout 120 --workers 4 --threads 4"]
 ```
 
-**Verified by:** Lead engineer Ken confirmed datagovuk app uses `--workers 4 --threads 4` across 2 pods = 32 concurrent requests; same pattern works for CKAN at 3 pods = 48 concurrent requests.
+**Verified by:** Team lead confirmed datagovuk app uses `--workers 4 --threads 4` across 2 pods = 32 concurrent requests; same pattern works for CKAN at 3 pods = 48 concurrent requests.
 
 #### Option 2: Add CPU Limits for Safety (OPTIONAL)
 ```yaml
