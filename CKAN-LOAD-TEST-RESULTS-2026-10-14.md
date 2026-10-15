@@ -724,5 +724,59 @@ If threads work at 50 VUs with 6-8Gi memory, we'll know:
 
 ---
 
-**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (Threads Test #1, Workers-Only Test #2)  
-**Status:** Preparing Step 2 — Increase memory to 6-8Gi, add threads, test at 50 VUs
+# Stress Test Run #4 — October 15, 2026 (4 Workers × 4 Threads, Baseline Load, 8Gi Memory)
+
+## Test Configuration
+- **Profile:** Baseline (2m ramp to 50 VUs, 25m soak)
+- **Gunicorn:** 4 workers × 4 threads (gthread worker class)
+- **Duration:** 30 minutes
+- **Memory Limit:** 8Gi (increased from 4Gi)
+
+## Results: FAILURE ❌
+
+**Error Rate: 99.31%** (45,500 failures / 45,815 requests)
+- Checks passed: 315 / 57,121 (0.55%)
+- Iterations: 56,535 completed
+- Successful HTTP responses: 0.69%
+
+**Performance (when requests succeeded):**
+- Average latency: 9.31 seconds
+- p(90): 24.21 seconds
+- p(95): 28.7 seconds
+
+## Critical Finding: Threads Make Performance WORSE
+
+**Direct Comparison (Same Load Level — 50 VUs):**
+- Baseline (4 workers only): 47% errors, sub-500ms latency ✓
+- Threads (4 workers × 4 threads, 8Gi): 99.31% errors, 9+ second latency ✗
+
+Even with doubled memory (8Gi) and handling the same 50 VU load, threads caused catastrophic degradation.
+
+**Root Cause Analysis:**
+- NOT a memory issue (8Gi is plenty)
+- NOT a load issue (same 50 VUs as baseline)
+- Problem: Threads incompatible with CKAN/Flask architecture
+  - Flask request context not thread-safe
+  - Thread contention on shared resources
+  - GIL overhead causing performance collapse
+
+**Conclusion:** DO NOT USE THREADS for CKAN. Process-based workers scale better.
+
+---
+
+# Next Phase: Step 3 — Test 8 Workers (No Threads)
+
+Strategy: Increase worker count instead of using threads.
+
+**Configuration:**
+- Remove threads: `--workers 4 --threads 4` → `--workers 8`
+- Keep memory at 8Gi (from Step 2)
+- Test stress profile (50→100 VUs)
+- See if 8 workers (process-based) handle load better than 4 workers
+
+Expected: 8 workers should give 2× throughput capacity without thread issues.
+
+---
+
+**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (Threads Tests #1 & #2, Workers-Only #3)  
+**Status:** Preparing Step 3 — 8 workers without threads under stress profile
