@@ -25,9 +25,9 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 900
-        runAsGroup: 900
-        fsGroup: 900
+        runAsUser: {{ .Values.ckan.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.ckan.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.ckan.securityContext.fsGroup }}
         seccompProfile:
           type: RuntimeDefault
       {{ if .Values.ckan.serviceAccount.enabled }}
@@ -69,6 +69,8 @@ spec:
               readOnly: true
             - name: prom-tmp
               mountPath: /prom_tmp
+            - name: ckan-tmp
+              mountPath: /tmp
           command: ["/bin/sh", "-c"]
           args: {{ .Values.ckan.args }}
           env:
@@ -167,6 +169,8 @@ spec:
         - name: nginx-tmp
           emptyDir: {}
         - name: prom-tmp
+          emptyDir: {}
+        - name: ckan-tmp
           emptyDir: {}
       {{- if eq "arm64" .Values.arch }}
       tolerations:
