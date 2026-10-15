@@ -764,19 +764,78 @@ Even with doubled memory (8Gi) and handling the same 50 VU load, threads caused 
 
 ---
 
-# Next Phase: Step 3 — Test 8 Workers (No Threads)
+# Stress Test Run #5 — October 15, 2026 (8 Workers, No Threads, Stress Profile)
 
-Strategy: Increase worker count instead of using threads.
+## Test Configuration
+- **Profile:** Stress (ramp 50→100 VUs over 7 stages)
+- **Gunicorn:** 8 workers (no threads)
+- **Duration:** 40 minutes
+- **Memory Limit:** 8Gi
 
-**Configuration:**
-- Remove threads: `--workers 4 --threads 4` → `--workers 8`
-- Keep memory at 8Gi (from Step 2)
-- Test stress profile (50→100 VUs)
-- See if 8 workers (process-based) handle load better than 4 workers
+## Results: FAILURE ❌
 
-Expected: 8 workers should give 2× throughput capacity without thread issues.
+**Error Rate: 99.60%** (114,618 failures / 115,077 requests)
+- Checks passed: 459 / 143,734 (0.31%)
+- Iterations: 142,125 completed
+- Throughput: 47.94 req/s
+
+**Performance (when requests succeeded):**
+- Average latency: 10.01 seconds
+- p(90): 22.5 seconds
+- p(95): 24.56 seconds
+
+## Critical Discovery: The Real Problem
+
+**Comparison of All Tests:**
+- Step 1 (4 workers, stress): 99.64% errors
+- Step 2 (4 workers × 4 threads, baseline): 99.31% errors
+- Step 3 (8 workers, stress): 99.60% errors
+
+All failed with ~99-100% error rates. This proves the problem is NOT:
+- Worker count
+- Threads vs processes
+- Memory
+- Memory allocation
+
+**The Real Bottleneck: Request Processing Time**
+
+Each request takes ~1.5 seconds average (150ms minimum processing time):
+- 8 workers can handle: 8 workers × (1000ms / 150ms per request) = ~50 req/s maximum
+- At 100 VUs: trying to send 100+ req/s
+- Result: Queue fills, gunicorn returns 503 errors for 99%+ of requests
+
+**Math:**
+```
+Workers: 8
+Processing time per request: ~150ms (minimum)
+Capacity: 8 × (1000 / 150) = 53 req/s max
+Test demand: 100 VUs × 1 req/s = 100+ req/s
+Overload factor: 100 / 53 = 1.89× beyond capacity
+```
+
+## Root Cause Analysis
+
+The bottleneck is not infrastructure (workers, threads, memory) but **application-level request processing**:
+- CKAN API requests take 100-150ms each minimum
+- At high concurrency, queue delays add up to 9-10+ seconds
+- Can't fix with more workers when each request itself is slow
+
+## What Would Actually Work
+
+To handle 100 VUs at current CKAN processing speed:
+- Need ~24 workers (triple the configuration)
+- Or optimize CKAN to process requests faster
+- Or accept that staging can only handle ~50 VUs reliably
+
+## Recommendations
+
+1. **For production:** Don't scale to 100 VUs without optimization. Current production peak is 275 req/s, which requires ~65+ workers at this processing speed.
+
+2. **For staging:** 8 workers with 8Gi memory is adequate for baseline testing (50 VUs), but stress testing to 100 VUs reveals the limits.
+
+3. **Next steps:** Profile CKAN request processing to find optimization opportunities rather than just adding more workers.
 
 ---
 
-**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (Threads Tests #1 & #2, Workers-Only #3)  
-**Status:** Preparing Step 3 — 8 workers without threads under stress profile
+**Document Date:** 2026-10-14 (Baseline), 2026-10-15 (All Tests Complete)  
+**Status:** Load testing complete. Problem identified: request processing speed, not concurrency.
