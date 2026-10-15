@@ -4,6 +4,7 @@ ckanHelmValues:
   script:
     enabled: true
     description: "Delete a list of datasets given by DEFRA"
+    runBeforeDate: "2026-10-12T00:00:00"
     keep_up_time: "43200"
     appResources:
       requests:

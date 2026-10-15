@@ -9,6 +9,14 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}
 data:
   script.sh: |-
+    {{- if .Values.script.runBeforeDate }}
+    _date="{{ .Values.script.runBeforeDate }}"
+    if [ $(date +%s) -gt $(date -d "$_date" +%s) ]; then
+      echo "Script will not run after $_date"
+      exit 0
+    fi
+    {{- end }}
+
     cd /script
     {{- if .Values.script.requirementsUrl }}
     pip install -r requirements.txt
