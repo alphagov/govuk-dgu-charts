@@ -6,6 +6,7 @@ data:
   init.sh: |
     # copy production.ini
     cp /map/production.ini /config
+    chown {{ $.Values.ckan.config.runAsUser }}:{{ $.Values.ckan.config.runAsGroup }} /config/production.ini
 
     # copy gunicorn_config.py
     if [ -f /etc/ckan/gunicorn_config.py ]; then
