@@ -27,6 +27,8 @@ script:
   catOutput: false
   probes:
     enabled: true
+  image: "ghcr.io/alphagov/ckan:v1.19.3"
+  ckanIniConfigMap: ckan-production-ini-2-10
 
 ckan:
   replicaCount: 1

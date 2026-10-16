@@ -1,5 +1,4 @@
 {{- if .Values.script.enabled }}
-{{- $image := "ghcr.io/alphagov/ckan:v1.19.3" -}}
 {{- $fullName := print .Release.Name "-ckan-script" -}}
 apiVersion: batch/v1
 kind: Job
@@ -24,7 +23,7 @@ spec:
       {{- end }}
       initContainers:
         - name: config-set
-          image: {{ $image }}
+          image: {{ .Values.script.image }}
           command: [ "/bin/sh", "-c", '. /init/init.sh']
           imagePullPolicy: Always
           env:
@@ -44,7 +43,7 @@ spec:
             - name: prom-tmp
               mountPath: /prom_tmp
         - name: script-set
-          image: {{ $image }}
+          image: {{ .Values.script.image }}
           command: [ "/bin/sh", "-c", '. /ckan-script-set/script-set.sh']
           imagePullPolicy: Always
           env:
@@ -60,7 +59,7 @@ spec:
               mountPath: /script
       containers:
         - name: ckan
-          image: {{ $image }}
+          image: {{ .Values.script.image }}
           imagePullPolicy: Always
           ports:
             - name: http
@@ -109,7 +108,7 @@ spec:
             name: {{ .Release.Name }}-ckan-init
         - name: production-ini
           configMap:
-            name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+            name: {{ .Release.Name }}-{{ .Values.script.ckanIniConfigMap }}
         - name: config
           emptyDir: {}
         - name: ckan-script-set
