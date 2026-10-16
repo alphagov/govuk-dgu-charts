@@ -232,6 +232,10 @@ pycsw:
   probes:
     enabled: false
   ckanIniConfigMap: ckan-production-ini-2-10
+  securityContext:
+    runAsUser: 900
+    runAsGroup: 900
+    fsGroup: 900
 
 externalSecret:
   enabled: false

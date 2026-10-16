@@ -25,9 +25,9 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
-        runAsUser: {{ .Values.ckan.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.ckan.securityContext.runAsGroup }}
-        fsGroup: {{ .Values.ckan.securityContext.fsGroup }}
+        runAsUser: {{ .Values.pycsw.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.pycsw.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.pycsw.securityContext.fsGroup }}
         seccompProfile:
           type: RuntimeDefault
       {{- include "ckan.pycsw-init" . | nindent 6 }}
