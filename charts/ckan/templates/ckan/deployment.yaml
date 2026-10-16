@@ -88,29 +88,29 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          # {{- if .Values.ckan.probes.enabled }}
-          # livenessProbe:
-          #   httpGet:
-          #     path: /healthcheck
-          #     port: ckan-http
-          #   periodSeconds: 60
-          #   timeoutSeconds: 60
-          # readinessProbe:
-          #   httpGet:
-          #     path: /healthcheck
-          #     port: ckan-http
-          #   periodSeconds: 5  
-          #   successThreshold: 3
-          #   timeoutSeconds: 30
-          # startupProbe:
-          #   httpGet:
-          #     path: /healthcheck
-          #     port: ckan-http
-          #   initialDelaySeconds: 60
-          #   failureThreshold: 60
-          #   periodSeconds: 10
-          #   timeoutSeconds: 60
-          # {{- end }}
+          {{- if .Values.ckan.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: ckan-http
+            periodSeconds: 60
+            timeoutSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: ckan-http
+            periodSeconds: 5  
+            successThreshold: 3
+            timeoutSeconds: 30
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: ckan-http
+            initialDelaySeconds: 60
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 60
+          {{- end }}
         - name: nginx
           {{- if eq $.Values.environment "test" }}
           image: nginx
