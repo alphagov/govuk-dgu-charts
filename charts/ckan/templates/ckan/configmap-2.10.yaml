@@ -79,6 +79,9 @@ data:
 
     ## Database settings ###########################################################
     sqlalchemy.url = postgresql://ckan_default:pass@localhost/ckan_default
+    sqlalchemy.pool_size = 20
+    sqlalchemy.max_overflow = 40
+    sqlalchemy.pool_recycle = 3600
     sqlalchemy.pool_pre_ping = true
     # sqlalchemy.<OPTION> = 
 
