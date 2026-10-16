@@ -231,6 +231,7 @@ pycsw:
   args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
   probes:
     enabled: false
+  ckanIniConfigMap: ckan-production-ini-2-10
 
 externalSecret:
   enabled: false
