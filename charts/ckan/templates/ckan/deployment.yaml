@@ -72,8 +72,8 @@ spec:
             - name: ckan-tmp
               mountPath: /tmp
           command: ["/bin/sh", "-c"]
-          # args: {{ .Values.ckan.args }}
-          args: ["sleep 80000"]
+          args: {{ .Values.ckan.args }}
+          # args: ["sleep 80000"]
           env:
             {{ include "ckan.environment-variables" . | nindent 12 }}
             - name: PROMETHEUS_MULTIPROC_DIR
@@ -99,7 +99,7 @@ spec:
           #   httpGet:
           #     path: /healthcheck
           #     port: ckan-http
-          #   periodSeconds: 5
+          #   periodSeconds: 5  
           #   successThreshold: 3
           #   timeoutSeconds: 30
           # startupProbe:
