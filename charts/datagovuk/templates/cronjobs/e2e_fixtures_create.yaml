@@ -42,9 +42,9 @@ spec:
           restartPolicy: OnFailure
           securityContext:
             runAsNonRoot: true
-            runAsUser: 900
-            runAsGroup: 900
-            fsGroup: 900
+            runAsUser: {{ .Values.ckan.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.ckan.securityContext.runAsGroup }}
+            fsGroup: {{ .Values.ckan.securityContext.fsGroup }}
             seccompProfile:
               type: RuntimeDefault
           volumes:
