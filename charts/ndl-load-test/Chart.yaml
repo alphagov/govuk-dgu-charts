@@ -1,8 +1,8 @@
 apiVersion: v2
 name: ndl-load-test
-description: k6 load testing chart for data.gov.uk staging
+description: k6 load testing chart for data.gov.uk staging with multi-profile CKAN tests
 type: application
-version: 0.1.2
+version: 0.2.0
 icon: https://grafana.com/img/logos/grafana.png
 home: https://github.com/alphagov/govuk-dgu-charts
 sources:

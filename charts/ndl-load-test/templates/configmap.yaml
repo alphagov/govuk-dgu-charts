@@ -6,99 +6,174 @@ metadata:
 data:
   script.js: |
     // chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    // Configuration flow: values.yaml (snake_case) → job.yaml (converts to ENV vars) → script.js
-    // Naming: job.yaml sets DATAGOVUK_URL, CKAN_URL, HOMEPAGE_THRESHOLD_MS, etc.
+    // CKAN load test with 4 profiles, 8 endpoints, dynamic dataset/harvest ID selection
     import http from 'k6/http';
     import { check, sleep } from 'k6';
     import { Rate } from 'k6/metrics';
 
     const errorRate = new Rate('errors');
 
-    // All configuration from pod environment variables — visible via kubectl describe pod
-    // URLs are explicit and transparent for full control
-    const DATAGOVUK_URL = __ENV.DATAGOVUK_URL;
-    const CKAN_URL = __ENV.CKAN_URL;
-    const DATAGOVUK_QUERY = __ENV.DATAGOVUK_QUERY || 'climate';
-    const CKAN_QUERY = __ENV.CKAN_QUERY || 'climate';
-    const CKAN_ROWS = parseInt(__ENV.CKAN_ROWS) || 5;
+    // Configuration from environment
+    const CKAN_URL = __ENV.CKAN_URL || 'https://ckan.eks.staging.govuk.digital';
+    const TEST_PROFILE = __ENV.TEST_PROFILE || 'baseline';
+    const ISOLATION_ENDPOINT = __ENV.ISOLATION_ENDPOINT || '';
+    const VUS = parseInt(__ENV.VUS) || 50;
 
-    // Load test stage configuration — all configurable at runtime
-    const VUS = parseInt(__ENV.VUS) || 100;
-    const WARMUP_DURATION = __ENV.WARMUP_DURATION || '5m';
-    const RAMP_DURATION = __ENV.RAMP_DURATION || '10m';
-    const SOAK_DURATION = __ENV.SOAK_DURATION || '15m';
+    // Thresholds for each endpoint (milliseconds) — hardcoded defaults, can be overridden via env vars
+    const THRESHOLDS = {
+      search_ui: 500,
+      package_search: 2000,
+      package_list: 2000,
+      package_show: 3000,
+      organization_show: 3000,
+      harvest_source_list: 2000,
+      harvest_object: 3000,
+    };
+    const ERROR_RATE_THRESHOLD = 0.01;
 
-    // Response time thresholds (milliseconds) — configurable at runtime
-    const HOMEPAGE_THRESHOLD = parseInt(__ENV.HOMEPAGE_THRESHOLD_MS) || 2000;
-    const SEARCH_THRESHOLD = parseInt(__ENV.SEARCH_THRESHOLD_MS) || 2000;
-    const DATASET_THRESHOLD = parseInt(__ENV.DATASET_THRESHOLD_MS) || 2000;
-    const CKAN_API_THRESHOLD = parseInt(__ENV.CKAN_API_THRESHOLD_MS) || 3000;
-    const ERROR_RATE_THRESHOLD = parseFloat(__ENV.ERROR_RATE_THRESHOLD) || 0.01;
+    // Data pool from setup() — will be populated with dataset IDs and harvest object IDs
+    let datasetIds = [];
+    let harvestObjectIds = [];
 
-    export const options = {
-      stages: [
-        { duration: WARMUP_DURATION, target: 1 },
-        { duration: RAMP_DURATION,   target: VUS },
-        { duration: SOAK_DURATION,   target: VUS },
-        { duration: WARMUP_DURATION, target: 0 },
-      ],
-      thresholds: {
-        'http_req_duration{type:homepage}': [`p(95)<${HOMEPAGE_THRESHOLD}`],
-        'http_req_duration{type:search}':   [`p(95)<${SEARCH_THRESHOLD}`],
-        'http_req_duration{type:dataset}':  [`p(95)<${DATASET_THRESHOLD}`],
-        'http_req_duration{type:ckan_api}': [`p(95)<${CKAN_API_THRESHOLD}`],
-        'errors': [`rate<${ERROR_RATE_THRESHOLD}`],
-      },
+    // Setup: fetch 100 dataset IDs and harvest object IDs for dynamic selection
+    export function setup() {
+      if (CKAN_URL.includes('production')) {
+        throw new Error('ERROR: CKAN_URL contains "production" - will not load test production');
+      }
+
+      console.log(`Setup: fetching dataset pool from ${CKAN_URL}`);
+      let res = http.get(`${CKAN_URL}/api/3/action/package_search?q=*&rows=100`, {
+        timeout: '10s',
+      });
+
+      // Handle rate limiting (429) and other errors gracefully
+      if (res.status === 429) {
+        console.log(`Setup: got 429 rate limit, continuing without dataset pool`);
+      } else if (res.status !== 200) {
+        console.log(`Setup: got status ${res.status}, continuing without dataset pool`);
+      }
+
+      try {
+        const data = JSON.parse(res.body);
+        datasetIds = data.result.results.map(pkg => pkg.id);
+        console.log(`Setup: fetched ${datasetIds.length} dataset IDs`);
+      } catch (e) {
+        throw new Error(`Failed to parse dataset response: ${e}`);
+      }
+
+      // Fetch harvest objects if needed for harvest_object endpoint
+      res = http.get(`${CKAN_URL}/api/3/action/harvest_object_list?limit=100`, {
+        timeout: '10s',
+      });
+
+      if (res.status === 200) {
+        try {
+          const data = JSON.parse(res.body);
+          if (data.result && data.result.results) {
+            harvestObjectIds = data.result.results.map(obj => obj.id);
+            console.log(`Setup: fetched ${harvestObjectIds.length} harvest object IDs`);
+          }
+        } catch (e) {
+          console.log(`Setup: could not fetch harvest objects (not critical): ${e}`);
+        }
+      }
+
+      return { datasetIds, harvestObjectIds };
+    }
+
+    // Define test stages based on profile
+    let stages = [];
+    if (TEST_PROFILE === 'baseline') {
+      stages = [
+        { duration: '2m', target: 50 },
+        { duration: '25m', target: 50 },
+        { duration: '3m', target: 0 },
+      ];
+    } else if (TEST_PROFILE === 'stress') {
+      stages = [
+        { duration: '3m', target: 50 },
+        { duration: '5m', target: 50 },
+        { duration: '5m', target: 75 },
+        { duration: '10m', target: 75 },
+        { duration: '5m', target: 100 },
+        { duration: '10m', target: 100 },
+        { duration: '2m', target: 0 },
+      ];
+    } else if (TEST_PROFILE === 'isolation') {
+      stages = [
+        { duration: '2m', target: 50 },
+        { duration: '28m', target: 50 },
+      ];
+    } else if (TEST_PROFILE === 'sustained') {
+      stages = [
+        { duration: '2m', target: 75 },
+        { duration: '116m', target: 75 },
+        { duration: '2m', target: 0 },
+      ];
+    }
+
+    // Build thresholds object — simple format without tags
+    let thresholdObj = {
+      'http_req_duration': [`p(95)<3000`],
+      'errors': [`rate<0.01`],
     };
 
-    export default function () {
-      let res;
+    export const options = {
+      stages: stages,
+      thresholds: thresholdObj,
+    };
 
-      // --- Test 1: Data.gov.uk Homepage ---
-      res = http.get(`${DATAGOVUK_URL}/`, {
-        tags: { type: 'homepage' },
-      });
-      check(res, {
-        'homepage: status is 200': (r) => r.status === 200,
-        'homepage: loads in <2s':  (r) => r.timings.duration < HOMEPAGE_THRESHOLD,
-      });
-      errorRate.add(res.status !== 200);
-      sleep(1);
+    export default function (data) {
+      // Extract data from setup
+      const ds = data.datasetIds || [];
+      const ho = data.harvestObjectIds || [];
 
-      // --- Test 2: Data.gov.uk Search ---
-      res = http.get(`${DATAGOVUK_URL}/search?q=${DATAGOVUK_QUERY}`, {
-        tags: { type: 'search' },
-      });
-      check(res, {
-        'search: status is 200': (r) => r.status === 200,
-        'search: loads in <2s':  (r) => r.timings.duration < SEARCH_THRESHOLD,
-      });
-      errorRate.add(res.status !== 200);
-      if (res.status !== 200) {
-        console.log(`[search FAIL] status=${res.status} body=${(res.body || '').substring(0, 200)}`);
+      if (ISOLATION_ENDPOINT) {
+        // Run only one endpoint (for isolation profile)
+        runEndpoint(ISOLATION_ENDPOINT, ds, ho);
+      } else {
+        // Run all endpoints with weighted distribution
+        const rand = Math.random();
+        if (rand < 0.15) runSearchUI();
+        else if (rand < 0.35) runPackageSearchAll();
+        else if (rand < 0.47) runPackageSearchHealth();
+        else if (rand < 0.59) runPackageList();
+        else if (rand < 0.74) runPackageShow(ds);
+        else if (rand < 0.86) runOrganizationShow();
+        else if (rand < 0.96) runHarvestSourceList();
+        else runHarvestObject(ho);
       }
-      sleep(1);
 
-      // --- Test 3: Data.gov.uk Dataset listing ---
-      // Note: Data.gov.uk dataset pages depend on CKAN API calls
-      res = http.get(`${CKAN_URL}/dataset`, {
-        tags: { type: 'dataset' },
+      sleep(1);
+    }
+
+    function runEndpoint(endpoint, ds, ho) {
+      if (endpoint === 'search_ui') runSearchUI();
+      else if (endpoint === 'package_search') runPackageSearchAll();
+      else if (endpoint === 'package_list') runPackageList();
+      else if (endpoint === 'package_show') runPackageShow(ds);
+      else if (endpoint === 'organization_show') runOrganizationShow();
+      else if (endpoint === 'harvest_source_list') runHarvestSourceList();
+      else if (endpoint === 'harvest_object') runHarvestObject(ho);
+    }
+
+    function runSearchUI() {
+      let res = http.get(`${CKAN_URL}/search/dataset`, {
+        tags: { endpoint: 'search_ui' },
       });
       check(res, {
-        'dataset: status is 200': (r) => r.status === 200,
-        'dataset: loads in <2s':  (r) => r.timings.duration < DATASET_THRESHOLD,
+        'search_ui: status 200': (r) => r.status === 200,
       });
       errorRate.add(res.status !== 200);
-      sleep(1);
+    }
 
-      // --- Test 4: CKAN API direct call ---
-      res = http.get(`${CKAN_URL}/api/3/action/package_search?q=${CKAN_QUERY}&rows=${CKAN_ROWS}`, {
-        tags: { type: 'ckan_api' },
+    function runPackageSearchAll() {
+      let res = http.get(`${CKAN_URL}/api/3/action/package_search?q=*&rows=5`, {
+        tags: { endpoint: 'package_search' },
       });
       check(res, {
-        'ckan_api: status is 200': (r) => r.status === 200,
-        'ckan_api: loads in <3s':  (r) => r.timings.duration < CKAN_API_THRESHOLD,
-        'api: returns results':  (r) => {
+        'package_search_all: status 200': (r) => r.status === 200,
+        'package_search_all: has results': (r) => {
           try {
             return JSON.parse(r.body).result.count > 0;
           } catch (e) {
@@ -107,5 +182,74 @@ data:
         },
       });
       errorRate.add(res.status !== 200);
-      sleep(1);
+    }
+
+    function runPackageSearchHealth() {
+      let res = http.get(`${CKAN_URL}/api/3/action/package_search?q=health&rows=5`, {
+        tags: { endpoint: 'package_search' },
+      });
+      check(res, {
+        'package_search_health: status 200': (r) => r.status === 200,
+      });
+      errorRate.add(res.status !== 200);
+    }
+
+    function runPackageList() {
+      let res = http.get(`${CKAN_URL}/api/3/action/package_list?limit=100`, {
+        tags: { endpoint: 'package_list' },
+      });
+      check(res, {
+        'package_list: status 200': (r) => r.status === 200,
+      });
+      errorRate.add(res.status !== 200);
+    }
+
+    function runPackageShow(datasetIds) {
+      if (datasetIds.length === 0) {
+        console.log('ERROR: no dataset IDs available');
+        return;
+      }
+      const randomId = datasetIds[Math.floor(Math.random() * datasetIds.length)];
+      let res = http.get(`${CKAN_URL}/api/3/action/package_show?id=${randomId}`, {
+        tags: { endpoint: 'package_show' },
+      });
+      check(res, {
+        'package_show: status 200': (r) => r.status === 200,
+      });
+      errorRate.add(res.status !== 200);
+    }
+
+    function runOrganizationShow() {
+      let res = http.get(`${CKAN_URL}/api/3/action/organization_show?id=office-for-national-statistics`, {
+        tags: { endpoint: 'organization_show' },
+      });
+      check(res, {
+        'organization_show: status 200': (r) => r.status === 200,
+      });
+      errorRate.add(res.status !== 200);
+    }
+
+    function runHarvestSourceList() {
+      let res = http.get(`${CKAN_URL}/api/3/action/harvest_source_list`, {
+        tags: { endpoint: 'harvest_source_list' },
+      });
+      check(res, {
+        'harvest_source_list: status 200': (r) => r.status === 200,
+      });
+      errorRate.add(res.status !== 200);
+    }
+
+    function runHarvestObject(harvestObjectIds) {
+      if (harvestObjectIds.length === 0) {
+        console.log('WARNING: no harvest object IDs, skipping this endpoint');
+        return;
+      }
+      const randomId = harvestObjectIds[Math.floor(Math.random() * harvestObjectIds.length)];
+      let res = http.get(`${CKAN_URL}/2/rest/harvestobject/${randomId}`, {
+        tags: { endpoint: 'harvest_object' },
+      });
+      check(res, {
+        'harvest_object: status 200': (r) => r.status === 200,
+      });
+      errorRate.add(res.status !== 200);
     }

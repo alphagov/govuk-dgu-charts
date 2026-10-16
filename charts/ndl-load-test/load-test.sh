@@ -8,18 +8,19 @@
 set -euo pipefail
 
 # Defaults
-VUS=10
-RAMP_DURATION=10
-SOAK_DURATION=10
-SEARCH_QUERY="climate"
-CKAN_QUERY="climate"
-CKAN_ROWS=5
-DATAGOVUK_URL="https://www.staging.data.gov.uk"
+VUS=50
+RAMP_DURATION=2
+SOAK_DURATION=25
+TEST_PROFILE="baseline"
+ISOLATION_ENDPOINT=""
 CKAN_URL="https://ckan.eks.staging.govuk.digital"
-HOMEPAGE_THRESHOLD=2000
-SEARCH_THRESHOLD=2000
-DATASET_THRESHOLD=2000
-CKAN_API_THRESHOLD=3000
+SEARCH_UI_THRESHOLD=500
+PACKAGE_SEARCH_THRESHOLD=2000
+PACKAGE_LIST_THRESHOLD=2000
+PACKAGE_SHOW_THRESHOLD=3000
+ORGANIZATION_SHOW_THRESHOLD=3000
+HARVEST_SOURCE_LIST_THRESHOLD=2000
+HARVEST_OBJECT_THRESHOLD=3000
 ERROR_RATE_THRESHOLD="0.01"
 NAMESPACE="datagovuk"
 JOB_NAME="ndl-load-test-k6"
@@ -28,6 +29,14 @@ CONFIGMAP_NAME="ndl-load-test-script"
 # Parse arguments
 while [[ $# -gt 0 ]]; do
   case $1 in
+    --profile)
+      TEST_PROFILE="$2"
+      shift 2
+      ;;
+    --isolate)
+      ISOLATION_ENDPOINT="$2"
+      shift 2
+      ;;
     --vus)
       VUS="$2"
       shift 2
@@ -40,41 +49,8 @@ while [[ $# -gt 0 ]]; do
       SOAK_DURATION="$2"
       shift 2
       ;;
-    --query)
-      SEARCH_QUERY="$2"
-      CKAN_QUERY="$2"
-      shift 2
-      ;;
-    --search-query)
-      SEARCH_QUERY="$2"
-      shift 2
-      ;;
-    --ckan-query)
-      CKAN_QUERY="$2"
-      shift 2
-      ;;
-    --ckan-rows)
-      CKAN_ROWS="$2"
-      shift 2
-      ;;
-    --datagovuk-url)
-      DATAGOVUK_URL="$2"
-      shift 2
-      ;;
     --ckan-url)
       CKAN_URL="$2"
-      shift 2
-      ;;
-    --search-threshold)
-      SEARCH_THRESHOLD="$2"
-      shift 2
-      ;;
-    --dataset-threshold)
-      DATASET_THRESHOLD="$2"
-      shift 2
-      ;;
-    --ckan-api-threshold)
-      CKAN_API_THRESHOLD="$2"
       shift 2
       ;;
     --error-threshold)
@@ -86,36 +62,27 @@ while [[ $# -gt 0 ]]; do
 Usage: ./load-test.sh [OPTIONS]
 
 Options:
-  --vus NUM                 Virtual users (default: 10)
-  --ramp MINUTES            Ramp-up duration (default: 10)
-  --soak MINUTES            Soak duration (default: 10)
-  --query STRING            Search and CKAN query (default: climate)
-  --search-query STRING     Custom search query only
-  --ckan-query STRING       Custom CKAN query only
-  --ckan-rows NUM           CKAN result rows (default: 5)
-  --datagovuk-url URL       Data.gov.uk URL to test (default: staging)
+  --profile TYPE            Test profile: baseline, stress, isolation, sustained (default: baseline)
+  --isolate ENDPOINT        For isolation profile, which endpoint to test (default: all)
+  --vus NUM                 Virtual users (default: 50)
+  --ramp MINUTES            Ramp-up duration in minutes (default: 2)
+  --soak MINUTES            Soak duration in minutes (default: 25)
   --ckan-url URL            CKAN URL to test (default: staging CKAN)
-  --search-threshold MS     Search p(95) threshold in ms (default: 2000)
-  --dataset-threshold MS    Dataset p(95) threshold in ms (default: 2000)
-  --ckan-api-threshold MS   CKAN API p(95) threshold in ms (default: 3000)
   --error-threshold RATE    Error rate threshold (default: 0.01)
   --help                    Show this help message
 
 Examples:
-  # 25 VU bisect test, 10 min soak
-  ./load-test.sh --vus 25 --soak 10
+  # Run baseline profile (default)
+  ./load-test.sh --profile baseline --vus 50 --soak 25
 
-  # Test different domain, relax thresholds
-  ./load-test.sh --datagovuk-url "https://example.com" --search-threshold 3000
+  # Run stress test with ramp to 100 VUs
+  ./load-test.sh --profile stress
 
-  # Test different search query
-  ./load-test.sh --query "housing" --vus 50
+  # Isolate and test one endpoint at 50 VUs
+  ./load-test.sh --profile isolation --isolate harvest_source_list
 
-  # Stress test: 5s thresholds, high error tolerance
-  ./load-test.sh --vus 100 --search-threshold 5000 --error-threshold 0.05
-
-  # Test internal services
-  ./load-test.sh --datagovuk-url "http://datagovuk-find.datagovuk.svc.cluster.local:3000" --ckan-url "http://ckan-ckan.datagovuk.svc.cluster.local"
+  # Run 2-hour sustained peak test at 75 VUs
+  ./load-test.sh --profile sustained --vus 75 --soak 116
 
 EOF
       exit 0
@@ -130,25 +97,15 @@ done
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Load Test Configuration"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Profile:          ${TEST_PROFILE}"
+if [ -n "$ISOLATION_ENDPOINT" ]; then
+  echo "Isolate:          ${ISOLATION_ENDPOINT}"
+fi
 echo "VUs:              ${VUS}"
 echo "Ramp-up:          ${RAMP_DURATION} min"
 echo "Soak:             ${SOAK_DURATION} min"
-echo "Total duration:   ~$((5 + RAMP_DURATION + SOAK_DURATION + 5)) min"
-echo ""
-echo "URLs:"
-echo "  Data.gov.uk:    ${DATAGOVUK_URL}"
-echo "  CKAN:           ${CKAN_URL}"
-echo ""
-echo "Queries:"
-echo "  Search:         ${SEARCH_QUERY}"
-echo "  CKAN:           ${CKAN_QUERY} (${CKAN_ROWS} rows)"
-echo ""
-echo "Thresholds:"
-echo "  Homepage:       p(95) < ${HOMEPAGE_THRESHOLD}ms"
-echo "  Search:         p(95) < ${SEARCH_THRESHOLD}ms"
-echo "  Dataset:        p(95) < ${DATASET_THRESHOLD}ms"
-echo "  CKAN API:       p(95) < ${CKAN_API_THRESHOLD}ms"
-echo "  Error rate:     < ${ERROR_RATE_THRESHOLD}"
+echo "CKAN URL:         ${CKAN_URL}"
+echo "Error threshold:  ${ERROR_RATE_THRESHOLD}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 echo ""
@@ -166,18 +123,19 @@ echo "Rendering manifests and applying via kubectl..."
 helm template ndl-load-test /Users/PuttanaA/Documents/AMAR-DSIT-NDL-WS/govuk-dgu-charts/charts/ndl-load-test \
   --namespace "${NAMESPACE}" \
   --set "suspended=false" \
+  --set "test_profile=${TEST_PROFILE}" \
+  --set "isolation_endpoint=${ISOLATION_ENDPOINT}" \
   --set "vus=${VUS}" \
   --set "ramp_duration=${RAMP_DURATION}m" \
   --set "soak_duration=${SOAK_DURATION}m" \
-  --set "datagovuk_url=${DATAGOVUK_URL}" \
   --set "ckan_url=${CKAN_URL}" \
-  --set "search_query=${SEARCH_QUERY}" \
-  --set "ckan_query=${CKAN_QUERY}" \
-  --set "ckan_rows=${CKAN_ROWS}" \
-  --set "thresholds.home_page_threshold_ms=${HOMEPAGE_THRESHOLD}" \
-  --set "thresholds.search_threshold_ms=${SEARCH_THRESHOLD}" \
-  --set "thresholds.dataset_threshold_ms=${DATASET_THRESHOLD}" \
-  --set "thresholds.ckan_api_threshold_ms=${CKAN_API_THRESHOLD}" \
+  --set "thresholds.search_ui_threshold_ms=${SEARCH_UI_THRESHOLD}" \
+  --set "thresholds.package_search_threshold_ms=${PACKAGE_SEARCH_THRESHOLD}" \
+  --set "thresholds.package_list_threshold_ms=${PACKAGE_LIST_THRESHOLD}" \
+  --set "thresholds.package_show_threshold_ms=${PACKAGE_SHOW_THRESHOLD}" \
+  --set "thresholds.organization_show_threshold_ms=${ORGANIZATION_SHOW_THRESHOLD}" \
+  --set "thresholds.harvest_source_list_threshold_ms=${HARVEST_SOURCE_LIST_THRESHOLD}" \
+  --set "thresholds.harvest_object_threshold_ms=${HARVEST_OBJECT_THRESHOLD}" \
   --set "thresholds.error_rate_threshold=${ERROR_RATE_THRESHOLD}" | \
 gds aws govuk-staging-dguengineer -- kubectl apply \
   --server-side \
