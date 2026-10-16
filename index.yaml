@@ -116,6 +116,23 @@ entries:
     version: 1.1.0
   ndl-load-test:
   - apiVersion: v2
+    created: "2026-10-16T09:32:28.551080454Z"
+    description: k6 load testing chart for data.gov.uk staging with multi-profile
+      CKAN tests
+    digest: df6a1513a68611f3ee5f3874d4fcdd3acc421856442335c33b058645ed41f386
+    home: https://github.com/alphagov/govuk-dgu-charts
+    icon: https://grafana.com/img/logos/grafana.png
+    maintainers:
+    - email: datagovuk-tech@dsit.gov.uk
+      name: GDS Operators
+    name: ndl-load-test
+    sources:
+    - https://github.com/alphagov/govuk-dgu-charts
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-dgu-charts/releases/download/ndl-load-test-0.2.0/ndl-load-test-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     created: "2026-03-18T10:32:10.053179095Z"
     description: k6 load testing chart for data.gov.uk staging
     digest: 75b46c1d032b69261b64dd3d176a2222937eb48e513e332159c5e724fe77b795
@@ -131,4 +148,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-dgu-charts/releases/download/ndl-load-test-0.1.2/ndl-load-test-0.1.2.tgz
     version: 0.1.2
-generated: "2026-05-18T15:10:19.882769302Z"
+generated: "2026-10-16T09:32:28.551105401Z"
