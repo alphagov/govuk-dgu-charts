@@ -77,7 +77,10 @@ data:
     beaker.session.samesite = Lax
 
     ## Database settings ###########################################################
-    sqlalchemy.url = postgresql://ckan:ckan@docker.for.mac.host.internal:5432/ckan
+    sqlalchemy.url = postgresql://ckan_default:pass@localhost/ckan_default
+    sqlalchemy.pool_size = 20
+    sqlalchemy.max_overflow = 40
+    sqlalchemy.pool_recycle = 3600
     sqlalchemy.pool_pre_ping = true
     # sqlalchemy.<OPTION> = 
 
