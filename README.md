@@ -42,7 +42,7 @@ git clone git@github.com:alphagov/govuk-dgu-charts.git
 
 ### Setting up a local CKAN cluster
 
-Advantage of using `k3d` is that we don't need to worry about creating an ingress controller. This aligns with how we 
+Advantage of using `k3d` is that we don't need to worry about creating an ingress controller. This aligns with how we
 run the cluster in EKS as that manages creation of the ingress controller for us.
 
 1. Create the `k3d` cluster
@@ -65,12 +65,12 @@ The remaining steps will assume our local registry is running on `localhost:5349
 
 4. Build a docker image
 
-If we want to push an image to our local registry we have to tag our image. 
-See [here](https://distribution.github.io/distribution/about/deploying/#run-a-local-registry) 
+If we want to push an image to our local registry we have to tag our image.
+See [here](https://distribution.github.io/distribution/about/deploying/#run-a-local-registry)
 for background on local Docker registries.
 
-So if our local registry is running at `localhost:53492` and we want to build 
-[ckan 2.10.4](https://github.com/alphagov/ckanext-datagovuk/blob/457e856fe0ff0d60edc99a4a2a88e778f37ac05f/docker/ckan/2.10.4.Dockerfile) 
+So if our local registry is running at `localhost:53492` and we want to build
+[ckan 2.10.4](https://github.com/alphagov/ckanext-datagovuk/blob/457e856fe0ff0d60edc99a4a2a88e778f37ac05f/docker/ckan/2.10.4.Dockerfile)
 we have to tag our image as follows:
 
 ```sh
@@ -90,7 +90,7 @@ docker push localhost:53492/ckan:2.10.4
 
 6. Use the image in our Helm chart
 
-Currently [govuk-dgu-charts/charts/ckan/values.yaml](https://github.com/alphagov/govuk-dgu-charts/blob/b6f56b6abd374584ad219f60e09ea7df20934127/charts/ckan/values.yaml) 
+Currently [govuk-dgu-charts/charts/ckan/values.yaml](https://github.com/alphagov/govuk-dgu-charts/blob/b6f56b6abd374584ad219f60e09ea7df20934127/charts/ckan/values.yaml)
 points to the `test` environment:
 
 ```
@@ -109,8 +109,8 @@ tag: 2.10.4
 branch: main
 ```
 
-Note that `local-registry` matches the name of the registry we passed in step 1. 
-If we want to use a different image from a different environment then set `environment` appropriately. 
+Note that `local-registry` matches the name of the registry we passed in step 1.
+If we want to use a different image from a different environment then set `environment` appropriately.
 
 7. Apply the local dev Helm Chart
 
@@ -165,7 +165,7 @@ NOTE - unlike other config files the image used in the `script-job.yaml` is pinn
 
 #### Checking the yaml created from the chart
 
-To see what yaml is created from the chart, run this command in the relevant directory - 
+To see what yaml is created from the chart, run this command in the relevant directory -
 
 `helm template  . --debug --values values.yaml > values-datagovuk.yaml`
 
@@ -189,7 +189,7 @@ and follow these [steps](https://docs.publishing.service.gov.uk/kubernetes/get-s
 
 To recreate the cluster from scratch if there is an existing ephemeral datagovuk cluster running, destroy the datagovuk cluster by deleting `dgu-app-of-apps` in the ephemeral Argo CD website and recreate the cluster by running the following command on the terminal under the `charts` directory (the environment variable passed in should match your ephemeral cluster name):
 
-```sh 
+```sh
 helm upgrade -n cluster-services datagovuk-argo-bootstrap argo-bootstrap --set environment=eph-aaa113
 ```
 
@@ -197,7 +197,7 @@ To test your changes on the ephemeral cluster without merging them into the `mai
 
 - update the `targetRevision` in the `ckan-application.yaml` and/or `datagovuk-application.yaml` and push this change up to your branch onto Github
 - if you have deleted the `dgu-app-of-apps` module then run the `helm upgrade` command as above
-- update the `targetRevision` in `dgu-app-of-apps` on the ephemeral Argo CD website. 
+- update the `targetRevision` in `dgu-app-of-apps` on the ephemeral Argo CD website.
 - after you have finished testing please remove the commit which changes the `targetRevision` before merging your changes into the `main` branch
 
 ## Schemas
@@ -228,4 +228,4 @@ kubeconform -schema-location default \
 
 ## Team
 
-[GOV.UK Platform Engineering](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering) team looks after this repo. If you're inside GDS, you can find us in [#govuk-platform-engineering](https://gds.slack.com/channels/govuk-platform-engineering).
+[GOV.UK Platform Engineering team](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering) looks after this repo. If you're inside GDS, you can find us in [#govuk-ask-platform-engineering](https://gds.slack.com/archives/C013F737737).
