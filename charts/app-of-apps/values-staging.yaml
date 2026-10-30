@@ -76,10 +76,10 @@ ckanHelmValues:
       name: ckan
       iamRoleARN: arn:aws:iam::696911096973:role/ckan-govuk
     dbBackupSync:
-      enabled: false
-      iamRoleARN: ""
-      sourceS3BucketName: ""
-      targetS3BucketName: ""
+      enabled: true
+      iamRoleARN: "arn:aws:iam::696911096973:role/ckan-db-backup-xaccount-sync-govuk"
+      sourceS3BucketName: "govuk-staging-database-backups"
+      targetS3BucketName: "staging-account-ckan-backup"
   pycsw:
     replicaCount: 1
     args: ["gunicorn --bind 0.0.0.0:8000 wsgi:application --timeout 120"]
