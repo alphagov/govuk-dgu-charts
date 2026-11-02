@@ -8,7 +8,7 @@ metadata:
   labels:
     app.kubernetes.io/arch: arm64
 spec:
-  schedule: "0 11 * * 2"
+  schedule: "0 7 * * *"
   suspend: {{ .Values.suspendCronJobs }}
   concurrencyPolicy: Forbid
   jobTemplate:
