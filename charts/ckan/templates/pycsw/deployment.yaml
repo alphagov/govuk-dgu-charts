@@ -1,4 +1,4 @@
-{{- if .Values.appEnabled }}
+{{- if .Values.pycsw.enabled }}
 {{- $fullName := print .Release.Name "-pycsw" -}}
 apiVersion: apps/v1
 kind: Deployment

@@ -220,7 +220,8 @@ fetch:
   replicaCount: 1
 
 pycsw:
-  replicaCount: 1
+  enabled: false
+  replicaCount: 0
   args: ["python $CKAN_VENV/src/pycsw/pycsw/wsgi.py"]
   probes:
     enabled: false
