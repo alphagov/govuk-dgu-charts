@@ -1,3 +1,4 @@
+{{- if .Values.find.enabled }}
 {{ if eq $.Values.environment "integration" }}
 {{- if .Values.find.ingress.enabled }}
 {{- $ephemeralPath := print $.Values.argo_environment ".ephemeral" -}}
@@ -28,6 +29,7 @@ spec:
                 name: {{ $.Release.Name }}-find
                 port:
                   number: 3000
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
