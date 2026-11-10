@@ -24,6 +24,7 @@ spec:
                 name: {{ $.Release.Name }}-ckan
                 port:
                   number: {{ $.Values.ckan.service.port }}
+          {{- if $.Values.pycsw.enabled }}
           - path: /csw
             pathType: Prefix
             backend:
@@ -31,6 +32,7 @@ spec:
                 name: {{ $.Release.Name }}-pycsw
                 port:
                   number: 8000
+          {{- end }}
           - path: /check-links-output
             pathType: Prefix
             backend:
