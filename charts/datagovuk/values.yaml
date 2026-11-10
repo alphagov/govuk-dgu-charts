@@ -60,9 +60,12 @@ datagovuk:
         key: solr_password
 
 find:
-  replicaCount: 1
+  enabled: false
+  replicaCount: 0
   args: ["bin/rails s -b 0.0.0.0 --pid /tmp/rails-server.pid"]
   ingress:
+    # Find ingress is being used by datagovuk service still
+    # Will need to co-ordinate with a Fastly update to use the datagovuk ingress
     enabled: true
     host: find.eks.test.govuk.digital
     ingressClassName: ""
