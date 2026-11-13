@@ -46,6 +46,7 @@ ckan:
   ckanIniConfigMap: ckan-production-ini-2-10
   config:
     dbInit: true
+    org_index_name: dgu_organisations_2
     site:
       id: "dgu"
       url: "http://ckan.dev.govuk.digital:8081"
