@@ -1,0 +1,16 @@
+{{- $fullName := (print .Release.Name "-reindex-organisations-update-script") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+data:
+  reindex-all-orgs.sh: |-
+    echo "===== Deleting all organisations from the orgs index to add later ====="
+    curl -g "$CKAN_SOLR_URL/update?commit=true" \
+        -H 'Content-Type: application/json' \
+        -d '{"delete":{"query":"site_id:{{ .Values.ckan.config.org_index_name }}"}}'
+
+    ckan datagovuk reindex-organisations

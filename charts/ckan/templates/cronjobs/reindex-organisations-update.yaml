@@ -1,0 +1,65 @@
+{{- $fullName := (print .Release.Name "-reindex-organisations-update") -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $fullName }}
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
+  labels:
+    app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+spec:
+  schedule: "0 2 * * SAT,WED"
+  suspend: {{ .Values.suspendCronJobs }}
+  jobTemplate:
+    metadata:
+      name: {{ $fullName }}
+      labels:
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      template:
+        metadata:
+          name: {{ $fullName }}
+          labels:
+            app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+        spec:
+          containers:
+            - name: ckan
+              image: '{{ include "docker-uri" (dict "environment" .Values.environment "app" "ckan" "files" $.Files) }}'
+              imagePullPolicy: Always
+              command: [ "bash", "-c", ". /script/reindex-all-orgs.sh" ]
+              env:
+                {{- include "ckan.environment-variables" . | nindent 16 }}
+              volumeMounts:
+                - name: production-ini
+                  mountPath: /config
+                  readOnly: true
+                - name: reindex-orgs-script
+                  mountPath: /script
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 900
+            runAsGroup: 900
+            fsGroup: 900
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: production-ini
+              configMap:
+                name: {{ .Release.Name }}-{{ .Values.ckan.ckanIniConfigMap }}
+            - name: reindex-orgs-script
+              configMap:
+                name: {{ $fullName }}-script
+          {{- if eq "arm64" .Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ .Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ .Values.arch }}
+          {{- end }}
