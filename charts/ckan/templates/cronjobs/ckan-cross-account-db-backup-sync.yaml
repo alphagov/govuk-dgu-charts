@@ -27,7 +27,7 @@ spec:
           serviceAccountName: ckan-db-backup-xaccount-sync
           containers:
             - name: db-backup-sync
-              image: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v51"
+              image: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v75"
               imagePullPolicy: Always
               command: [ "aws", "s3", "sync", "s3://{{.Values.ckan.dbBackupSync.sourceS3BucketName}}/ckan-postgres/", "s3://{{.Values.ckan.dbBackupSync.targetS3BucketName}}/ckan-postgres/" ]
               securityContext:
